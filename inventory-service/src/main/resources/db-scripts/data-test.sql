@@ -1,0 +1,2 @@
+INSERT INTO inventory(id, sku_code, quantity) VALUES (nextval('inventory_id_sequence'), 'iphone_14', 10);
+INSERT INTO inventory(id, sku_code, quantity) VALUES (nextval('inventory_id_sequence'), 'macbook_air', 5);

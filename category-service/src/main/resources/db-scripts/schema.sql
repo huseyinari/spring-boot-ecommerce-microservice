@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS category;
+DROP SEQUENCE IF EXISTS category_id_sequence;
+
+CREATE SEQUENCE category_id_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 2147483647
+START 100000
+NO CYCLE;
+
+CREATE TABLE category (
+    id BIGINT,
+    category_name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    total_product_count INTEGER NOT NULL DEFAULT 0,
+    --
+    created_by VARCHAR(100) NOT NULL,
+    created_date TIMESTAMP NOT NULL,
+    updated_by VARCHAR(100),
+    updated_date TIMESTAMP
+);
+
+ALTER TABLE category ADD CONSTRAINT pk_category_id PRIMARY KEY (id);
+ALTER TABLE category ADD CONSTRAINT un_category_name UNIQUE (category_name);
