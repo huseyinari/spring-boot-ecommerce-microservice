@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tr.com.huseyinari.ecommerce.product.client.InventoryClient;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
+import tr.com.huseyinari.ecommerce.product.domain.ProductStatus;
+import tr.com.huseyinari.ecommerce.product.kafka.producer.ProductKafkaProducer;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
@@ -24,10 +26,11 @@ public class ProductService {
 
     private final ProductRepository repository;
     private final InventoryClient inventoryClient;
+    private final ProductKafkaProducer kafkaProducer;
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
-        Optional<Product> optional = this.repository.findBySkuCode(skuCode);
+        Optional<Product> optional = this.repository.findBySkuCodeAndStatus(skuCode, ProductStatus.SUCCESS);
 
         if (optional.isEmpty()) {
             throw new RuntimeException("Ürün bulunamadı !");
@@ -38,7 +41,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductSearchResponse> findAll() {
-        return repository.findAll()
+        return repository.findAllByStatus(ProductStatus.SUCCESS)
                 .stream()
                 .map(ProductMapper::toSearchResponse)
                 .toList();
@@ -54,12 +57,13 @@ public class ProductService {
 
         Product product = ProductMapper.toEntity(request);
         product.setSkuCode(this.generateSkuCode(product.getName()));
+        product.setStatus(ProductStatus.PENDING);
 
         product = repository.save(product);
 
-        inventoryClient.openProductStock(product.getSkuCode());     // TODO: Transactional yönetimi gerekli - işlem başarısız olursa mevcut olmayan ürüne stok açılmış olur
+        kafkaProducer.createOpeningProductStock(product);
 
-        logger.info("ID: " + product.getId() + " -> Product başarıyla oluşturuldu.");
+        logger.info("ID: {} -> Product başarıyla oluşturuldu.", product.getId());
 
         return ProductMapper.toCreateResponse(product);
     }

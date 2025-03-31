@@ -9,6 +9,8 @@ CREATE TABLE products (
     sku_code VARCHAR(255) NOT NULL,
     price DEC(10, 2) NOT NULL,
     category_id BIGINT NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    failure_description VARCHAR(4000),
     --
     created_by VARCHAR(100) NOT NULL,
     created_date TIMESTAMP NOT NULL,

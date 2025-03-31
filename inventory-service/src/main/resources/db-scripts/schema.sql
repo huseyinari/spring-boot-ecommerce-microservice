@@ -20,3 +20,4 @@ CREATE TABLE inventory (
 );
 
 ALTER TABLE inventory ADD CONSTRAINT pk_inventory_id PRIMARY KEY (id);
+ALTER TABLE inventory ADD CONSTRAINT un_inventory_sku_code UNIQUE (sku_code);

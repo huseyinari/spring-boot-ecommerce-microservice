@@ -42,7 +42,7 @@ public class OrderService {
             order.setPrice(product.getPrice());
             order = repository.save(order);
 
-            logger.info(order.getId() + " -> Sipariş başarıyla kaydedildi.");
+            logger.info("{} -> Sipariş başarıyla kaydedildi.", order.getId());
 
             // TODO: STOK DÜŞÜRÜLECEK
             return OrderMapper.toCreateResponse(order);

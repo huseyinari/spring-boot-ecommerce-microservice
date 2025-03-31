@@ -25,7 +25,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        final String[] permittedUrls = { "/public/**", "/eureka/**" };
+        final String[] permittedUrls = { "/public/**", "/eureka/**", "/api/v1/auth/**" };
 
         http
             .authorizeExchange(auth -> auth

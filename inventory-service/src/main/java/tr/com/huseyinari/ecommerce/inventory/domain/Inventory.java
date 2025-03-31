@@ -17,9 +17,9 @@ public class Inventory extends AbstractAuditableEntity {
     @SequenceGenerator(name = "inventory_id_sequence", sequenceName = "inventory_id_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "sku_code")
+    @Column(name = "sku_code", nullable = false, updatable = false, unique = true)
     private String skuCode;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 }

@@ -84,4 +84,22 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>huseyinari-nexus-releases</id>
+			<url>http://huseyinari.com.tr:8090/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>huseyinari-nexus-snapshots</id>
+			<url>http://huseyinari.com.tr:8090/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>huseyinari-nexus-public</id>
+			<url>http://huseyinari.com.tr:8090/repository/maven-public/</url>
+		</repository>
+	</repositories>
+
 </project>

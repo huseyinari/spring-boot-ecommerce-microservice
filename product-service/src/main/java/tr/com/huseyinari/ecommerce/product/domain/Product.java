@@ -35,6 +35,13 @@ public class Product extends AbstractAuditableEntity {
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
+
+    @Column(name = "failure_description")
+    private String failureDescription;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private Set<ProductImage> productImages = new HashSet<>();
 }
