@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import tr.com.huseyinari.ecommerce.auth.config.EcommerceKeycloakProperties;
 import tr.com.huseyinari.ecommerce.auth.request.LoginRequest;
+import tr.com.huseyinari.ecommerce.auth.request.RefreshTokenRequest;
 import tr.com.huseyinari.ecommerce.auth.request.RegisterRequest;
 import tr.com.huseyinari.ecommerce.auth.response.LoginResponse;
 import tr.com.huseyinari.ecommerce.auth.response.RegisterResponse;
@@ -57,10 +58,13 @@ public class AuthService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(response.getBody());
 
+            String tokenType = rootNode.path("token_type").asText();
             String accessToken = rootNode.path("access_token").asText();
             String refreshToken = rootNode.path("refresh_token").asText();
+            Integer expiresIn = rootNode.path("expires_in").asInt();
+            Integer refreshExpiresIn = rootNode.path("refresh_expires_in").asInt();
 
-            return new LoginResponse(accessToken, refreshToken);
+            return new LoginResponse(tokenType, accessToken, refreshToken, expiresIn, refreshExpiresIn);
         } catch (HttpClientErrorException e) {
             if ("Unauthorized".equals(e.getStatusText())) {
                 throw new RuntimeException("Kullanıcı adı veya şifre yanlış !");
@@ -74,10 +78,55 @@ public class AuthService {
         }
     }
 
+    public LoginResponse refresh(RefreshTokenRequest request) {
+        String loginUrl = new StringBuilder()
+                .append(keycloakProperties.getServerUrl())
+                .append("/realms/")
+                .append(keycloakProperties.getRealm())
+                .append("/protocol/openid-connect/token")
+                .toString();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "refresh_token");
+        body.add("scope", "openid");
+        body.add("client_id", keycloakProperties.getClientId());
+        body.add("client_secret", keycloakProperties.getClientSecret());
+        body.add("refresh_token", request.refreshToken());
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(loginUrl, HttpMethod.POST, requestEntity, String.class);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+
+            String tokenType = rootNode.path("token_type").asText();
+            String accessToken = rootNode.path("access_token").asText();
+            String refreshToken = rootNode.path("refresh_token").asText();
+            Integer expiresIn = rootNode.path("expires_in").asInt();
+            Integer refreshExpiresIn = rootNode.path("refresh_expires_in").asInt();
+
+            return new LoginResponse(tokenType, accessToken, refreshToken, expiresIn, refreshExpiresIn);
+        } catch (HttpClientErrorException e) {
+            if ("Bad Request".equals(e.getStatusText())) {
+                throw new RuntimeException("Refresh Token hatalı olduğu için yenileme işlemi yapılamadı !");
+            } else {
+                throw new RuntimeException("Token yenileme işlemi sırasında hata oluştu !");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Token yenileme işlemi sırasında hata oluştu !");
+        }
+    }
+
     public RegisterResponse register(RegisterRequest request) {
         UsersResource usersResource = this.keycloakAdminClientService.getUsersResource();
 
-        List<UserRepresentation> userRepresentationListByUsername = usersResource.search(request.userName()); // true = tam eşleşme için
+        List<UserRepresentation> userRepresentationListByUsername = usersResource.search(request.userName());
         if (!userRepresentationListByUsername.isEmpty()) {
             throw new RuntimeException("Hesap zaten kullanılıyor.");
         }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tr.com.huseyinari.ecommerce.auth.request.LoginRequest;
+import tr.com.huseyinari.ecommerce.auth.request.RefreshTokenRequest;
 import tr.com.huseyinari.ecommerce.auth.request.RegisterRequest;
 import tr.com.huseyinari.ecommerce.auth.response.LoginResponse;
 import tr.com.huseyinari.ecommerce.auth.response.RegisterResponse;
@@ -22,6 +23,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = service.login(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshTokenRequest request) {
+        LoginResponse response = service.refresh(request);
         return ResponseEntity.ok(response);
     }
 
