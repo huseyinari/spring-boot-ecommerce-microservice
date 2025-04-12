@@ -26,12 +26,12 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<CategorySearchResponse> findOne(@PathVariable Long id) {
         CategorySearchResponse response = service.findOne(id);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<CategoryCreateResponse> create(@RequestBody CategoryCreateRequest request) {
         CategoryCreateResponse response = service.create(request);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 }

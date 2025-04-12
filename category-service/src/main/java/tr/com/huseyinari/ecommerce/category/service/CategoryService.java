@@ -3,6 +3,7 @@ package tr.com.huseyinari.ecommerce.category.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
+import tr.com.huseyinari.ecommerce.category.exception.CategoryNotFoundException;
 import tr.com.huseyinari.ecommerce.category.mapper.CategoryMapper;
 import tr.com.huseyinari.ecommerce.category.repository.CategoryRepository;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
@@ -24,7 +25,7 @@ public class CategoryService {
     }
 
     public CategorySearchResponse findOne(Long id) {
-        Category category = repository.findById(id).orElseThrow(() -> new RuntimeException("Kategori bulunamadı !"));
+        Category category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);
         return CategoryMapper.toSearchResponse(category);
     }
 

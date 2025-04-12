@@ -12,6 +12,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+//@EqualsAndHashCode
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_image_id_sequence")

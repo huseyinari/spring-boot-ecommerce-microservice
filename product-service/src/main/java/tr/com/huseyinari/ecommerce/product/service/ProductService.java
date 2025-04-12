@@ -1,10 +1,12 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tr.com.huseyinari.ecommerce.product.client.CategoryClient;
 import tr.com.huseyinari.ecommerce.product.client.InventoryClient;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductStatus;
@@ -14,6 +16,8 @@ import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
+import tr.com.huseyinari.ecommerce.product.shared.CategorySearchResponse;
+import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,18 +29,13 @@ public class ProductService {
     private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository repository;
-    private final InventoryClient inventoryClient;
     private final ProductKafkaProducer kafkaProducer;
+    private final CategoryClient categoryClient;
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
-        Optional<Product> optional = this.repository.findBySkuCodeAndStatus(skuCode, ProductStatus.SUCCESS);
-
-        if (optional.isEmpty()) {
-            throw new RuntimeException("Ürün bulunamadı !");
-        }
-
-        return ProductMapper.toSearchResponse(optional.get());
+        Product product = this.repository.findBySkuCodeAndStatus(skuCode, ProductStatus.SUCCESS).orElseThrow(() -> new RuntimeException("Ürün bulunamadı !"));
+        return ProductMapper.toSearchResponse(product);
     }
 
     @Transactional(readOnly = true)
@@ -53,7 +52,14 @@ public class ProductService {
             throw new RuntimeException("Aynı isme sahip ürün zaten mevcut.");
         }
 
-        // TODO: categoryId var mı kontrolü ??
+        try {
+            SinhaRestApiResponse<CategorySearchResponse> response = categoryClient.findOne(request.categoryId());
+        } catch (FeignException.NotFound e) {
+            throw new RuntimeException("Geçerli bir kategori seçiniz !");
+        } catch (Exception e) {
+            throw new RuntimeException("Kategori servisine erişilemedi. Lütfen daha sonra tekrar deneyiniz.");
+        }
+
 
         Product product = ProductMapper.toEntity(request);
         product.setSkuCode(this.generateSkuCode(product.getName()));
