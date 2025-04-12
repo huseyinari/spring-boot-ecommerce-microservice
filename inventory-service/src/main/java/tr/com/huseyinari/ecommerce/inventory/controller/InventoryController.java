@@ -14,11 +14,11 @@ import tr.com.huseyinari.ecommerce.inventory.service.InventoryService;
 public class InventoryController {
     private final InventoryService service;
 
-    @PostMapping("{skuCode}")
-    public ResponseEntity<Void> openProductStock(@PathVariable String skuCode) {
-        this.service.openProductStock(skuCode);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("{skuCode}")
+//    public ResponseEntity<Void> openProductStock(@PathVariable String skuCode) {
+//        this.service.openProductStock(skuCode);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/is-in-stock")
     public ResponseEntity<Boolean> isInStock(@RequestParam String skuCode, @RequestParam Integer quantity) {

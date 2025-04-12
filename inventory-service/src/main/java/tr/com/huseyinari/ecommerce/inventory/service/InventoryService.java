@@ -21,14 +21,15 @@ public class InventoryService {
         return this.repository.existsBySkuCodeAndQuantityGreaterThanEqual(skuCode, quantity);
     }
 
-    @Transactional
-    public void openProductStock(String skuCode) {
-        Inventory inventory = new Inventory();
-        inventory.setSkuCode(skuCode);      // Bu servis, yeni ürün oluşturulduğunda bizim tarafımızdan çağrılacağı için skuCode'u kontrol ettirmedim.
-        inventory.setQuantity(0);
-
-        this.repository.save(inventory);
-    }
+    // KAFKA İLE AÇILIŞ STOĞU OLUŞTURULDUGU İÇİN SERVİS KALDIRILDI
+//    @Transactional
+//    public void openProductStock(String skuCode) {
+//        Inventory inventory = new Inventory();
+//        inventory.setSkuCode(skuCode);      // Bu servis, yeni ürün oluşturulduğunda bizim tarafımızdan çağrılacağı için skuCode'u kontrol ettirmedim.
+//        inventory.setQuantity(0);
+//
+//        this.repository.save(inventory);
+//    }
 
     @Transactional
     public StockIncreaseResponse increaseStock(StockIncreaseRequest request) {
