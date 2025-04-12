@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class CreateOpeningProductStockEvent {
     private String skuCode;
+    private String createdBy;
 }

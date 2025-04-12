@@ -33,7 +33,7 @@ public class InventoryKafkaConsumer {
             newStock.setQuantity(0);
 
             // TODO: AUDITING BILGILERI NEREDE SETLENMELİ ???
-            newStock.setCreatedBy("system (kafka)");
+            newStock.setCreatedBy(event.getCreatedBy());
             newStock.setCreatedDate(LocalDateTime.now());
 
             repository.save(newStock);
