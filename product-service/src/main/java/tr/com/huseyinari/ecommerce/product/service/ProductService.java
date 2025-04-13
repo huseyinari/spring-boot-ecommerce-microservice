@@ -1,30 +1,33 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import feign.FeignException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import tr.com.huseyinari.ecommerce.product.client.CategoryClient;
-import tr.com.huseyinari.ecommerce.product.client.InventoryClient;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductStatus;
+import tr.com.huseyinari.ecommerce.product.exception.ProductAlreadyExistException;
+import tr.com.huseyinari.ecommerce.product.exception.ProductNotFoundException;
 import tr.com.huseyinari.ecommerce.product.kafka.producer.ProductKafkaProducer;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
-import tr.com.huseyinari.ecommerce.product.shared.CategorySearchResponse;
+import tr.com.huseyinari.ecommerce.product.shared.response.CategorySearchResponse;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class ProductService {
     private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
@@ -34,7 +37,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
-        Product product = this.repository.findBySkuCodeAndStatus(skuCode, ProductStatus.SUCCESS).orElseThrow(() -> new RuntimeException("Ürün bulunamadı !"));
+        Product product = this.repository.findBySkuCodeAndStatus(skuCode, ProductStatus.SUCCESS).orElseThrow(ProductNotFoundException::new);
         return ProductMapper.toSearchResponse(product);
     }
 
@@ -47,9 +50,9 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductCreateResponse create(ProductCreateRequest request) {
+    public ProductCreateResponse create(@Valid ProductCreateRequest request) {
         if (repository.findByName(request.name()).isPresent()) {
-            throw new RuntimeException("Aynı isme sahip ürün zaten mevcut.");
+            throw new ProductAlreadyExistException();
         }
 
         try {
@@ -59,7 +62,6 @@ public class ProductService {
         } catch (Exception e) {
             throw new RuntimeException("Kategori servisine erişilemedi. Lütfen daha sonra tekrar deneyiniz.");
         }
-
 
         Product product = ProductMapper.toEntity(request);
         product.setSkuCode(this.generateSkuCode(product.getName()));

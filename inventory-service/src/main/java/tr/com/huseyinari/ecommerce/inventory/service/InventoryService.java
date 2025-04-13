@@ -1,9 +1,12 @@
 package tr.com.huseyinari.ecommerce.inventory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tr.com.huseyinari.ecommerce.inventory.domain.Inventory;
+import tr.com.huseyinari.ecommerce.inventory.exception.ProductSkuCodeNotFoundException;
 import tr.com.huseyinari.ecommerce.inventory.mapper.InventoryMapper;
 import tr.com.huseyinari.ecommerce.inventory.repository.InventoryRepository;
 import tr.com.huseyinari.ecommerce.inventory.request.StockIncreaseRequest;
@@ -14,6 +17,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class InventoryService {
+    private final Logger logger = LoggerFactory.getLogger(InventoryService.class);
+
     private final InventoryRepository repository;
 
     @Transactional(readOnly = true)
@@ -33,13 +38,7 @@ public class InventoryService {
 
     @Transactional
     public StockIncreaseResponse increaseStock(StockIncreaseRequest request) {
-        Optional<Inventory> optional = this.repository.findBySkuCode(request.getSkuCode());
-
-        if (optional.isEmpty()) {
-            throw new RuntimeException("Belirtilen koda ait ürün bulunamadı !");
-        }
-
-        Inventory currentStock = optional.get();
+        Inventory currentStock = this.repository.findBySkuCode(request.getSkuCode()).orElseThrow(ProductSkuCodeNotFoundException::new);
 
         Integer lastQuantity = currentStock.getQuantity() + request.getQuantity();
         currentStock.setQuantity(lastQuantity);

@@ -16,14 +16,6 @@ import java.util.Map;
 public class GlobalExceptionHandler extends SinhaGlobalExceptionHandler {
     @ExceptionHandler({CategoryNotFoundException.class})
     public ResponseEntity<SinhaRestApiResponse<Object>> handleCategoryNotFoundException(CategoryNotFoundException exception) {
-        final Map<String, String> errors = new HashMap<>();
-        errors.put("system", exception.getMessage());
-
-        SinhaRestApiResponse<Object> response = new SinhaRestApiResponse<>();
-        response.setData(null);
-        response.setResponseTime(LocalDateTime.now());
-        response.setErrors(errors);
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return super.fromSingleErrorMessage(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

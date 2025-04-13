@@ -3,10 +3,11 @@ package tr.com.huseyinari.ecommerce.auth.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -14,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import tr.com.huseyinari.ecommerce.auth.config.EcommerceKeycloakProperties;
+import tr.com.huseyinari.ecommerce.auth.exception.*;
 import tr.com.huseyinari.ecommerce.auth.request.LoginRequest;
 import tr.com.huseyinari.ecommerce.auth.request.RefreshTokenRequest;
 import tr.com.huseyinari.ecommerce.auth.request.RegisterRequest;
@@ -27,6 +29,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    private final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
     private final KeycloakAdminClientService keycloakAdminClientService;
     private final EcommerceKeycloakProperties keycloakProperties;
 
@@ -67,9 +71,9 @@ public class AuthService {
             return new LoginResponse(tokenType, accessToken, refreshToken, expiresIn, refreshExpiresIn);
         } catch (HttpClientErrorException e) {
             if ("Unauthorized".equals(e.getStatusText())) {
-                throw new RuntimeException("Kullanıcı adı veya şifre yanlış !");
+                throw new BadCredentialsException();
             } else if ("Bad Request".equals(e.getStatusText())) {
-                throw new RuntimeException("Kullanıcı hesabı aktif değil !");
+                throw new UserNotActiveException();
             } else {
                 throw new RuntimeException("Giriş yapma işlemi başarısız !");
             }
@@ -114,7 +118,7 @@ public class AuthService {
             return new LoginResponse(tokenType, accessToken, refreshToken, expiresIn, refreshExpiresIn);
         } catch (HttpClientErrorException e) {
             if ("Bad Request".equals(e.getStatusText())) {
-                throw new RuntimeException("Refresh Token hatalı olduğu için yenileme işlemi yapılamadı !");
+                throw new InvalidRefreshTokenException();
             } else {
                 throw new RuntimeException("Token yenileme işlemi sırasında hata oluştu !");
             }
@@ -128,12 +132,12 @@ public class AuthService {
 
         List<UserRepresentation> userRepresentationListByUsername = usersResource.search(request.userName());
         if (!userRepresentationListByUsername.isEmpty()) {
-            throw new RuntimeException("Hesap zaten kullanılıyor.");
+            throw new UsernameAlreadyExistException();
         }
 
         List<UserRepresentation> userRepresentationListByEmail = usersResource.search(null, null, null, request.email(), null, null);
         if (!userRepresentationListByEmail.isEmpty()) {
-            throw new RuntimeException("E-Posta adresi kullanılıyor.");
+            throw new EmailAlreadyExistException();
         }
 
         CredentialRepresentation credential = new CredentialRepresentation();
