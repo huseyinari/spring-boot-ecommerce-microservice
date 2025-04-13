@@ -2,6 +2,7 @@ package tr.com.huseyinari.ecommerce.product.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import tr.com.huseyinari.ecommerce.product.enums.ProductStatus;
 import tr.com.huseyinari.springdatajpa.AbstractAuditableEntity;
 
 import java.math.BigDecimal;

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import tr.com.huseyinari.ecommerce.product.client.CategoryClient;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
-import tr.com.huseyinari.ecommerce.product.domain.ProductStatus;
+import tr.com.huseyinari.ecommerce.product.enums.ProductStatus;
 import tr.com.huseyinari.ecommerce.product.exception.ProductAlreadyExistException;
 import tr.com.huseyinari.ecommerce.product.exception.ProductNotFoundException;
 import tr.com.huseyinari.ecommerce.product.kafka.producer.ProductKafkaProducer;

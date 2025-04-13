@@ -1,4 +1,4 @@
-package tr.com.huseyinari.ecommerce.product.domain;
+package tr.com.huseyinari.ecommerce.product.enums;
 
 import lombok.Getter;
 

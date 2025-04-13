@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.common.kafka.event.CreateOpeningProductStockFailureEvent;
 import tr.com.huseyinari.ecommerce.common.kafka.event.CreateOpeningProductStockSuccessEvent;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
-import tr.com.huseyinari.ecommerce.product.domain.ProductStatus;
+import tr.com.huseyinari.ecommerce.product.enums.ProductStatus;
 import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
 
 import java.util.Optional;
