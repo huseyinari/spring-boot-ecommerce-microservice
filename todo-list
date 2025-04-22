@@ -1,5 +1,4 @@
 storage service yazılacak veya resimler için ne yapılabileceği araştırılacak.
 Category ve Products için resimler ayarlanmalı
 
-
-keycloak servis yazıp kullanıcı kaydı açma
+ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı
