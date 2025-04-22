@@ -1,0 +1,53 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: api-gateway-service
+#  main:
+#    web-application-type: reactive
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8088/realms/ecommerce
+  cloud:
+    gateway:
+#      default-filters:
+#        - TokenRelay=
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/v1/product/**
+          filters:
+            - AddAuthenticatedUserInHeaderFilter
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/order/**
+          filters:
+            - AddAuthenticatedUserInHeaderFilter
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/v1/inventory/**
+          filters:
+            - AddAuthenticatedUserInHeaderFilter
+        - id: category-service
+          uri: lb://category-service
+          predicates:
+            - Path=/api/v1/category/**
+          filters:
+            - AddAuthenticatedUserInHeaderFilter
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/v1/auth/**
+          # filters:
+            # - AddAuthenticatedUserInHeaderFilter
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
