@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.common.kafka.event.CreateOpeningProductStockEvent;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
@@ -17,7 +18,7 @@ public class ProductKafkaProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void createOpeningProductStock(Product product) {
-        String currentUsername = RequestUtils.getHeader("X-Authenticated-User-Name").orElseThrow();
+        String currentUsername = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_NAME).orElseThrow();
 
         CreateOpeningProductStockEvent event = new CreateOpeningProductStockEvent();
         event.setSkuCode(product.getSkuCode());

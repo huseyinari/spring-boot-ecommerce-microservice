@@ -1,10 +1,9 @@
 package tr.com.huseyinari.ecommerce.product.config;
 
 import feign.RequestInterceptor;
-import feign.RequestTemplate;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 
 import java.util.Optional;
@@ -15,11 +14,11 @@ public class FeignConfiguration {
     public RequestInterceptor addAuthenticatedUserInRequestInterceptor() {
         return requestTemplate -> {
             // Api Gateway'den gelen giriş yapmış kullanıcı adını içerdeki servisleri çağırırken de iletecek.
-            Optional<String> optionalUsername = RequestUtils.getHeader("X-Authenticated-User-Name");
+            Optional<String> optionalUsername = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_NAME);
 
             if (optionalUsername.isPresent()) {
                 String authenticatedUsername = optionalUsername.get();
-                requestTemplate.header("X-Authenticated-User-Name", authenticatedUsername);
+                requestTemplate.header(RequestHeaderConstants.AUTHENTICATED_USER_NAME, authenticatedUsername);
             }
         };
     }

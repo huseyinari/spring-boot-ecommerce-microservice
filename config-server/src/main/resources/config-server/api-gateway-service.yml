@@ -13,38 +13,45 @@ spring:
   cloud:
     gateway:
 #      default-filters:
-#        - TokenRelay=
+#        - AddAuthenticatedUserInHeaderFilter
+#        - LoggingFilter
       routes:
         - id: product-service
           uri: lb://product-service
           predicates:
             - Path=/api/v1/product/**
+          # NOT => Filter'lar burada tanımlandığı sırayla çalışırlar !!! AbstractGatewayFilterFactory ile oluşturulan filter'lara Ordered işlemez. Buradaki sıra önemli
           filters:
             - AddAuthenticatedUserInHeaderFilter
+            - LoggingFilter
         - id: order-service
           uri: lb://order-service
           predicates:
             - Path=/api/v1/order/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
+            - LoggingFilter
         - id: inventory-service
           uri: lb://inventory-service
           predicates:
             - Path=/api/v1/inventory/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
+            - LoggingFilter
         - id: category-service
           uri: lb://category-service
           predicates:
             - Path=/api/v1/category/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
+            - LoggingFilter
         - id: auth-service
           uri: lb://auth-service
           predicates:
             - Path=/api/v1/auth/**
-          # filters:
-            # - AddAuthenticatedUserInHeaderFilter
+          filters:
+            - LoggingFilter
+#             - AddAuthenticatedUserInHeaderFilter
 eureka:
   client:
     registerWithEureka: true

@@ -8,6 +8,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.apigateway.security.CustomAuthenticationToken;
+import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 
 @Component
 public class AddAuthenticatedUserInHeaderFilter extends AbstractGatewayFilterFactory<AddAuthenticatedUserInHeaderFilter.Config> {
@@ -26,9 +27,11 @@ public class AddAuthenticatedUserInHeaderFilter extends AbstractGatewayFilterFac
                         if (authenticationToken == null)
                             return chain.filter(exchange);
 
+                        // Giriş yapan kullanıcıyı request header'a X-Authenticated-User-Name olarak ekleyecek...
+
                         String authenticatedUsername = authenticationToken.getUsername();
                         ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                .header("X-Authenticated-User-Name", authenticatedUsername)
+                                .header(RequestHeaderConstants.AUTHENTICATED_USER_NAME, authenticatedUsername)
                                 .build();
 
                         return chain.filter(exchange.mutate().request(mutatedRequest).build());
