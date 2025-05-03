@@ -52,6 +52,13 @@ spring:
           filters:
             - LoggingFilter
 #             - AddAuthenticatedUserInHeaderFilter
+        - id: storage-service
+          uri: lb://storage-service
+          predicates:
+            - Path=/api/v1/storage/**
+          filters:
+            - LoggingFilter
+            - AddAuthenticatedUserInHeaderFilter
 eureka:
   client:
     registerWithEureka: true
