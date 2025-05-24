@@ -6,12 +6,14 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 public class CustomAuthenticationToken extends AbstractAuthenticationToken {
+    private String userId;
     private String username;
     private String name;
     private String familyName;
     private String email;
 
     public CustomAuthenticationToken(
+        String userId,
         String username,
         String name,
         String familyName,
@@ -19,7 +21,7 @@ public class CustomAuthenticationToken extends AbstractAuthenticationToken {
         Collection<? extends GrantedAuthority> authorities
     ) {
         super(authorities);
-
+        this.userId = userId;
         this.username = username;
         this.name = name;
         this.familyName = familyName;
@@ -37,6 +39,9 @@ public class CustomAuthenticationToken extends AbstractAuthenticationToken {
         return this.username;
     }
 
+    public String getUserId() {
+        return this.userId;
+    }
     public String getUsername() {
         return this.username;
     }

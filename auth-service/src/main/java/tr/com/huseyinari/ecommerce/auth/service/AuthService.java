@@ -23,8 +23,7 @@ import tr.com.huseyinari.ecommerce.auth.response.LoginResponse;
 import tr.com.huseyinari.ecommerce.auth.response.RegisterResponse;
 
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -153,10 +152,17 @@ public class AuthService {
         user.setCredentials(Collections.singletonList(credential));
         user.setEnabled(true);
 
+        Map<String, List<String>> attributes = new HashMap<>();
+
+        String userId = UUID.randomUUID().toString();
+        attributes.put("userId", Collections.singletonList(userId));    // Kullanıcıya attribute olarak kendi oluşturduğum bir ID veriyorum.
+
+        user.setAttributes(attributes);
+
         Response response = usersResource.create(user);
 
         if (response.getStatus() == 201) {
-            return new RegisterResponse(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail());
+            return new RegisterResponse(userId, user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail());
         } else {
             throw new RuntimeException("Kullanıcı kaydetme işleminde bir hata oluştu !");
         }

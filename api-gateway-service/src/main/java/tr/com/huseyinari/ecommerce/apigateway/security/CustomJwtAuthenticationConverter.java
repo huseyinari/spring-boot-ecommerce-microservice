@@ -26,12 +26,15 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Mono<Abs
             Collection<GrantedAuthority> authorities = this.extractAuthorities(jwt);
 
             // Kullanıcı bilgilerini al
+            String userId = jwt.getClaimAsString("user_id");   // Kullanıcıyı kaydederken authservice'te attribute olarak userId (UUID) veriyorum. Onu da keycloak tarafında token'e ekledim.
             String username = jwt.getClaimAsString("preferred_username");
             String email = jwt.getClaimAsString("email");
             String name = jwt.getClaimAsString("given_name");
             String familyName = jwt.getClaimAsString("family_name");
 
-            return new CustomAuthenticationToken(username, name, familyName, email, authorities);   // <-- kendi oluşturduğumuz token sınıfı
+            // TODO: userId, username... alanlarının boş gelme durumları kontrol edilmeli
+
+            return new CustomAuthenticationToken(userId, username, name, familyName, email, authorities);   // <-- kendi oluşturduğumuz token sınıfı
         });
     }
 

@@ -30,8 +30,11 @@ public class AddAuthenticatedUserInHeaderFilter extends AbstractGatewayFilterFac
                         // Giriş yapan kullanıcıyı request header'a X-Authenticated-User-Name olarak ekleyecek...
 
                         String authenticatedUsername = authenticationToken.getUsername();
+                        String authenticatedUserId = authenticationToken.getUserId();
+
                         ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
                                 .header(RequestHeaderConstants.AUTHENTICATED_USER_NAME, authenticatedUsername)
+                                .header(RequestHeaderConstants.AUTHENTICATED_USER_ID, authenticatedUserId)
                                 .build();
 
                         return chain.filter(exchange.mutate().request(mutatedRequest).build());
