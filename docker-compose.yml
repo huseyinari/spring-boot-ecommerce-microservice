@@ -49,6 +49,17 @@ services:
       POSTGRES_USER: ${CATEGORY_DB_USER}
       POSTGRES_DB: ${CATEGORY_DB}
 
+  storage-service-db:
+    image: postgres:17.2
+    container_name: storage-db
+    ports:
+      - 5458:5432
+    volumes:
+      - /Users/sinha/Desktop/ecommerce/volume-data/storage-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${STORAGE_DB_PASSWORD}
+      POSTGRES_USER: ${STORAGE_DB_USER}
+      POSTGRES_DB: ${STORAGE_DB}
 
   keycloak-db:
     image: postgres:17.2
