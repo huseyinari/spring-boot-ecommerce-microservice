@@ -15,7 +15,7 @@ CREATE TABLE orders (
     price DEC(10, 2) NOT NULL,
     quantity INTEGER NOT NULL,
     --
-    created_by VARCHAR(100) NOT NULL,
+    created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
     updated_by VARCHAR(100),
     updated_date TIMESTAMP

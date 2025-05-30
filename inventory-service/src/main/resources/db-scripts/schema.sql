@@ -13,7 +13,7 @@ CREATE TABLE inventory (
     sku_code VARCHAR(255) NOT NULL,
     quantity INTEGER NOT NULL DEFAULT 0,
     --
-    created_by VARCHAR(100) NOT NULL,
+    created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
     updated_by VARCHAR(100),
     updated_date TIMESTAMP
