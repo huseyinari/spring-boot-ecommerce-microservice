@@ -9,5 +9,5 @@ public record ProductSearchResponse (
     String description,
     String skuCode,
     BigDecimal price,
-    Set<String> imageUrls
+    Set<Long> imageStorageIds
 ) {}

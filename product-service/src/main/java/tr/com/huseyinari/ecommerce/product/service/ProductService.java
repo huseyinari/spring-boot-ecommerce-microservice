@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.product.client.CategoryClient;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.enums.ProductStatus;
@@ -20,6 +21,7 @@ import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.shared.response.CategorySearchResponse;
+import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
 import java.util.List;
@@ -36,14 +38,20 @@ public class ProductService {
     private final CategoryClient categoryClient;
 
     @Transactional(readOnly = true)
+    public ProductSearchResponse findById(String id) {
+        Product product = this.repository.findById(id).orElseThrow(ProductNotFoundException::new);
+        return ProductMapper.toSearchResponse(product);
+    }
+
+    @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
-        Product product = this.repository.findBySkuCodeAndStatus(skuCode, ProductStatus.SUCCESS).orElseThrow(ProductNotFoundException::new);
+        Product product = this.repository.findBySkuCode(skuCode).orElseThrow(ProductNotFoundException::new);
         return ProductMapper.toSearchResponse(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductSearchResponse> findAll() {
-        return repository.findAllByStatus(ProductStatus.SUCCESS)
+        return repository.findAll()
                 .stream()
                 .map(ProductMapper::toSearchResponse)
                 .toList();
@@ -51,6 +59,8 @@ public class ProductService {
 
     @Transactional
     public ProductCreateResponse create(@Valid ProductCreateRequest request) {
+        String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow(() -> new RuntimeException("Kullanıcı bilgisi bulunamadı !"));
+
         if (repository.findByName(request.name()).isPresent()) {
             throw new ProductAlreadyExistException();
         }
@@ -65,6 +75,7 @@ public class ProductService {
 
         Product product = ProductMapper.toEntity(request);
         product.setSkuCode(this.generateSkuCode(product.getName()));
+        product.setUserId(currentUserId);
         product.setStatus(ProductStatus.PENDING);
 
         product = repository.save(product);

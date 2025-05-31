@@ -11,8 +11,9 @@ CREATE TABLE products (
     category_id BIGINT NOT NULL,
     status VARCHAR(20) NOT NULL,
     failure_description VARCHAR(4000),
+    user_id VARCHAR(255) NOT NULL,
     --
-    created_by VARCHAR(100) NOT NULL,
+    created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
     updated_by VARCHAR(100),
     updated_date TIMESTAMP
@@ -33,10 +34,15 @@ NO CYCLE;
 CREATE TABLE product_image (
     id BIGINT,
     product_id VARCHAR(100) NOT NULL,
-    image_url VARCHAR(100) NOT NULL
+    storage_object_id BIGINT NOT NULL,
+    --
+    created_by VARCHAR(100),
+    created_date TIMESTAMP NOT NULL,
+    updated_by VARCHAR(100),
+    updated_date TIMESTAMP
 );
 
 ALTER TABLE product_image ADD CONSTRAINT pk_product_image_id PRIMARY KEY (id);
 ALTER TABLE product_image ADD CONSTRAINT fk_product_image_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 
-CREATE UNIQUE INDEX un_ind_product_image_product_id_image_url ON product_image (product_id, image_url);
+CREATE UNIQUE INDEX un_ind_product_image_product_id_storage_object_id ON product_image (product_id, storage_object_id);

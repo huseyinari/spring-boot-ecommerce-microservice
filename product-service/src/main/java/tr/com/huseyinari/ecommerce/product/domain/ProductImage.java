@@ -2,6 +2,7 @@ package tr.com.huseyinari.ecommerce.product.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import tr.com.huseyinari.springdatajpa.AbstractAuditableEntity;
 
 import java.util.Objects;
 
@@ -13,14 +14,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 //@EqualsAndHashCode
-public class ProductImage {
+public class ProductImage extends AbstractAuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_image_id_sequence")
     @SequenceGenerator(name = "product_image_id_sequence", sequenceName = "product_image_id_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "storage_object_id")
+    private Long storageObjectId;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)

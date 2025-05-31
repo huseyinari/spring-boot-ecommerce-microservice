@@ -25,10 +25,10 @@ public class ProductMapper {
     }
 
     public static ProductSearchResponse toSearchResponse(Product product) {
-        Set<String> imageUrls =
+        Set<Long> imageStorageIds =
                 product.getProductImages()
                         .stream()
-                        .map(ProductImage::getImageUrl)
+                        .map(ProductImage::getStorageObjectId)
                         .collect(Collectors.toSet());
 
         return new ProductSearchResponse(
@@ -37,14 +37,14 @@ public class ProductMapper {
                 product.getDescription(),
                 product.getSkuCode(),
                 product.getPrice(),
-                imageUrls
+                imageStorageIds
         );
     }
     public static ProductCreateResponse toCreateResponse(Product product) {
-        Set<String> imageUrls =
+        Set<Long> imageStorageIds =
                 product.getProductImages()
                     .stream()
-                    .map(ProductImage::getImageUrl)
+                    .map(ProductImage::getStorageObjectId)
                     .collect(Collectors.toSet());
 
         return new ProductCreateResponse(
@@ -53,7 +53,7 @@ public class ProductMapper {
             product.getDescription(),
             product.getSkuCode(),
             product.getPrice(),
-            imageUrls
+                imageStorageIds
         );
     }
 }

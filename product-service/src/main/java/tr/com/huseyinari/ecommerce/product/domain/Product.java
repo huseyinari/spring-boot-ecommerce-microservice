@@ -43,6 +43,9 @@ public class Product extends AbstractAuditableEntity {
     @Column(name = "failure_description")
     private String failureDescription;
 
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private Set<ProductImage> productImages = new HashSet<>();
 }
