@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tr.com.huseyinari.ecommerce.storage.request.UploadRequest;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentBase64Response;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentResponse;
+import tr.com.huseyinari.ecommerce.storage.response.StorageObjectSearchResponse;
 import tr.com.huseyinari.ecommerce.storage.response.UploadResponse;
 import tr.com.huseyinari.ecommerce.storage.service.StorageService;
 import tr.com.huseyinari.springweb.rest.IgnoreResponseBodyAdvice;
@@ -19,6 +20,12 @@ import tr.com.huseyinari.springweb.rest.IgnoreResponseBodyAdvice;
 @RequiredArgsConstructor
 public class StorageController {
     private final StorageService service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StorageObjectSearchResponse> findOne(@PathVariable Long id) {
+        StorageObjectSearchResponse response = service.findOne(id);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UploadResponse> upload(
@@ -32,16 +39,16 @@ public class StorageController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/base64/{storageObjectId}")
-    public ResponseEntity<FileContentBase64Response> getBase64(@PathVariable Long storageObjectId) {
-        FileContentBase64Response response = service.getFileContentBase64(storageObjectId);
+    @GetMapping("/base64/{id}")
+    public ResponseEntity<FileContentBase64Response> getBase64(@PathVariable Long id) {
+        FileContentBase64Response response = service.getFileContentBase64(id);
         return ResponseEntity.ok(response);
     }
 
     @IgnoreResponseBodyAdvice
-    @GetMapping("/download/{storageObjectId}")
-    public ResponseEntity<byte[]> download(@PathVariable Long storageObjectId) {
-        FileContentResponse response = service.getFileContent(storageObjectId);
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> download(@PathVariable Long id) {
+        FileContentResponse response = service.getFileContent(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);

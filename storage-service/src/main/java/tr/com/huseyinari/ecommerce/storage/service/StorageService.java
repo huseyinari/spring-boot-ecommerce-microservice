@@ -9,10 +9,7 @@ import tr.com.huseyinari.ecommerce.storage.repository.StorageObjectRepository;
 import tr.com.huseyinari.ecommerce.storage.request.S3GetFileRequest;
 import tr.com.huseyinari.ecommerce.storage.request.S3UploadRequest;
 import tr.com.huseyinari.ecommerce.storage.request.UploadRequest;
-import tr.com.huseyinari.ecommerce.storage.response.FileContentBase64Response;
-import tr.com.huseyinari.ecommerce.storage.response.FileContentResponse;
-import tr.com.huseyinari.ecommerce.storage.response.S3UploadResponse;
-import tr.com.huseyinari.ecommerce.storage.response.UploadResponse;
+import tr.com.huseyinari.ecommerce.storage.response.*;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.utils.StringUtils;
 
@@ -21,6 +18,20 @@ import tr.com.huseyinari.utils.StringUtils;
 public class StorageService {
     private final StorageObjectRepository repository;
     private final S3Service s3Service;
+
+    public StorageObjectSearchResponse findOne(Long id) {
+        StorageObject storageObject = repository.findById(id).orElseThrow(() -> new RuntimeException("Dosya bulunamadı !"));
+
+        if (storageObject.isPrivateAccess()) {
+            String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+
+            if (!currentUserId.equals(storageObject.getOwnerId())) {
+                throw new RuntimeException("Dosyaya erişim izniniz bulunmamaktadır !");
+            }
+        }
+
+        return StorageMapper.toSearchResponse(storageObject);
+    }
 
     public UploadResponse upload(UploadRequest request) {
         String currentUserId = null;
@@ -45,25 +56,17 @@ public class StorageService {
         return StorageMapper.toUploadResponse(storageObject);
     }
 
-    public FileContentResponse getFileContent(Long storageObjectId) {
-        StorageObject storageObject = repository.findById(storageObjectId).orElseThrow(() -> new RuntimeException("Dosya bulunamadı !"));
+    public FileContentResponse getFileContent(Long id) {
+        StorageObjectSearchResponse storageObject = this.findOne(id);
 
-        if (storageObject.isPrivateAccess()) {
-            String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
-
-            if (!currentUserId.equals(storageObject.getOwnerId())) {
-                throw new RuntimeException("Dosyaya erişim izniniz bulunmamaktadır !");
-            }
-        }
-
-        S3GetFileRequest s3GetFileRequest = new S3GetFileRequest(storageObject.getFileName(), storageObject.getStorageName());
+        S3GetFileRequest s3GetFileRequest = new S3GetFileRequest(storageObject.fileName(), storageObject.storageName());
         byte[] content = s3Service.getFileContent(s3GetFileRequest);
 
-        return new FileContentResponse(content, storageObject.getFileName(), storageObject.getExtension());
+        return new FileContentResponse(content, storageObject.fileName(), storageObject.extension());
     }
 
-    public FileContentBase64Response getFileContentBase64(Long storageObjectId) {
-        final FileContentResponse fileContentResponse = this.getFileContent(storageObjectId);
+    public FileContentBase64Response getFileContentBase64(Long id) {
+        final FileContentResponse fileContentResponse = this.getFileContent(id);
 
         final String base64 = StringUtils.encodeBase64(fileContentResponse.content());
         final String fileName = fileContentResponse.fileName();
