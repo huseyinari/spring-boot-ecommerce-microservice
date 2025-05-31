@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.storage.domain.StorageObject;
+import tr.com.huseyinari.ecommerce.storage.exception.StorageObjectNotFoundException;
 import tr.com.huseyinari.ecommerce.storage.mapper.StorageMapper;
 import tr.com.huseyinari.ecommerce.storage.repository.StorageObjectRepository;
 import tr.com.huseyinari.ecommerce.storage.request.S3GetFileRequest;
@@ -20,12 +21,12 @@ public class StorageService {
     private final S3Service s3Service;
 
     public StorageObjectSearchResponse findOne(Long id) {
-        StorageObject storageObject = repository.findById(id).orElseThrow(() -> new RuntimeException("Dosya bulunamadı !"));
+        StorageObject storageObject = repository.findById(id).orElseThrow(StorageObjectNotFoundException::new);
 
         if (storageObject.isPrivateAccess()) {
             String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
 
-            if (!currentUserId.equals(storageObject.getOwnerId())) {
+            if (!storageObject.getOwnerId().equals(currentUserId)) {
                 throw new RuntimeException("Dosyaya erişim izniniz bulunmamaktadır !");
             }
         }
