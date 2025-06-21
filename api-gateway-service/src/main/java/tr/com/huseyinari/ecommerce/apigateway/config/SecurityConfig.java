@@ -11,6 +11,9 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoders;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import tr.com.huseyinari.ecommerce.apigateway.security.CustomJwtAuthenticationConverter;
 
 import java.util.List;
@@ -25,7 +28,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        final String[] permittedUrls = { "/public/**", "/eureka/**", "/api/v1/auth/**" };
+        final String[] permittedUrls = {
+            "/public/**",
+            "/eureka/**",
+            "/api/v1/auth/**",
+            "api/v1/category/menu"
+        };
 
         http
             .authorizeExchange(auth -> auth
@@ -40,9 +48,24 @@ public class SecurityConfig {
             ));
 
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
-        http.cors(ServerHttpSecurity.CorsSpec::disable);
+//        http.cors(ServerHttpSecurity.CorsSpec::disable);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+//        corsConfig.addAllowedOrigin("http://localhost:3000"); // React app URL
+        corsConfig.addAllowedOriginPattern("*");
+        corsConfig.addAllowedMethod("*");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+
+        return new CorsWebFilter(source);
     }
 
     // REAKTİK OLMASAYDI KULLANABİLİRDİK
