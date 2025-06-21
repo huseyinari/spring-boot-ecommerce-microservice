@@ -11,6 +11,7 @@ import tr.com.huseyinari.ecommerce.category.repository.CategoryRepository;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
+import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
 
 import java.util.List;
 
@@ -22,14 +23,14 @@ public class CategoryService {
     private final CategoryRepository repository;
 
     public List<CategorySearchResponse> findAll() {
-        return repository.findAll()
+        return this.repository.findAll()
                 .stream()
                 .map(CategoryMapper::toSearchResponse)
                 .toList();
     }
 
     public CategorySearchResponse findOne(Long id) {
-        Category category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);
+        Category category = this.repository.findById(id).orElseThrow(CategoryNotFoundException::new);
         return CategoryMapper.toSearchResponse(category);
     }
 
@@ -38,5 +39,35 @@ public class CategoryService {
         category = this.repository.save(category);
 
         return CategoryMapper.toCreateResponse(category);
+    }
+
+    public List<MenuCategoryResponse> getMenuCategories() {
+        List<MenuCategoryResponse> allCategories =
+                this.repository.findAll()
+                        .stream()
+                        .map(CategoryMapper::toMenuCategoriesResponse)
+                        .toList();
+
+        List<MenuCategoryResponse> menuCategoryResponseList = allCategories.stream().filter(item -> item.getParentId() == null).toList(); // root kategorileri ekle
+
+        for (MenuCategoryResponse rootCategory : menuCategoryResponseList) {
+            this.setSubCategories(allCategories, rootCategory);
+        }
+
+        return menuCategoryResponseList;
+    }
+
+    // Recursive bir şekilde tüm kategorilere alt kategorilerini setler.
+    private void setSubCategories(List<MenuCategoryResponse> allCategories, MenuCategoryResponse selectedCategory) {
+        List<MenuCategoryResponse> subCategories = allCategories.stream().filter(item -> selectedCategory.getId().equals(item.getParentId())).toList();
+
+        if (subCategories.isEmpty())
+            return;
+
+        selectedCategory.setSubCategories(subCategories);
+
+        for (MenuCategoryResponse subCategory : subCategories) {
+            this.setSubCategories(allCategories, subCategory);
+        }
     }
 }

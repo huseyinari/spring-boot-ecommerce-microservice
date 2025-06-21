@@ -25,4 +25,11 @@ public class Category extends AbstractAuditableEntity {
 
     @Column(name = "total_product_count", nullable = false)
     private Integer totalProductCount;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+//    private Category parent;
+
+    @Column(name = "parent_id")
+    private Long parentId;
 }

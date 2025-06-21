@@ -13,6 +13,7 @@ CREATE TABLE category (
     category_name VARCHAR(255) NOT NULL,
     image_url VARCHAR(255) NOT NULL,
     total_product_count INTEGER NOT NULL DEFAULT 0,
+    parent_id BIGINT,
     --
     created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
@@ -22,3 +23,4 @@ CREATE TABLE category (
 
 ALTER TABLE category ADD CONSTRAINT pk_category_id PRIMARY KEY (id);
 ALTER TABLE category ADD CONSTRAINT un_category_name UNIQUE (category_name);
+ALTER TABLE category ADD CONSTRAINT fk_category_parent_id FOREIGN KEY (parent_id) REFERENCES category(id);

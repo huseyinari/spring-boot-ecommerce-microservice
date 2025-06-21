@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
+import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
 import tr.com.huseyinari.ecommerce.category.service.CategoryService;
 
 import java.util.List;
@@ -19,8 +20,8 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategorySearchResponse>> findAll() {
-        List<CategorySearchResponse> responseList = service.findAll();
-        return ResponseEntity.ok(responseList);
+        List<CategorySearchResponse> response = service.findAll();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -33,5 +34,11 @@ public class CategoryController {
     public ResponseEntity<CategoryCreateResponse> create(@RequestBody CategoryCreateRequest request) {
         CategoryCreateResponse response = service.create(request);
         return new ResponseEntity<>(response , HttpStatus.CREATED);
+    }
+
+    @GetMapping("/menu")
+    public ResponseEntity<List<MenuCategoryResponse>> getMenuCategories() {
+        List<MenuCategoryResponse> response = service.getMenuCategories();
+        return ResponseEntity.ok(response);
     }
 }

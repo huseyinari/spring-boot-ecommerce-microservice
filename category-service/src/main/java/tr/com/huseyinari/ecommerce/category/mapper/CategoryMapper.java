@@ -4,6 +4,9 @@ import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
+import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
+
+import java.util.ArrayList;
 
 public class CategoryMapper {
     private CategoryMapper() {
@@ -24,5 +27,17 @@ public class CategoryMapper {
 
     public static CategoryCreateResponse toCreateResponse(Category category) {
         return new CategoryCreateResponse(category.getId(), category.getName(), category.getImageUrl(), category.getTotalProductCount());
+    }
+
+    public static MenuCategoryResponse toMenuCategoriesResponse(Category category) {
+        MenuCategoryResponse response = new MenuCategoryResponse();
+        response.setId(category.getId());
+        response.setName(category.getName());
+        response.setImageUrl(category.getImageUrl());
+        response.setTotalProductCount(category.getTotalProductCount());
+        response.setParentId(category.getParentId());
+        response.setSubCategories(new ArrayList<>());
+
+        return response;
     }
 }
