@@ -16,6 +16,7 @@ CREATE TABLE storage_objects (
     extension VARCHAR(255) NOT NULL,
     is_private_access BOOLEAN NOT NULL DEFAULT FALSE,
     owner_id VARCHAR(255),
+    storage_type VARCHAR(255) NOT NULL,
     --
     created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,

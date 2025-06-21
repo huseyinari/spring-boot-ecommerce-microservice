@@ -2,6 +2,7 @@ package tr.com.huseyinari.ecommerce.storage.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import tr.com.huseyinari.ecommerce.storage.enums.StorageObjectType;
 import tr.com.huseyinari.springdatajpa.AbstractAuditableEntity;
 
 @Entity(name = "StorageObject")
@@ -34,4 +35,8 @@ public class StorageObject extends AbstractAuditableEntity {
 
     @Column(name = "owner_id")
     private String ownerId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "storage_type", nullable = false)
+    private StorageObjectType type;
 }

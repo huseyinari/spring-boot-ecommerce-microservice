@@ -1,9 +1,0 @@
-package tr.com.huseyinari.ecommerce.storage.request;
-
-import org.springframework.web.multipart.MultipartFile;
-
-public record UploadRequest (
-    MultipartFile multipartFile,
-    String storageName,
-    boolean privateAccess
-) {}

@@ -7,11 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tr.com.huseyinari.ecommerce.storage.request.UploadRequest;
+import tr.com.huseyinari.ecommerce.storage.request.UploadProductImageRequest;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentBase64Response;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentResponse;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectSearchResponse;
-import tr.com.huseyinari.ecommerce.storage.response.UploadResponse;
+import tr.com.huseyinari.ecommerce.storage.response.UploadProductImageResponse;
 import tr.com.huseyinari.ecommerce.storage.service.StorageService;
 import tr.com.huseyinari.springweb.rest.IgnoreResponseBodyAdvice;
 
@@ -24,18 +24,6 @@ public class StorageController {
     @GetMapping("/{id}")
     public ResponseEntity<StorageObjectSearchResponse> findOne(@PathVariable Long id) {
         StorageObjectSearchResponse response = service.findOne(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UploadResponse> upload(
-        @RequestParam("file") MultipartFile multipartFile,
-        @RequestParam("storage_name") String storageName,
-        @RequestParam("private_access") boolean privateAccess
-    ) {
-        UploadRequest request = new UploadRequest(multipartFile, storageName, privateAccess);
-        UploadResponse response = service.upload(request);
-
         return ResponseEntity.ok(response);
     }
 
@@ -56,5 +44,16 @@ public class StorageController {
         headers.setContentDispositionFormData("attachment", response.fileName());
 
         return new ResponseEntity<>(response.content(), headers, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/upload/product-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UploadProductImageResponse> uploadProductImage(
+        @RequestParam("file") MultipartFile multipartFile
+//        @RequestParam("private_access") boolean privateAccess
+    ) {
+        UploadProductImageRequest request = new UploadProductImageRequest(multipartFile);
+        UploadProductImageResponse response = service.uploadProductImage(request);
+
+        return ResponseEntity.ok(response);
     }
 }
