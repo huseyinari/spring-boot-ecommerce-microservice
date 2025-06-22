@@ -36,15 +36,15 @@ public class InventoryKafkaConsumer {
             newStock.setCreatedBy(event.getCreatedBy());
             newStock.setCreatedDate(LocalDateTime.now());
 
-            repository.save(newStock);
+            this.repository.save(newStock);
 
             logger.info("{} numaralı ürün için stok kaydı başarıyla açıldı. Mesaj ürün servisine gönderiliyor.", skuCode);
 
-            kafkaProducer.sendOpeningProductStockSuccess(skuCode);
+            this.kafkaProducer.sendOpeningProductStockSuccess(skuCode);
         } catch (Exception e) {
             logger.info("{} numaralı ürün için stok kaydı açılışında hata oluştu. {}", skuCode, e.getMessage());
 
-            kafkaProducer.sendOpeningProductStockFailure(skuCode, e.getMessage());
+            this.kafkaProducer.sendOpeningProductStockFailure(skuCode, e.getMessage());
         }
     }
 }

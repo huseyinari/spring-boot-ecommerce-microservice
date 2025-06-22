@@ -35,9 +35,9 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         String loginUrl = new StringBuilder()
-                .append(keycloakProperties.getServerUrl())
+                .append(this.keycloakProperties.getServerUrl())
                 .append("/realms/")
-                .append(keycloakProperties.getRealm())
+                .append(this.keycloakProperties.getRealm())
                 .append("/protocol/openid-connect/token")
                 .toString();
 
@@ -47,8 +47,8 @@ public class AuthService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "password");
         body.add("scope", "openid");
-        body.add("client_id", keycloakProperties.getClientId());
-        body.add("client_secret", keycloakProperties.getClientSecret());
+        body.add("client_id", this.keycloakProperties.getClientId());
+        body.add("client_secret", this.keycloakProperties.getClientSecret());
         body.add("username", request.username());
         body.add("password", request.password());
 
@@ -83,9 +83,9 @@ public class AuthService {
 
     public LoginResponse refresh(RefreshTokenRequest request) {
         String loginUrl = new StringBuilder()
-                .append(keycloakProperties.getServerUrl())
+                .append(this.keycloakProperties.getServerUrl())
                 .append("/realms/")
-                .append(keycloakProperties.getRealm())
+                .append(this.keycloakProperties.getRealm())
                 .append("/protocol/openid-connect/token")
                 .toString();
 
@@ -95,8 +95,8 @@ public class AuthService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "refresh_token");
         body.add("scope", "openid");
-        body.add("client_id", keycloakProperties.getClientId());
-        body.add("client_secret", keycloakProperties.getClientSecret());
+        body.add("client_id", this.keycloakProperties.getClientId());
+        body.add("client_secret", this.keycloakProperties.getClientSecret());
         body.add("refresh_token", request.refreshToken());
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);

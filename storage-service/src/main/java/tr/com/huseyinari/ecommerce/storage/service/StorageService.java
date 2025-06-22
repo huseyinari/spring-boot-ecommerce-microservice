@@ -29,7 +29,7 @@ public class StorageService {
 
     @Transactional(readOnly = true)
     public StorageObjectSearchResponse findOne(Long id) {
-        StorageObject storageObject = repository.findById(id).orElseThrow(StorageObjectNotFoundException::new);
+        StorageObject storageObject = this.repository.findById(id).orElseThrow(StorageObjectNotFoundException::new);
 
         if (storageObject.isPrivateAccess()) {
             String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
@@ -45,7 +45,7 @@ public class StorageService {
     @Transactional
     public StorageObjectCreateResponse create(StorageObjectCreateRequest request) {
         StorageObject storageObject = StorageMapper.toEntity(request);
-        storageObject = repository.save(storageObject);
+        storageObject = this.repository.save(storageObject);
 
         return StorageMapper.toCreateResponse(storageObject);
     }
@@ -59,7 +59,7 @@ public class StorageService {
         switch (storageObject.type()) {
             case S3 -> {
                 S3GetFileRequest s3GetFileRequest = new S3GetFileRequest(storageObject.fileName(), storageObject.storageName());
-                content = s3Service.getFileContent(s3GetFileRequest);
+                content = this.s3Service.getFileContent(s3GetFileRequest);
             }
             default -> throw new RuntimeException("Dosya türüne ait depolama alanı bulunamadı !");
         }
@@ -82,8 +82,8 @@ public class StorageService {
     public UploadProductImageResponse uploadProductImage(UploadProductImageRequest request) {
         String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
 
-        S3UploadRequest s3UploadRequest = new S3UploadRequest(request.multipartFile(), productImagesBucketName);
-        S3UploadResponse s3UploadResponse = s3Service.uploadFile(s3UploadRequest);
+        S3UploadRequest s3UploadRequest = new S3UploadRequest(request.multipartFile(), this.productImagesBucketName);
+        S3UploadResponse s3UploadResponse = this.s3Service.uploadFile(s3UploadRequest);
 
         final boolean privateAccess = false;
 

@@ -51,7 +51,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductSearchResponse> findAll() {
-        return repository.findAll()
+        return this.repository.findAll()
                 .stream()
                 .map(ProductMapper::toSearchResponse)
                 .toList();
@@ -61,12 +61,12 @@ public class ProductService {
     public ProductCreateResponse create(@Valid ProductCreateRequest request) {
         String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow(() -> new RuntimeException("Kullanıcı bilgisi bulunamadı !"));
 
-        if (repository.findByName(request.name()).isPresent()) {
+        if (this.repository.findByName(request.name()).isPresent()) {
             throw new ProductAlreadyExistException();
         }
 
         try {
-            SinhaRestApiResponse<CategorySearchResponse> response = categoryClient.findOne(request.categoryId());
+            SinhaRestApiResponse<CategorySearchResponse> response = this.categoryClient.findOne(request.categoryId());
         } catch (FeignException.NotFound e) {
             throw new RuntimeException("Geçerli bir kategori seçiniz !");
         } catch (Exception e) {
@@ -78,9 +78,9 @@ public class ProductService {
         product.setUserId(currentUserId);
         product.setStatus(ProductStatus.PENDING);
 
-        product = repository.save(product);
+        product = this.repository.save(product);
 
-        kafkaProducer.createOpeningProductStock(product);
+        this.kafkaProducer.createOpeningProductStock(product);
 
         logger.info("ID: {} -> Product başarıyla oluşturuldu.", product.getId());
 

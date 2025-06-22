@@ -32,21 +32,21 @@ public class OrderService {
         SinhaRestApiResponse<ProductSearchResponse> productResponse = null;
 
         try {
-            productResponse = productClient.get(request.skuCode());
+            productResponse = this.productClient.get(request.skuCode());
         } catch (FeignException.NotFound e) {
             throw new ProductNotFoundException();
         }
 
         ProductSearchResponse product = productResponse.getData();
 
-        SinhaRestApiResponse<Boolean> stockResponse = inventoryClient.isInStock(request.skuCode(), request.quantity());
+        SinhaRestApiResponse<Boolean> stockResponse = this.inventoryClient.isInStock(request.skuCode(), request.quantity());
         boolean isInStock = stockResponse.getData() != null && stockResponse.getData();
 
         if (isInStock) {
             Order order = OrderMapper.toEntity(request);
 
             order.setPrice(product.getPrice());
-            order = repository.save(order);
+            order = this.repository.save(order);
 
             logger.info("{} -> Sipariş başarıyla kaydedildi.", order.getId());
 

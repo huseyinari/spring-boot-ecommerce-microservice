@@ -20,25 +20,25 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategorySearchResponse>> findAll() {
-        List<CategorySearchResponse> response = service.findAll();
+        List<CategorySearchResponse> response = this.service.findAll();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategorySearchResponse> findOne(@PathVariable Long id) {
-        CategorySearchResponse response = service.findOne(id);
+        CategorySearchResponse response = this.service.findOne(id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<CategoryCreateResponse> create(@RequestBody CategoryCreateRequest request) {
-        CategoryCreateResponse response = service.create(request);
+        CategoryCreateResponse response = this.service.create(request);
         return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 
     @GetMapping("/menu")
     public ResponseEntity<List<MenuCategoryResponse>> getMenuCategories() {
-        List<MenuCategoryResponse> response = service.getMenuCategories();
+        List<MenuCategoryResponse> response = this.service.getMenuCategories();
         return ResponseEntity.ok(response);
     }
 }

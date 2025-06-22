@@ -25,13 +25,13 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductSearchResponse>> findAll() {
-        List<ProductSearchResponse> responseList = service.findAll();
+        List<ProductSearchResponse> responseList = this.service.findAll();
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<ProductCreateResponse> create(@RequestBody ProductCreateRequest request) {
-        ProductCreateResponse response = service.create(request);
+        ProductCreateResponse response = this.service.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

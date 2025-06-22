@@ -22,13 +22,13 @@ public class KeycloakAdminClientService {
             ResteasyClient resteasyClient = new ResteasyClientBuilder().connectionPoolSize(10).build();
 
             this.keycloak = KeycloakBuilder.builder()
-                    .serverUrl(keycloakProperties.getServerUrl())
-                    .realm(keycloakProperties.getRealm())
+                    .serverUrl(this.keycloakProperties.getServerUrl())
+                    .realm(this.keycloakProperties.getRealm())
                     .grantType(OAuth2Constants.PASSWORD)
-                    .username(keycloakProperties.getAdminUsername())
-                    .password(keycloakProperties.getAdminPassword())
-                    .clientId(keycloakProperties.getClientId())
-                    .clientSecret(keycloakProperties.getClientSecret())
+                    .username(this.keycloakProperties.getAdminUsername())
+                    .password(this.keycloakProperties.getAdminPassword())
+                    .clientId(this.keycloakProperties.getClientId())
+                    .clientSecret(this.keycloakProperties.getClientSecret())
                     .resteasyClient(resteasyClient)
                     .build();
         }
@@ -37,6 +37,6 @@ public class KeycloakAdminClientService {
     }
 
     public UsersResource getUsersResource() {
-        return this.getInstance().realm(keycloakProperties.getRealm()).users();
+        return this.getInstance().realm(this.keycloakProperties.getRealm()).users();
     }
 }

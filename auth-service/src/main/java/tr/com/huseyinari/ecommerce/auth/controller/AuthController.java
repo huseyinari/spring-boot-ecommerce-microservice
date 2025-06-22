@@ -25,19 +25,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-        LoginResponse response = service.login(request);
+        LoginResponse response = this.service.login(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(@RequestBody @Valid RefreshTokenRequest request) {
-        LoginResponse response = service.refresh(request);
+        LoginResponse response = this.service.refresh(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
-        RegisterResponse response = service.register(request);
+        RegisterResponse response = this.service.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

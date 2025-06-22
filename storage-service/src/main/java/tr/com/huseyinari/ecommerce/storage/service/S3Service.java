@@ -51,7 +51,7 @@ public class S3Service {
             multipartFile.transferTo(file);
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, newFileName, file);
-            amazonS3.putObject(putObjectRequest);
+            this.amazonS3.putObject(putObjectRequest);
 
             logger.info("Dosya başarıyla yüklendi. Dosya: {}", file.getPath());
 
@@ -82,7 +82,7 @@ public class S3Service {
         byte[] result = null;
 
         try {
-            S3Object s3Object = amazonS3.getObject(bucketName, fileName);
+            S3Object s3Object = this.amazonS3.getObject(bucketName, fileName);
             S3ObjectInputStream inputStream = s3Object.getObjectContent();
 
             result = IOUtils.toByteArray(inputStream);

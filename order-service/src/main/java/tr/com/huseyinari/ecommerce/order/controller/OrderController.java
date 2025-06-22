@@ -19,7 +19,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderCreateResponse> placeOrder(@RequestBody OrderCreateRequest request) {
-        OrderCreateResponse response = service.placeOrder(request);
+        OrderCreateResponse response = this.service.placeOrder(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

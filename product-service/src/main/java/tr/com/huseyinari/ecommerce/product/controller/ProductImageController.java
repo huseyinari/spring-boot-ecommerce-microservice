@@ -18,7 +18,7 @@ public class ProductImageController {
 
     @PostMapping
     public ResponseEntity<ProductImageCreateResponse> create(@RequestBody ProductImageCreateRequest request) {
-        ProductImageCreateResponse response = service.create(request);
+        ProductImageCreateResponse response = this.service.create(request);
         return ResponseEntity.ok(response);
     }
 }

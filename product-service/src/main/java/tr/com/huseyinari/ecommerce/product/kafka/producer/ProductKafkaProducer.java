@@ -24,6 +24,6 @@ public class ProductKafkaProducer {
         event.setSkuCode(product.getSkuCode());
         event.setCreatedBy(currentUsername);
 
-        kafkaTemplate.send(createOpeningProductStockTopic, event);
+        this.kafkaTemplate.send(this.createOpeningProductStockTopic, event);
     }
 }

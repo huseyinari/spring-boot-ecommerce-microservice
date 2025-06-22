@@ -25,7 +25,7 @@ public class ProductKafkaConsumer {
         groupId = "product-group"
     )
     public void handleCreateOpeningProductStockFailure(CreateOpeningProductStockFailureEvent message) {
-        Optional<Product> optional = repository.findBySkuCode(message.getSkuCode());
+        Optional<Product> optional = this.repository.findBySkuCode(message.getSkuCode());
 
         if (optional.isEmpty()) {
             logger.info("{} numaralı bir ürün olmadığı için işlem yapılmayacak.", message.getSkuCode());
@@ -38,7 +38,7 @@ public class ProductKafkaConsumer {
 
         logger.info("{} kodlu ürün için açılış stoğu oluşturulamadı. Hata ürüne işlendi: {}", message.getSkuCode(), message.getDescription());
 
-        repository.save(product);
+        this.repository.save(product);
     }
 
     @KafkaListener(
@@ -46,7 +46,7 @@ public class ProductKafkaConsumer {
         groupId = "product-group"
     )
     public void handleCreateProductCompleted(CreateOpeningProductStockSuccessEvent message) {
-        Optional<Product> optional = repository.findBySkuCode(message.getSkuCode());
+        Optional<Product> optional = this.repository.findBySkuCode(message.getSkuCode());
 
         if (optional.isEmpty()) {
             logger.info("{} kodlu bir ürün olmadığı için işlem yapılmayacak.", message.getSkuCode());
@@ -58,6 +58,6 @@ public class ProductKafkaConsumer {
 
         logger.info("Ürünün açılış stoğu başarıyla oluşturuldu: {}", product.getSkuCode());
 
-        repository.save(product);
+        this.repository.save(product);
     }
 }

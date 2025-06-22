@@ -23,20 +23,20 @@ public class StorageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StorageObjectSearchResponse> findOne(@PathVariable Long id) {
-        StorageObjectSearchResponse response = service.findOne(id);
+        StorageObjectSearchResponse response = this.service.findOne(id);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/base64/{id}")
     public ResponseEntity<FileContentBase64Response> getBase64(@PathVariable Long id) {
-        FileContentBase64Response response = service.getFileContentBase64(id);
+        FileContentBase64Response response = this.service.getFileContentBase64(id);
         return ResponseEntity.ok(response);
     }
 
     @IgnoreResponseBodyAdvice
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
-        FileContentResponse response = service.getFileContent(id);
+        FileContentResponse response = this.service.getFileContent(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -52,7 +52,7 @@ public class StorageController {
 //        @RequestParam("private_access") boolean privateAccess
     ) {
         UploadProductImageRequest request = new UploadProductImageRequest(multipartFile);
-        UploadProductImageResponse response = service.uploadProductImage(request);
+        UploadProductImageResponse response = this.service.uploadProductImage(request);
 
         return ResponseEntity.ok(response);
     }

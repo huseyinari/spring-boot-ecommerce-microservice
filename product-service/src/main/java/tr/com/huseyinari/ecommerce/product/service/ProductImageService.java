@@ -27,16 +27,16 @@ public class ProductImageService {
     public ProductImageCreateResponse create(ProductImageCreateRequest request) {
         String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
 
-        boolean exist = repository.findByProduct_IdAndStorageObjectId(request.productId(), request.storageObjectId()).isPresent();
+        boolean exist = this.repository.findByProduct_IdAndStorageObjectId(request.productId(), request.storageObjectId()).isPresent();
         if (exist) {
             throw new RuntimeException("Belirtilen resim zaten üründe bulunuyor !");
         }
 
-        ProductSearchResponse productResponse = productService.findById(request.productId());
+        ProductSearchResponse productResponse = this.productService.findById(request.productId());
 
         StorageObjectSearchResponse storageObject = null;
         try {
-            SinhaRestApiResponse<StorageObjectSearchResponse> response = storageClient.findOne(request.storageObjectId());
+            SinhaRestApiResponse<StorageObjectSearchResponse> response = this.storageClient.findOne(request.storageObjectId());
             storageObject = response.getData();
         } catch (FeignException.NotFound e) {
             throw new RuntimeException("Seçilen dosya sistemde bulunamadı !");
@@ -53,7 +53,7 @@ public class ProductImageService {
         productImage.setProduct(product);
         productImage.setStorageObjectId(storageObject.getId());
 
-        repository.save(productImage);
+        this.repository.save(productImage);
 
         return new ProductImageCreateResponse(product.getId(), storageObject.getId());
     }

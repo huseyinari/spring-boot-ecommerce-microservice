@@ -22,7 +22,7 @@ public class InventoryKafkaProducer {
         CreateOpeningProductStockSuccessEvent event = new CreateOpeningProductStockSuccessEvent();
         event.setSkuCode(skuCode);
 
-        kafkaTemplate.send(createOpeningProductStockSuccessTopic, event);
+        kafkaTemplate.send(this.createOpeningProductStockSuccessTopic, event);
     }
 
     public void sendOpeningProductStockFailure(String skuCode, String errorDescription) {
@@ -30,6 +30,6 @@ public class InventoryKafkaProducer {
         event.setSkuCode(skuCode);
         event.setDescription(errorDescription);
 
-        kafkaTemplate.send(createOpeningProductStockFailedTopic, event);
+        kafkaTemplate.send(this.createOpeningProductStockFailedTopic, event);
     }
 }
