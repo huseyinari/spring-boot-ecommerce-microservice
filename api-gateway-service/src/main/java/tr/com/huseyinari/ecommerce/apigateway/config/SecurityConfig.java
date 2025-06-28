@@ -32,7 +32,9 @@ public class SecurityConfig {
             "/public/**",
             "/eureka/**",
             "/api/v1/auth/**",
-            "api/v1/category/menu"
+            "/api/v1/storage/content/{id}",
+            "/api/v1/category/menu",
+            "/api/v1/carousel-item/{carouselName}"
         };
 
         http

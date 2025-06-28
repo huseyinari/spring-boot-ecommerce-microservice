@@ -13,7 +13,7 @@ CREATE TABLE storage_objects (
     file_name VARCHAR(255) NOT NULL,
     storage_name VARCHAR(255) NOT NULL,
     file_size INTEGER NOT NULL,
-    extension VARCHAR(255) NOT NULL,
+    file_extension VARCHAR(255) NOT NULL,
     is_private_access BOOLEAN NOT NULL DEFAULT FALSE,
     owner_id VARCHAR(255),
     storage_type VARCHAR(255) NOT NULL,

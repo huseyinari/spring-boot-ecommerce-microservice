@@ -27,7 +27,7 @@ public class StorageObject extends AbstractAuditableEntity {
     @Column(name = "file_size", nullable = false)
     private Long fileSize;
 
-    @Column(name = "extension", nullable = false)
+    @Column(name = "file_extension", nullable = false)
     private String extension;
 
     @Column(name = "is_private_access", nullable = false)

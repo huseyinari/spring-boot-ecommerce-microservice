@@ -2,18 +2,17 @@ package tr.com.huseyinari.ecommerce.storage.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.storage.domain.StorageObject;
 import tr.com.huseyinari.ecommerce.storage.enums.StorageObjectType;
+import tr.com.huseyinari.ecommerce.storage.exception.StorageObjectAccessDeniedException;
 import tr.com.huseyinari.ecommerce.storage.exception.StorageObjectNotFoundException;
 import tr.com.huseyinari.ecommerce.storage.mapper.StorageMapper;
 import tr.com.huseyinari.ecommerce.storage.repository.StorageObjectRepository;
-import tr.com.huseyinari.ecommerce.storage.request.S3GetFileRequest;
-import tr.com.huseyinari.ecommerce.storage.request.S3UploadRequest;
-import tr.com.huseyinari.ecommerce.storage.request.StorageObjectCreateRequest;
-import tr.com.huseyinari.ecommerce.storage.request.UploadProductImageRequest;
+import tr.com.huseyinari.ecommerce.storage.request.*;
 import tr.com.huseyinari.ecommerce.storage.response.*;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.utils.StringUtils;
@@ -22,6 +21,7 @@ import tr.com.huseyinari.utils.StringUtils;
 @RequiredArgsConstructor
 public class StorageService {
     private final StorageObjectRepository repository;
+    private final LocalStorageService localStorageService;
     private final S3Service s3Service;
 
     @Value("${huseyinari.ecommerce.s3.buckets.product-images-bucket-name}")
@@ -32,10 +32,10 @@ public class StorageService {
         StorageObject storageObject = this.repository.findById(id).orElseThrow(StorageObjectNotFoundException::new);
 
         if (storageObject.isPrivateAccess()) {
-            String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+            String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElse(null);
 
             if (!storageObject.getOwnerId().equals(currentUserId)) {
-                throw new RuntimeException("Dosyaya erişim izniniz bulunmamaktadır !");
+                throw new StorageObjectAccessDeniedException();
             }
         }
 
@@ -58,8 +58,11 @@ public class StorageService {
 
         switch (storageObject.type()) {
             case S3 -> {
-                S3GetFileRequest s3GetFileRequest = new S3GetFileRequest(storageObject.fileName(), storageObject.storageName());
-                content = this.s3Service.getFileContent(s3GetFileRequest);
+                S3GetFileRequest request = new S3GetFileRequest(storageObject.fileName(), storageObject.storageName());
+                content = this.s3Service.getFileContent(request);
+            } case LOCAL -> {
+                LocalStorageGetFileRequest request = new LocalStorageGetFileRequest(storageObject.fileName(), storageObject.storageName());
+                content = this.localStorageService.getFileContent(request);
             }
             default -> throw new RuntimeException("Dosya türüne ait depolama alanı bulunamadı !");
         }
@@ -100,5 +103,18 @@ public class StorageService {
         StorageObjectCreateResponse storageObjectCreateResponse = this.create(storageObjectCreateRequest);
 
         return StorageMapper.toUploadProductImageResponse(storageObjectCreateResponse);
+    }
+
+    public MediaType getMediaType(String fileExtension) {
+        switch (fileExtension) {
+            case "png":
+                return MediaType.IMAGE_PNG;
+            case "jpg":
+            case "jpeg":
+            case "webp":
+                return MediaType.IMAGE_JPEG;
+            default:
+                throw new RuntimeException("Bilinmeyen medya türü !");
+        }
     }
 }

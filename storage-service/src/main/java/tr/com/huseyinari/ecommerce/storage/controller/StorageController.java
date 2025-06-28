@@ -34,6 +34,21 @@ public class StorageController {
     }
 
     @IgnoreResponseBodyAdvice
+    @GetMapping("/content/{id}")
+    public ResponseEntity<byte[]> getContent(@PathVariable Long id) {
+        FileContentResponse response = this.service.getFileContent(id);
+        MediaType mediaType = this.service.getMediaType(response.extension());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(mediaType);
+        headers.setCacheControl("no-cache, no-store, must-revalidate"); // opsiyonel
+        headers.setPragma("no-cache");
+        headers.setExpires(0);
+
+        return new ResponseEntity<>(response.content(), headers, HttpStatus.OK);
+    }
+
+    @IgnoreResponseBodyAdvice
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         FileContentResponse response = this.service.getFileContent(id);

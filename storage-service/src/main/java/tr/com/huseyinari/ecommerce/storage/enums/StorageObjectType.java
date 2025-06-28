@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum StorageObjectType {
+    LOCAL("LOCAL"),
     S3("S3");
 
     private final String name;
