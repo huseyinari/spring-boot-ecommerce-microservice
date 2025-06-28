@@ -41,7 +41,7 @@ spring:
         - id: category-service
           uri: lb://category-service
           predicates:
-            - Path=/api/v1/category/**
+            - Path=/api/v1/category/**,/api/v1/carousel-item/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
             - LoggingFilter
