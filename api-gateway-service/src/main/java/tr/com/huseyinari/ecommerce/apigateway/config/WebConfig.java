@@ -10,12 +10,14 @@ import java.time.Duration;
 
 @Configuration
 public class WebConfig implements WebFluxConfigurer {
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/public/**")
-                .addResourceLocations("classpath:/public/")
-                .setCacheControl(CacheControl.maxAge(Duration.ofDays(1)));
-    }
+
+//    ----------------- STORAGE SERVICE'E TAŞIDIM -----------------
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/public/**")
+//                .addResourceLocations("classpath:/public/")
+//                .setCacheControl(CacheControl.maxAge(Duration.ofDays(1)));
+//    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
