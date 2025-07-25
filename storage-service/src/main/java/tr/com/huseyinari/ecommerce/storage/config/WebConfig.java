@@ -11,7 +11,7 @@ import java.time.Duration;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/public/**")
+        registry.addResourceHandler("/public/storage/**")
                 .addResourceLocations("classpath:/public/")
                 .setCacheControl(CacheControl.maxAge(Duration.ofDays(1)));
     }

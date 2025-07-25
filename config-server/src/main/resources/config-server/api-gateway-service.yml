@@ -55,7 +55,7 @@ spring:
         - id: storage-service
           uri: lb://storage-service
           predicates:
-            - Path=/api/v1/storage/**,/public/**
+            - Path=/api/v1/storage/**,/public/storage/**
           filters:
             - LoggingFilter
             - AddAuthenticatedUserInHeaderFilter
