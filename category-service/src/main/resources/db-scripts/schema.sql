@@ -24,6 +24,7 @@ CREATE TABLE category (
     image_url VARCHAR(255) NOT NULL,
     total_product_count INTEGER NOT NULL DEFAULT 0,
     parent_id BIGINT,
+    image_storage_object_id BIGINT NOT NULL,
     --
     created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,

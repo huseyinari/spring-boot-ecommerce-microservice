@@ -8,6 +8,7 @@ import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
 import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
+import tr.com.huseyinari.ecommerce.category.response.PopularCategorySearchResponse;
 import tr.com.huseyinari.ecommerce.category.service.CategoryService;
 
 import java.util.List;
@@ -39,6 +40,12 @@ public class CategoryController {
     @GetMapping("/menu")
     public ResponseEntity<List<MenuCategoryResponse>> getMenuCategories() {
         List<MenuCategoryResponse> response = this.service.getMenuCategories();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<PopularCategorySearchResponse>> getPopularCategories() {
+        List<PopularCategorySearchResponse> response = this.service.getPopularCategories();
         return ResponseEntity.ok(response);
     }
 }

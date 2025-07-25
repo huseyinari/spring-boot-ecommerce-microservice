@@ -5,6 +5,7 @@ import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
 import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
+import tr.com.huseyinari.ecommerce.category.response.PopularCategorySearchResponse;
 
 import java.util.ArrayList;
 
@@ -39,5 +40,9 @@ public class CategoryMapper {
         response.setSubCategories(new ArrayList<>());
 
         return response;
+    }
+
+    public static PopularCategorySearchResponse toPopularCategorySearchResponse(Category category) {
+        return new PopularCategorySearchResponse(category.getName(), category.getTotalProductCount(), category.getImageStorageObjectId());
     }
 }

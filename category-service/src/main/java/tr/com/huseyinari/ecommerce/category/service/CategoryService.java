@@ -3,6 +3,8 @@ package tr.com.huseyinari.ecommerce.category.service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.exception.CategoryNotFoundException;
@@ -12,6 +14,7 @@ import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
 import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
+import tr.com.huseyinari.ecommerce.category.response.PopularCategorySearchResponse;
 
 import java.util.List;
 
@@ -69,5 +72,12 @@ public class CategoryService {
         for (MenuCategoryResponse subCategory : subCategories) {
             this.setSubCategories(allCategories, subCategory);
         }
+    }
+
+    public List<PopularCategorySearchResponse> getPopularCategories() {
+        Pageable pageable = PageRequest.of(0, 6);
+        List<Category> popularCategories = this.repository.findByParentIdOrderByTotalProductCountDesc(null, pageable);
+
+        return popularCategories.stream().map(CategoryMapper::toPopularCategorySearchResponse).toList();
     }
 }
