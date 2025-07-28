@@ -1,5 +1,6 @@
-DROP TABLE IF EXISTS inventory;
 DROP SEQUENCE IF EXISTS inventory_id_sequence;
+
+DROP TABLE IF EXISTS inventory;
 
 CREATE SEQUENCE inventory_id_sequence
 INCREMENT 1

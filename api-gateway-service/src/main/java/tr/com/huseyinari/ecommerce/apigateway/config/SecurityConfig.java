@@ -35,7 +35,8 @@ public class SecurityConfig {
             "/api/v1/storage/content/{id}",
             "/api/v1/category/menu",
             "/api/v1/category/popular",
-            "/api/v1/carousel-item/{carouselName}"
+            "/api/v1/carousel-item/{carouselName}",
+            "/api/v1/product/most-viewed/today"
         };
 
         http

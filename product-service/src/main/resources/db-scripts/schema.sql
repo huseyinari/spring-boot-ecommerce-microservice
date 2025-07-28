@@ -1,6 +1,9 @@
+DROP SEQUENCE IF EXISTS product_image_id_sequence;
+DROP SEQUENCE IF EXISTS product_reviews_id_sequence;
+
+DROP TABLE IF EXISTS product_reviews;
 DROP TABLE IF EXISTS product_image;
 DROP TABLE IF EXISTS products;
-DROP SEQUENCE IF EXISTS product_image_id_sequence;
 
 CREATE TABLE products (
     id VARCHAR(100),
@@ -8,6 +11,8 @@ CREATE TABLE products (
     description VARCHAR(255),
     sku_code VARCHAR(255) NOT NULL,
     price DEC(10, 2) NOT NULL,
+    discount DEC(10, 2),
+    discounted_price DEC(10, 2) NOT NULL,
     category_id BIGINT NOT NULL,
     status VARCHAR(20) NOT NULL,
     failure_description VARCHAR(4000),
@@ -44,5 +49,25 @@ CREATE TABLE product_image (
 
 ALTER TABLE product_image ADD CONSTRAINT pk_product_image_id PRIMARY KEY (id);
 ALTER TABLE product_image ADD CONSTRAINT fk_product_image_product_id FOREIGN KEY (product_id) REFERENCES products(id);
-
 CREATE UNIQUE INDEX un_ind_product_image_product_id_storage_object_id ON product_image (product_id, storage_object_id);
+
+CREATE SEQUENCE product_reviews_id_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 2147483647
+START 100000
+NO CYCLE;
+
+CREATE TABLE product_reviews (
+    id BIGINT,
+    reviewed_ip_address VARCHAR(50) NOT NULL,
+    product_id VARCHAR(100) NOT NULL,
+    --
+    created_by VARCHAR(100),
+    created_date TIMESTAMP NOT NULL,
+    updated_by VARCHAR(100),
+    updated_date TIMESTAMP
+);
+
+ALTER TABLE product_reviews ADD CONSTRAINT pk_product_reviews_id PRIMARY KEY (id);
+ALTER TABLE product_reviews ADD CONSTRAINT fk_product_reviews_product_id FOREIGN KEY (product_id) REFERENCES products(id);

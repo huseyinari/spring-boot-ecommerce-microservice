@@ -16,9 +16,12 @@ import tr.com.huseyinari.ecommerce.product.exception.ProductAlreadyExistExceptio
 import tr.com.huseyinari.ecommerce.product.exception.ProductNotFoundException;
 import tr.com.huseyinari.ecommerce.product.kafka.producer.ProductKafkaProducer;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductMapper;
+import tr.com.huseyinari.ecommerce.product.projection.MostViewedProductProjection;
 import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductImageSearchResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductMostViewedTodayResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.shared.response.CategorySearchResponse;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
@@ -36,6 +39,8 @@ public class ProductService {
     private final ProductRepository repository;
     private final ProductKafkaProducer kafkaProducer;
     private final CategoryClient categoryClient;
+    private final ProductReviewService productReviewService;
+    private final ProductImageService productImageService;
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findById(String id) {
@@ -85,6 +90,29 @@ public class ProductService {
         logger.info("ID: {} -> Product başarıyla oluşturuldu.", product.getId());
 
         return ProductMapper.toCreateResponse(product);
+    }
+
+    public List<ProductMostViewedTodayResponse> getMostViewedTodayProducts() {
+        List<MostViewedProductProjection> result = this.productReviewService.getMostViewedProductsToday();
+        return result
+                .stream()
+                .map(item -> {
+                    ProductSearchResponse product = this.findById(item.getProductId());
+
+                    List<ProductImageSearchResponse> productImageList = this.productImageService.findByProductId(product.id());
+                    String firstImageUrl = !productImageList.isEmpty() ? productImageList.get(0).imageUrl() : null;
+
+                    return new ProductMostViewedTodayResponse(
+                        product.id(),
+                        product.name(),
+                        product.price(),
+                        product.discount(),
+                        product.discountedPrice(),
+                        firstImageUrl,
+                        item.getViewCount()
+                    );
+                })
+                .toList();
     }
 
     private String generateSkuCode(String productName) {

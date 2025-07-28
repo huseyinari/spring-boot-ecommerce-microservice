@@ -1,5 +1,6 @@
-DROP TABLE IF EXISTS storage_objects;
 DROP SEQUENCE IF EXISTS storage_objects_id_sequence;
+
+DROP TABLE IF EXISTS storage_objects;
 
 CREATE SEQUENCE storage_objects_id_sequence
 INCREMENT 1

@@ -37,6 +37,8 @@ public class ProductMapper {
                 product.getDescription(),
                 product.getSkuCode(),
                 product.getPrice(),
+                product.getDiscount(),
+                product.getDiscountedPrice(),
                 imageStorageIds
         );
     }

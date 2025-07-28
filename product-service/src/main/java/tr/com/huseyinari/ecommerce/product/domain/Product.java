@@ -33,6 +33,12 @@ public class Product extends AbstractAuditableEntity {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Column(name = "discount")
+    private BigDecimal discount;
+
+    @Column(name = "discounted_price", nullable = false)
+    private BigDecimal discountedPrice;
+
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
 

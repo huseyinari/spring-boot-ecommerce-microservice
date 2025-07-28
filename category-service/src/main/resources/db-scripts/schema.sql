@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS carousel_item;
-
 DROP SEQUENCE IF EXISTS category_id_sequence;
 DROP SEQUENCE IF EXISTS carousel_item_id_sequence;
+
+DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS carousel_item;
 
 CREATE SEQUENCE category_id_sequence
 INCREMENT 1

@@ -1,5 +1,6 @@
-DROP TABLE IF EXISTS orders;
 DROP SEQUENCE IF EXISTS orders_id_sequence;
+
+DROP TABLE IF EXISTS orders;
 
 CREATE SEQUENCE orders_id_sequence
 INCREMENT 1

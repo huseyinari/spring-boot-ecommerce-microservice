@@ -2,27 +2,56 @@ package tr.com.huseyinari.ecommerce.product.service;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.product.client.StorageClient;
+import tr.com.huseyinari.ecommerce.product.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductImage;
 import tr.com.huseyinari.ecommerce.product.repository.ProductImageRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductImageCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductImageCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductImageSearchResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.shared.response.StorageObjectSearchResponse;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ProductImageService {
     private final ProductImageRepository repository;
     private final ProductService productService;
     private final StorageClient storageClient;
+    private final ECommerceConfigurationProperties configurationProperties;
+
+    public ProductImageService(
+        ProductImageRepository repository,
+        @Lazy ProductService productService,
+        StorageClient storageClient,
+        ECommerceConfigurationProperties configurationProperties
+    ) {
+        this.repository = repository;
+        this.productService = productService;
+        this.storageClient = storageClient;
+        this.configurationProperties = configurationProperties;
+    }
+
+    List<ProductImageSearchResponse> findByProductId(String productId) {
+        return this.repository.findByProduct_IdOrderByCreatedDateAsc(productId)
+                .stream()
+                .map(item -> new ProductImageSearchResponse(
+                    item.getId(),
+                    item.getProduct().getId(),
+                    item.getStorageObjectId(),
+                    configurationProperties.getStorageObjectContentUrl() + "/" + item.getStorageObjectId()
+                ))
+                .toList();
+    }
 
     public ProductImageCreateResponse create(ProductImageCreateRequest request) {
         String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();

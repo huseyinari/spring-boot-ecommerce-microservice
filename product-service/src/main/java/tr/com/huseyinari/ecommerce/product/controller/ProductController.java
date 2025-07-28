@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductMostViewedTodayResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.service.ProductService;
 
@@ -33,5 +34,11 @@ public class ProductController {
     public ResponseEntity<ProductCreateResponse> create(@RequestBody ProductCreateRequest request) {
         ProductCreateResponse response = this.service.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/most-viewed/today")
+    public ResponseEntity<List<ProductMostViewedTodayResponse>> mostViewed() {
+        List<ProductMostViewedTodayResponse> responseList = this.service.getMostViewedTodayProducts();
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 }
