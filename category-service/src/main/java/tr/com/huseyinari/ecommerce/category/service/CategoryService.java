@@ -80,9 +80,11 @@ public class CategoryService {
         Pageable pageable = PageRequest.of(0, 6);
         List<Category> popularCategories = this.repository.findByParentIdOrderByTotalProductCountDesc(null, pageable);
 
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
         return popularCategories
                 .stream()
-                .map(item -> CategoryMapper.toPopularCategorySearchResponse(item, configurationProperties.getStorageObjectContentUrl()))
+                .map(item -> CategoryMapper.toPopularCategorySearchResponse(item, storageObjectContentUrl))
                 .toList();
     }
 }

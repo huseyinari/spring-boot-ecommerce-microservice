@@ -1,4 +1,4 @@
-package tr.com.huseyinari.ecommerce.product.config;
+package tr.com.huseyinari.ecommerce.auth.config;
 
 import lombok.Getter;
 import lombok.Setter;

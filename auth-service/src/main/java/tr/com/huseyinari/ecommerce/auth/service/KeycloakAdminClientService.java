@@ -8,12 +8,12 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.stereotype.Component;
-import tr.com.huseyinari.ecommerce.auth.config.EcommerceKeycloakProperties;
+import tr.com.huseyinari.ecommerce.auth.config.ECommerceConfigurationProperties;
 
 @Component
 @RequiredArgsConstructor
 public class KeycloakAdminClientService {
-    private final EcommerceKeycloakProperties keycloakProperties;
+    private final ECommerceConfigurationProperties configurationProperties;
 
     private Keycloak keycloak = null;
 
@@ -22,13 +22,13 @@ public class KeycloakAdminClientService {
             ResteasyClient resteasyClient = new ResteasyClientBuilder().connectionPoolSize(10).build();
 
             this.keycloak = KeycloakBuilder.builder()
-                    .serverUrl(this.keycloakProperties.getServerUrl())
-                    .realm(this.keycloakProperties.getRealm())
+                    .serverUrl(this.configurationProperties.getKeycloak().getServerUrl())
+                    .realm(this.configurationProperties.getKeycloak().getRealm())
                     .grantType(OAuth2Constants.PASSWORD)
-                    .username(this.keycloakProperties.getAdminUsername())
-                    .password(this.keycloakProperties.getAdminPassword())
-                    .clientId(this.keycloakProperties.getClientId())
-                    .clientSecret(this.keycloakProperties.getClientSecret())
+                    .username(this.configurationProperties.getKeycloak().getAdminUsername())
+                    .password(this.configurationProperties.getKeycloak().getAdminPassword())
+                    .clientId(this.configurationProperties.getKeycloak().getClientId())
+                    .clientSecret(this.configurationProperties.getKeycloak().getClientSecret())
                     .resteasyClient(resteasyClient)
                     .build();
         }
@@ -37,6 +37,6 @@ public class KeycloakAdminClientService {
     }
 
     public UsersResource getUsersResource() {
-        return this.getInstance().realm(this.keycloakProperties.getRealm()).users();
+        return this.getInstance().realm(this.configurationProperties.getKeycloak().getRealm()).users();
     }
 }

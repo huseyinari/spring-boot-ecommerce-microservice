@@ -1,4 +1,4 @@
-package tr.com.huseyinari.ecommerce.product.config;
+package tr.com.huseyinari.ecommerce.storage.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,5 +9,4 @@ import tr.com.huseyinari.ecommerce.common.config.BaseConfigurationProperties;
 @Getter
 @Setter
 public class ECommerceConfigurationProperties extends BaseConfigurationProperties {
-
 }

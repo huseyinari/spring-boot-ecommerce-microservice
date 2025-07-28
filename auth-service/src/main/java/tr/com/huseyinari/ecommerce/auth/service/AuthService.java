@@ -14,7 +14,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import tr.com.huseyinari.ecommerce.auth.config.EcommerceKeycloakProperties;
+import tr.com.huseyinari.ecommerce.auth.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.auth.exception.*;
 import tr.com.huseyinari.ecommerce.auth.request.LoginRequest;
 import tr.com.huseyinari.ecommerce.auth.request.RefreshTokenRequest;
@@ -31,13 +31,13 @@ public class AuthService {
     private final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final KeycloakAdminClientService keycloakAdminClientService;
-    private final EcommerceKeycloakProperties keycloakProperties;
+    private final ECommerceConfigurationProperties configurationProperties;
 
     public LoginResponse login(LoginRequest request) {
         String loginUrl = new StringBuilder()
-                .append(this.keycloakProperties.getServerUrl())
+                .append(this.configurationProperties.getKeycloak().getServerUrl())
                 .append("/realms/")
-                .append(this.keycloakProperties.getRealm())
+                .append(this.configurationProperties.getKeycloak().getRealm())
                 .append("/protocol/openid-connect/token")
                 .toString();
 
@@ -47,8 +47,8 @@ public class AuthService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "password");
         body.add("scope", "openid");
-        body.add("client_id", this.keycloakProperties.getClientId());
-        body.add("client_secret", this.keycloakProperties.getClientSecret());
+        body.add("client_id", this.configurationProperties.getKeycloak().getClientId());
+        body.add("client_secret", this.configurationProperties.getKeycloak().getClientSecret());
         body.add("username", request.username());
         body.add("password", request.password());
 
@@ -83,9 +83,9 @@ public class AuthService {
 
     public LoginResponse refresh(RefreshTokenRequest request) {
         String loginUrl = new StringBuilder()
-                .append(this.keycloakProperties.getServerUrl())
+                .append(this.configurationProperties.getKeycloak().getServerUrl())
                 .append("/realms/")
-                .append(this.keycloakProperties.getRealm())
+                .append(this.configurationProperties.getKeycloak().getRealm())
                 .append("/protocol/openid-connect/token")
                 .toString();
 
@@ -95,8 +95,8 @@ public class AuthService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "refresh_token");
         body.add("scope", "openid");
-        body.add("client_id", this.keycloakProperties.getClientId());
-        body.add("client_secret", this.keycloakProperties.getClientSecret());
+        body.add("client_id", this.configurationProperties.getKeycloak().getClientId());
+        body.add("client_secret", this.configurationProperties.getKeycloak().getClientSecret());
         body.add("refresh_token", request.refreshToken());
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);

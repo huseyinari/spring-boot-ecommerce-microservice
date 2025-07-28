@@ -8,7 +8,7 @@ import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationPropert
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableConfigurationProperties({ECommerceConfigurationProperties.class})
+@EnableConfigurationProperties({ ECommerceConfigurationProperties.class })
 public class CategoryServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(CategoryServiceApplication.class, args);

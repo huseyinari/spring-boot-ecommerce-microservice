@@ -47,20 +47,26 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductSearchResponse findById(String id) {
         Product product = this.repository.findById(id).orElseThrow(ProductNotFoundException::new);
-        return ProductMapper.toSearchResponse(product, configurationProperties.getStorageObjectContentUrl());
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
+        return ProductMapper.toSearchResponse(product, storageObjectContentUrl);
     }
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
         Product product = this.repository.findBySkuCode(skuCode).orElseThrow(ProductNotFoundException::new);
-        return ProductMapper.toSearchResponse(product, configurationProperties.getStorageObjectContentUrl());
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
+        return ProductMapper.toSearchResponse(product, storageObjectContentUrl);
     }
 
     @Transactional(readOnly = true)
     public List<ProductSearchResponse> findAll() {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
         return this.repository.findAll()
                 .stream()
-                .map(item -> ProductMapper.toSearchResponse(item, configurationProperties.getStorageObjectContentUrl()))
+                .map(item -> ProductMapper.toSearchResponse(item, storageObjectContentUrl))
                 .toList();
     }
 

@@ -42,13 +42,15 @@ public class ProductImageService {
     }
 
     List<ProductImageSearchResponse> findByProductId(String productId) {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
         return this.repository.findByProduct_IdOrderByCreatedDateAsc(productId)
                 .stream()
                 .map(item -> new ProductImageSearchResponse(
                     item.getId(),
                     item.getProduct().getId(),
                     item.getStorageObjectId(),
-                    configurationProperties.getStorageObjectContentUrl() + "/" + item.getStorageObjectId()
+                    storageObjectContentUrl + "/" + item.getStorageObjectId()
                 ))
                 .toList();
     }

@@ -20,10 +20,12 @@ public class CarouselItemService {
 
     @Transactional(readOnly = true)
     public List<CarouselItemSearchResponse> findByCarouselName(String carouselName) {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
         return this.repository.findByCarouselName(carouselName)
                 .stream()
                 .sorted(Comparator.comparingInt(CarouselItem::getListOrder))
-                .map(item -> CarouselItemMapper.toSearchResponse(item, configurationProperties.getStorageObjectContentUrl()))
+                .map(item -> CarouselItemMapper.toSearchResponse(item, storageObjectContentUrl))
                 .toList();
     }
 }
