@@ -72,7 +72,7 @@ public class ProductService {
 
     @Transactional
     public ProductCreateResponse create(@Valid ProductCreateRequest request) {
-        String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow(() -> new RuntimeException("Kullanıcı bilgisi bulunamadı !"));
+        final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow(() -> new RuntimeException("Kullanıcı bilgisi bulunamadı !"));
 
         if (this.repository.findByName(request.name()).isPresent()) {
             throw new ProductAlreadyExistException();

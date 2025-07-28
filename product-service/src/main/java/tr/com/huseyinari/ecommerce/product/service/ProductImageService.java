@@ -56,7 +56,7 @@ public class ProductImageService {
     }
 
     public ProductImageCreateResponse create(ProductImageCreateRequest request) {
-        String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+        final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
 
         boolean exist = this.repository.findByProduct_IdAndStorageObjectId(request.productId(), request.storageObjectId()).isPresent();
         if (exist) {

@@ -14,8 +14,8 @@ public class FeignConfiguration {
     public RequestInterceptor addAuthenticatedUserInRequestInterceptor() {
         return requestTemplate -> {
             // Api Gateway'den gelen giriş yapmış kullanıcı bilgilerini içerdeki servisleri çağırırken de iletecek.
-            Optional<String> optionalUsername = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_NAME);
-            Optional<String> optionalUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID);
+            final Optional<String> optionalUsername = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_NAME);
+            final Optional<String> optionalUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID);
 
             if (optionalUsername.isPresent()) {
                 String authenticatedUsername = optionalUsername.get();

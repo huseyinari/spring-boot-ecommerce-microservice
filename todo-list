@@ -4,4 +4,3 @@ Category ve Products için resimler ayarlanmalı
 ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı
 
 UI tarafına storageObjectId dönen servisler düzenlenecek ve doğrudan image url dönecek.
-tüm servislerdeki @value anotasyonları configurationproperties ile değiştirilsin.
