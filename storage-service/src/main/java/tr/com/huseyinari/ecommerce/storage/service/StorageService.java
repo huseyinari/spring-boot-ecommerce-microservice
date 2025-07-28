@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
+import tr.com.huseyinari.ecommerce.storage.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.storage.domain.StorageObject;
 import tr.com.huseyinari.ecommerce.storage.enums.StorageObjectType;
 import tr.com.huseyinari.ecommerce.storage.exception.StorageObjectAccessDeniedException;
@@ -23,16 +24,14 @@ public class StorageService {
     private final StorageObjectRepository repository;
     private final LocalStorageService localStorageService;
     private final S3Service s3Service;
-
-    @Value("${huseyinari.ecommerce.s3.buckets.product-images-bucket-name}")
-    private String productImagesBucketName;
+    private final ECommerceConfigurationProperties configurationProperties;
 
     @Transactional(readOnly = true)
     public StorageObjectSearchResponse findOne(Long id) {
         StorageObject storageObject = this.repository.findById(id).orElseThrow(StorageObjectNotFoundException::new);
 
         if (storageObject.isPrivateAccess()) {
-            String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElse(null);
+            final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElse(null);
 
             if (!storageObject.getOwnerId().equals(currentUserId)) {
                 throw new StorageObjectAccessDeniedException();
@@ -83,9 +82,10 @@ public class StorageService {
 
     @Transactional
     public UploadProductImageResponse uploadProductImage(UploadProductImageRequest request) {
-        String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+        final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+        final String productImagesBucketName = this.configurationProperties.getAws().getS3().getProductImagesBucketName();
 
-        S3UploadRequest s3UploadRequest = new S3UploadRequest(request.multipartFile(), this.productImagesBucketName);
+        S3UploadRequest s3UploadRequest = new S3UploadRequest(request.multipartFile(), productImagesBucketName);
         S3UploadResponse s3UploadResponse = this.s3Service.uploadFile(s3UploadRequest);
 
         final boolean privateAccess = false;

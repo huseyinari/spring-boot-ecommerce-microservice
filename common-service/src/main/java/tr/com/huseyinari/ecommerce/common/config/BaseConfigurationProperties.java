@@ -10,6 +10,7 @@ public abstract class BaseConfigurationProperties {
     private String storageObjectContentUrl;
     private KeycloakProperties keycloak;
     private AwsProperties aws;
+    private KafkaProperties kafka;
 
     @Getter
     @Setter
@@ -35,5 +36,21 @@ public abstract class BaseConfigurationProperties {
         private String secretKey;
         private String bucketName;
         private String region;
+        private String productImagesBucketName;
+        private String categoryImagesBucketName;
+    }
+
+    @Getter
+    @Setter
+    public static class KafkaProperties {
+        private KafkaTopicProperties topics;
+    }
+
+    @Getter
+    @Setter
+    public static class KafkaTopicProperties {
+        private String createOpeningProductStock;
+        private String createOpeningProductStockFailed;
+        private String createOpeningProductStockSuccess;
     }
 }

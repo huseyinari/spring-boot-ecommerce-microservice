@@ -6,30 +6,30 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.common.kafka.event.CreateOpeningProductStockFailureEvent;
 import tr.com.huseyinari.ecommerce.common.kafka.event.CreateOpeningProductStockSuccessEvent;
+import tr.com.huseyinari.ecommerce.inventory.config.ECommerceConfigurationProperties;
 
 @Component
 @RequiredArgsConstructor
 public class InventoryKafkaProducer {
-    @Value("${huseyinari.ecommerce.kafka.topics.create-opening-product-stock-success}")
-    private String createOpeningProductStockSuccessTopic;
-
-    @Value("${huseyinari.ecommerce.kafka.topics.create-opening-product-stock-failed}")
-    private String createOpeningProductStockFailedTopic;
-
+    private final ECommerceConfigurationProperties configurationProperties;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendOpeningProductStockSuccess(String skuCode) {
+        final String topicName = this.configurationProperties.getKafka().getTopics().getCreateOpeningProductStockSuccess();
+
         CreateOpeningProductStockSuccessEvent event = new CreateOpeningProductStockSuccessEvent();
         event.setSkuCode(skuCode);
 
-        kafkaTemplate.send(this.createOpeningProductStockSuccessTopic, event);
+        kafkaTemplate.send(topicName, event);
     }
 
     public void sendOpeningProductStockFailure(String skuCode, String errorDescription) {
+        final String topicName = this.configurationProperties.getKafka().getTopics().getCreateOpeningProductStockFailed();
+
         CreateOpeningProductStockFailureEvent event = new CreateOpeningProductStockFailureEvent();
         event.setSkuCode(skuCode);
         event.setDescription(errorDescription);
 
-        kafkaTemplate.send(this.createOpeningProductStockFailedTopic, event);
+        kafkaTemplate.send(topicName, event);
     }
 }
