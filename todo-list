@@ -3,4 +3,5 @@ Category ve Products için resimler ayarlanmalı
 
 ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı
 
-UI tarafına storageObjectId dönen servisler düzenlenecek ve doğrudan image url dönecek.
+LocalStorage ve S3 işlemlerinde kalıtım kullanılmalı ve factory pattern uygulanabilir.
+NotificationService WebFlux ile yazılabilir.
