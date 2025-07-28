@@ -6,6 +6,6 @@ public record CarouselItemSearchResponse (
     String link,
     String linkTitle,
     Integer listOrder,
-    Long imageStorageObjectId
+    String imageUrl
 )
 {}

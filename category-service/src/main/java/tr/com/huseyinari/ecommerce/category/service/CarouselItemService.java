@@ -3,6 +3,7 @@ package tr.com.huseyinari.ecommerce.category.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.category.domain.CarouselItem;
 import tr.com.huseyinari.ecommerce.category.mapper.CarouselItemMapper;
 import tr.com.huseyinari.ecommerce.category.repository.CarouselItemRepository;
@@ -15,13 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarouselItemService {
     private final CarouselItemRepository repository;
+    private final ECommerceConfigurationProperties configurationProperties;
 
     @Transactional(readOnly = true)
     public List<CarouselItemSearchResponse> findByCarouselName(String carouselName) {
         return this.repository.findByCarouselName(carouselName)
                 .stream()
                 .sorted(Comparator.comparingInt(CarouselItem::getListOrder))
-                .map(CarouselItemMapper::toSearchResponse)
+                .map(item -> CarouselItemMapper.toSearchResponse(item, configurationProperties.getStorageObjectContentUrl()))
                 .toList();
     }
 }

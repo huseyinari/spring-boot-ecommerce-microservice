@@ -11,5 +11,5 @@ public record ProductSearchResponse (
     BigDecimal price,
     BigDecimal discount,
     BigDecimal  discountedPrice,
-    Set<Long> imageStorageIds
+    Set<String> imageUrls
 ) {}

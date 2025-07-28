@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.exception.CategoryNotFoundException;
 import tr.com.huseyinari.ecommerce.category.mapper.CategoryMapper;
@@ -24,6 +25,7 @@ public class CategoryService {
     private final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
     private final CategoryRepository repository;
+    private final ECommerceConfigurationProperties configurationProperties;
 
     public List<CategorySearchResponse> findAll() {
         return this.repository.findAll()
@@ -78,6 +80,9 @@ public class CategoryService {
         Pageable pageable = PageRequest.of(0, 6);
         List<Category> popularCategories = this.repository.findByParentIdOrderByTotalProductCountDesc(null, pageable);
 
-        return popularCategories.stream().map(CategoryMapper::toPopularCategorySearchResponse).toList();
+        return popularCategories
+                .stream()
+                .map(item -> CategoryMapper.toPopularCategorySearchResponse(item, configurationProperties.getStorageObjectContentUrl()))
+                .toList();
     }
 }

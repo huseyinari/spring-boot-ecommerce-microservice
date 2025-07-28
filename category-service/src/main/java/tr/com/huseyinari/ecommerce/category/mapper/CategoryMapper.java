@@ -42,7 +42,11 @@ public class CategoryMapper {
         return response;
     }
 
-    public static PopularCategorySearchResponse toPopularCategorySearchResponse(Category category) {
-        return new PopularCategorySearchResponse(category.getName(), category.getTotalProductCount(), category.getImageStorageObjectId());
+    public static PopularCategorySearchResponse toPopularCategorySearchResponse(Category category, String storageObjectContentUrl) {
+        return new PopularCategorySearchResponse(
+            category.getName(),
+            category.getTotalProductCount(),
+            storageObjectContentUrl + "/" + category.getImageStorageObjectId()
+        );
     }
 }

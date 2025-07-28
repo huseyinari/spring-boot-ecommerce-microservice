@@ -8,14 +8,14 @@ public class CarouselItemMapper {
 
     }
 
-    public static CarouselItemSearchResponse toSearchResponse(CarouselItem carouselItem) {
+    public static CarouselItemSearchResponse toSearchResponse(CarouselItem carouselItem, String storageObjectContentUrl) {
         return new CarouselItemSearchResponse(
             carouselItem.getTitle(),
             carouselItem.getSubtitle(),
             carouselItem.getLink(),
             carouselItem.getLinkTitle(),
             carouselItem.getListOrder(),
-            carouselItem.getImageStorageObjectId()
+            storageObjectContentUrl + "/" + carouselItem.getImageStorageObjectId()
         );
     }
 }

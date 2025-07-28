@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.product.client.CategoryClient;
+import tr.com.huseyinari.ecommerce.product.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.enums.ProductStatus;
 import tr.com.huseyinari.ecommerce.product.exception.ProductAlreadyExistException;
@@ -41,24 +42,25 @@ public class ProductService {
     private final CategoryClient categoryClient;
     private final ProductReviewService productReviewService;
     private final ProductImageService productImageService;
+    private final ECommerceConfigurationProperties configurationProperties;
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findById(String id) {
         Product product = this.repository.findById(id).orElseThrow(ProductNotFoundException::new);
-        return ProductMapper.toSearchResponse(product);
+        return ProductMapper.toSearchResponse(product, configurationProperties.getStorageObjectContentUrl());
     }
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
         Product product = this.repository.findBySkuCode(skuCode).orElseThrow(ProductNotFoundException::new);
-        return ProductMapper.toSearchResponse(product);
+        return ProductMapper.toSearchResponse(product, configurationProperties.getStorageObjectContentUrl());
     }
 
     @Transactional(readOnly = true)
     public List<ProductSearchResponse> findAll() {
         return this.repository.findAll()
                 .stream()
-                .map(ProductMapper::toSearchResponse)
+                .map(item -> ProductMapper.toSearchResponse(item, configurationProperties.getStorageObjectContentUrl()))
                 .toList();
     }
 

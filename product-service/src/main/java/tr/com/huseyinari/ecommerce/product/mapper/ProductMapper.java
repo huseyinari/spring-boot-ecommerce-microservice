@@ -24,11 +24,12 @@ public class ProductMapper {
                 .build();
     }
 
-    public static ProductSearchResponse toSearchResponse(Product product) {
-        Set<Long> imageStorageIds =
+    public static ProductSearchResponse toSearchResponse(Product product, String storageObjectContentUrl) {
+        Set<String> imageUrls =
                 product.getProductImages()
                         .stream()
                         .map(ProductImage::getStorageObjectId)
+                        .map(storageObjectId -> storageObjectContentUrl + "/" + storageObjectId)
                         .collect(Collectors.toSet());
 
         return new ProductSearchResponse(
@@ -39,7 +40,7 @@ public class ProductMapper {
                 product.getPrice(),
                 product.getDiscount(),
                 product.getDiscountedPrice(),
-                imageStorageIds
+                imageUrls
         );
     }
     public static ProductCreateResponse toCreateResponse(Product product) {
@@ -55,7 +56,7 @@ public class ProductMapper {
             product.getDescription(),
             product.getSkuCode(),
             product.getPrice(),
-                imageStorageIds
+            imageStorageIds
         );
     }
 }
