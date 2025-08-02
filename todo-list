@@ -3,5 +3,6 @@ Category ve Products için resimler ayarlanmalı
 
 ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı
 
-LocalStorage ve S3 işlemlerinde kalıtım kullanılmalı ve factory pattern uygulanabilir.
 NotificationService WebFlux ile yazılabilir.
+
+zookeeper ve kafka container'lar için ram ve cpu limiti eklendi. bu keycloak gibi fazla kaynak isteyen diğer container'lar için de uygulanmalı !
