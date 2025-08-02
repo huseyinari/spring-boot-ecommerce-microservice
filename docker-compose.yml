@@ -99,18 +99,23 @@ services:
 
 
   zookeeper:
-    image: bitnami/zookeeper:3.6.2
+    image: bitnami/zookeeper:3.9  # En güncel stable Bitnami Zookeeper
     container_name: zookeeper
     ports:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-      - ZOO_JVMFLAGS=-Xms128m -Xmx256m  # fazla ram ve cpu harcamasını önlemek için
+      - ZOO_JVMFLAGS=-Xms128m -Xmx256m
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'  # toplam cpu'nun en fazla %30'nu kullanabilir
+          memory: 256M
     networks:
       - ecommerce-kafka-network
 
   kafka1:
-    image: bitnami/kafka:2.7.0
+    image: bitnami/kafka:3.7  # En güncel stable Bitnami Kafka (Ağustos 2025)
     container_name: kafka1
     ports:
       - '9093:9093'
@@ -123,13 +128,19 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_HEAP_OPTS=-Xms128m -Xmx256m
+      - KAFKA_JVM_PERFORMANCE_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200
     depends_on:
       - zookeeper
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3' # toplam cpu'nun en fazla %30'nu kullanabilir
+          memory: 384M
     networks:
       - ecommerce-kafka-network
 
   kafka2:
-    image: bitnami/kafka:2.7.0
+    image: bitnami/kafka:3.7
     container_name: kafka2
     ports:
       - '9094:9094'
@@ -142,10 +153,17 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_HEAP_OPTS=-Xms128m -Xmx256m
+      - KAFKA_JVM_PERFORMANCE_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200
     depends_on:
       - zookeeper
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'   # toplam cpu'nun en fazla %30'nu kullanabilir
+          memory: 384M
     networks:
       - ecommerce-kafka-network
+
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
