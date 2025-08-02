@@ -41,10 +41,10 @@ public class InventoryKafkaConsumer {
             logger.info("{} numaralı ürün için stok kaydı başarıyla açıldı. Mesaj ürün servisine gönderiliyor.", skuCode);
 
             this.kafkaProducer.sendOpeningProductStockSuccess(skuCode);
-        } catch (Exception e) {
-            logger.info("{} numaralı ürün için stok kaydı açılışında hata oluştu. {}", skuCode, e.getMessage());
+        } catch (Exception exception) {
+            logger.info("{} numaralı ürün için stok kaydı açılışında hata oluştu. {}", skuCode, exception.getMessage());
 
-            this.kafkaProducer.sendOpeningProductStockFailure(skuCode, e.getMessage());
+            this.kafkaProducer.sendOpeningProductStockFailure(skuCode, exception.getMessage());
         }
     }
 }

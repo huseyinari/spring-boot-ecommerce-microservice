@@ -80,9 +80,9 @@ public class ProductService {
 
         try {
             SinhaRestApiResponse<CategorySearchResponse> response = this.categoryClient.findOne(request.categoryId());
-        } catch (FeignException.NotFound e) {
+        } catch (FeignException.NotFound exception) {
             throw new RuntimeException("Geçerli bir kategori seçiniz !");
-        } catch (Exception e) {
+        } catch (Exception exception) {
             throw new RuntimeException("Kategori servisine erişilemedi. Lütfen daha sonra tekrar deneyiniz.");
         }
 

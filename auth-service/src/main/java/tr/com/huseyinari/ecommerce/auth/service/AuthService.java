@@ -68,15 +68,15 @@ public class AuthService {
             Integer refreshExpiresIn = rootNode.path("refresh_expires_in").asInt();
 
             return new LoginResponse(tokenType, accessToken, refreshToken, expiresIn, refreshExpiresIn);
-        } catch (HttpClientErrorException e) {
-            if ("Unauthorized".equals(e.getStatusText())) {
+        } catch (HttpClientErrorException exception) {
+            if ("Unauthorized".equals(exception.getStatusText())) {
                 throw new BadCredentialsException();
-            } else if ("Bad Request".equals(e.getStatusText())) {
+            } else if ("Bad Request".equals(exception.getStatusText())) {
                 throw new UserNotActiveException();
             } else {
                 throw new RuntimeException("Giriş yapma işlemi başarısız !");
             }
-        } catch (Exception e) {
+        } catch (Exception exception) {
             throw new RuntimeException("Giriş yapma işlemi başarısız !");
         }
     }
@@ -115,13 +115,13 @@ public class AuthService {
             Integer refreshExpiresIn = rootNode.path("refresh_expires_in").asInt();
 
             return new LoginResponse(tokenType, accessToken, refreshToken, expiresIn, refreshExpiresIn);
-        } catch (HttpClientErrorException e) {
-            if ("Bad Request".equals(e.getStatusText())) {
+        } catch (HttpClientErrorException exception) {
+            if ("Bad Request".equals(exception.getStatusText())) {
                 throw new InvalidRefreshTokenException();
             } else {
                 throw new RuntimeException("Token yenileme işlemi sırasında hata oluştu !");
             }
-        } catch (Exception e) {
+        } catch (Exception exception) {
             throw new RuntimeException("Token yenileme işlemi sırasında hata oluştu !");
         }
     }

@@ -71,7 +71,7 @@ public class ProductImageService {
             storageObject = response.getData();
         } catch (FeignException.NotFound e) {
             throw new RuntimeException("Seçilen dosya sistemde bulunamadı !");
-        } catch (Exception e) {
+        } catch (Exception exception) {
             // TODO: Aslında servisten 404 yerine farklı bir hata response da dönmüş olabilir. Bu gibi durumlarda servise erişilememe durumu kesin olarak belirlenmeli.
             throw new RuntimeException("Depolama servisine erişilemedi. Lütfen daha sonra tekrar deneyiniz.");
         }
