@@ -10,9 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import tr.com.huseyinari.ecommerce.storage.request.S3GetFileRequest;
-import tr.com.huseyinari.ecommerce.storage.request.S3UploadRequest;
-import tr.com.huseyinari.ecommerce.storage.response.S3UploadResponse;
+import tr.com.huseyinari.ecommerce.storage.config.ECommerceConfigurationProperties;
+import tr.com.huseyinari.ecommerce.storage.request.ReadFileRequest;
+import tr.com.huseyinari.ecommerce.storage.request.UploadFileRequest;
+import tr.com.huseyinari.ecommerce.storage.response.ReadFileResponse;
+import tr.com.huseyinari.ecommerce.storage.response.S3ReadFileResponse;
+import tr.com.huseyinari.ecommerce.storage.response.S3UploadFileResponse;
+import tr.com.huseyinari.ecommerce.storage.response.UploadFileResponse;
 import tr.com.huseyinari.utils.IOUtils;
 import tr.com.huseyinari.utils.StringUtils;
 
@@ -21,32 +25,43 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class S3Service implements StorageService {
     private static final Logger logger = LoggerFactory.getLogger(S3Service.class);
 
+    private final ECommerceConfigurationProperties configurationProperties;
     private final AmazonS3 amazonS3;
 
-    public S3UploadResponse uploadFile(S3UploadRequest request) {
-        if (request.multipartFile() == null) {
+    public UploadFileResponse uploadFile(UploadFileRequest request) {
+        if (request.getMultipartFile() == null || request.getMultipartFile().isEmpty()) {
             throw new RuntimeException("Dosya seçilmedi.");
         }
+        if (StringUtils.isBlank(request.getStorageName())) {
+            throw new RuntimeException("Depolama adı boş olamaz.");
+        }
 
-        final MultipartFile multipartFile = request.multipartFile();
-        final String bucketName = request.bucketName();
+        final MultipartFile multipartFile = request.getMultipartFile();
+        final String bucketName = request.getStorageName();
+
+        final Long maxUploadFileSize = this.configurationProperties.getMaxUploadFileSize();
+
+        if (maxUploadFileSize.compareTo(multipartFile.getSize()) < 0) {
+            throw new RuntimeException("Dosya boyutu çok büyük !");
+        }
+
+        final String originalFileName = multipartFile.getOriginalFilename();
+
+        if (StringUtils.isBlank(originalFileName) || !originalFileName.contains(".")) {
+            throw new RuntimeException("Geçersiz dosya adı !");
+        }
+
+        final String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        final long fileSize = multipartFile.getSize();  // byte
+
+        final String newFileName = UUID.randomUUID() + "." + extension;
+
         File file = null;
 
         try {
-            final String originalFileName = multipartFile.getOriginalFilename();
-
-            if (StringUtils.isBlank(originalFileName) || !originalFileName.contains(".")) {
-                throw new RuntimeException("Geçersiz dosya adı !");
-            }
-
-            final String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-            final long fileSize = multipartFile.getSize();  // byte
-
-            final String newFileName = UUID.randomUUID() + "." + extension;
-
             file = File.createTempFile("temp-", newFileName);
             multipartFile.transferTo(file);
 
@@ -55,16 +70,10 @@ public class S3Service {
 
             logger.info("Dosya başarıyla yüklendi. Dosya: {}", file.getPath());
 
-            return new S3UploadResponse(newFileName, extension, fileSize, bucketName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("Dosya yükleme işlemi başarısız. Exception: {}", e.getMessage());
-
-            if (file != null) {
-                logger.error("Hatalı Dosya: {}", file.getPath());
-            }
-
-            throw new RuntimeException("Dosya yükleme işlemi başarısız. " + e.getMessage());
+            return new S3UploadFileResponse(newFileName, extension, fileSize, bucketName);
+        } catch (Exception exception) {
+            logger.error("Dosya yükleme işlemi başarısız. Exception: {}", exception.getMessage());
+            throw new RuntimeException("Dosya yükleme işlemi başarısız. " + exception.getMessage());
         } finally {
             if (file != null && file.exists()) {
                 boolean isDeleted = file.delete();
@@ -75,17 +84,16 @@ public class S3Service {
         }
     }
 
-    public byte[] getFileContent(S3GetFileRequest request) {
-        final String fileName = request.fileName();
-        final String bucketName = request.bucketName();
-
-        byte[] result = null;
+    public ReadFileResponse getFileContent(ReadFileRequest request) {
+        final String fileName = request.getFileName();
+        final String bucketName = request.getStorageName();
 
         try {
             S3Object s3Object = this.amazonS3.getObject(bucketName, fileName);
             S3ObjectInputStream inputStream = s3Object.getObjectContent();
 
-            result = IOUtils.toByteArray(inputStream);
+            final byte[] fileContent = IOUtils.toByteArray(inputStream);
+            return new S3ReadFileResponse(fileContent);
         } catch (AmazonS3Exception exception) {
             exception.printStackTrace();
             logger.error("(AmazonS3Exception) Dosya indirme işlemi başarısız. Dosya Adı: {}", fileName);
@@ -109,7 +117,5 @@ public class S3Service {
 
             throw new RuntimeException("Dosya okumada hata oluştu !");
         }
-
-        return result;
     }
 }

@@ -3,3 +3,5 @@
 .idea/
 volume-data/
 target/
+
+local-storage/

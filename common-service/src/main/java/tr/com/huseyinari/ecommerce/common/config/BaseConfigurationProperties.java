@@ -8,6 +8,8 @@ import lombok.Setter;
 public abstract class BaseConfigurationProperties {
     private String baseUrl;
     private String storageObjectContentUrl;
+    private String localStorageFilePath;
+    private Long maxUploadFileSize;
     private KeycloakProperties keycloak;
     private AwsProperties aws;
     private KafkaProperties kafka;

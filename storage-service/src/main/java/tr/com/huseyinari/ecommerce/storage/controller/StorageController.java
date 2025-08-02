@@ -12,14 +12,14 @@ import tr.com.huseyinari.ecommerce.storage.response.FileContentBase64Response;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentResponse;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectSearchResponse;
 import tr.com.huseyinari.ecommerce.storage.response.UploadProductImageResponse;
-import tr.com.huseyinari.ecommerce.storage.service.StorageService;
+import tr.com.huseyinari.ecommerce.storage.service.StorageObjectService;
 import tr.com.huseyinari.springweb.rest.IgnoreResponseBodyAdvice;
 
 @RestController
 @RequestMapping("/api/v1/storage")
 @RequiredArgsConstructor
 public class StorageController {
-    private final StorageService service;
+    private final StorageObjectService service;
 
     @GetMapping("/{id}")
     public ResponseEntity<StorageObjectSearchResponse> findOne(@PathVariable Long id) {
