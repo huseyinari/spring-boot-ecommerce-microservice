@@ -9,5 +9,7 @@ public record ProductCreateResponse(
     String description,
     String skuCode,
     BigDecimal price,
+    BigDecimal discount,
+    BigDecimal discountedPrice,
     Set<Long> imageStorageIds
 ) {}

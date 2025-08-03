@@ -6,6 +6,7 @@ import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class ProductMapper {
                 .name(request.name())
                 .description(request.description())
                 .price(request.price())
+                .discount(request.discount())
                 .categoryId(request.categoryId())
                 .build();
     }
@@ -56,6 +58,8 @@ public class ProductMapper {
             product.getDescription(),
             product.getSkuCode(),
             product.getPrice(),
+            product.getDiscount(),
+            product.getDiscountedPrice(),
             imageStorageIds
         );
     }

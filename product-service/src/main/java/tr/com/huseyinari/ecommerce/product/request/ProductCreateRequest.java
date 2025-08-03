@@ -12,6 +12,7 @@ public record ProductCreateRequest(
     String description,
     @NotNull(message = "Lütfen ürün fiyatı giriniz.")
     BigDecimal price,
+    BigDecimal discount,
     @NotNull(message = "Lütfen kategori seçiniz.")
     Long categoryId
 ) {}

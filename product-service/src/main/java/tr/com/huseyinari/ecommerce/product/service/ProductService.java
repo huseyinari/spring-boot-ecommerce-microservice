@@ -28,6 +28,7 @@ import tr.com.huseyinari.ecommerce.product.shared.response.CategorySearchRespons
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,6 +91,13 @@ public class ProductService {
         product.setSkuCode(this.generateSkuCode(product.getName()));
         product.setUserId(currentUserId);
         product.setStatus(ProductStatus.PENDING);
+
+        if (request.discount() == null || BigDecimal.ZERO.compareTo(request.discount()) == 0) {
+            product.setDiscount(BigDecimal.ZERO);
+            product.setDiscountedPrice(request.price());
+        } else {
+            product.setDiscountedPrice(request.price().subtract(request.discount()));
+        }
 
         product = this.repository.save(product);
 
