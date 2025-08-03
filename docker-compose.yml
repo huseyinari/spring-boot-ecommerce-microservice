@@ -90,13 +90,16 @@ services:
       KC_DB_URL: jdbc:postgresql://keycloak-db/${KEYCLOAK_DB}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-      JAVA_OPTS: -Xms128m -Xmx512m
     ports:
       - 8088:8080
 #    restart: always
     depends_on:
       - keycloak-db
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   zookeeper:
     image: bitnami/zookeeper:3.9  # En güncel stable Bitnami Zookeeper
@@ -105,14 +108,13 @@ services:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-      - ZOO_JVMFLAGS=-Xms128m -Xmx256m
+    networks:
+      - ecommerce-kafka-network
     deploy:
       resources:
         limits:
-          cpus: '0.3'  # toplam cpu'nun en fazla %30'nu kullanabilir
-          memory: 256M
-    networks:
-      - ecommerce-kafka-network
+          cpus: '0.5'  # toplam cpu'dan en fazla %50 kullanabilir
+          memory: 512M
 
   kafka1:
     image: bitnami/kafka:3.7  # En güncel stable Bitnami Kafka (Ağustos 2025)
@@ -127,17 +129,16 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka1:9092,EXTERNAL://localhost:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-      - KAFKA_HEAP_OPTS=-Xms128m -Xmx256m
       - KAFKA_JVM_PERFORMANCE_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200
     depends_on:
       - zookeeper
+    networks:
+      - ecommerce-kafka-network
     deploy:
       resources:
         limits:
-          cpus: '0.3' # toplam cpu'nun en fazla %30'nu kullanabilir
-          memory: 384M
-    networks:
-      - ecommerce-kafka-network
+          cpus: '0.5' # toplam cpu'dan en fazla %50 kullanabilir
+          memory: 512M
 
   kafka2:
     image: bitnami/kafka:3.7
@@ -152,32 +153,51 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka2:9092,EXTERNAL://localhost:9094
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-      - KAFKA_HEAP_OPTS=-Xms128m -Xmx256m
       - KAFKA_JVM_PERFORMANCE_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200
     depends_on:
       - zookeeper
+    networks:
+      - ecommerce-kafka-network
     deploy:
       resources:
         limits:
-          cpus: '0.3'   # toplam cpu'nun en fazla %30'nu kullanabilir
-          memory: 384M
-    networks:
-      - ecommerce-kafka-network
+          cpus: '0.5'   # toplam cpu'dan en fazla %50 kullanabilir
+          memory: 512M
 
-
-  kafdrop:
-    image: obsidiandynamics/kafdrop:latest
-    container_name: kafdrop
+#  kafdrop:
+#    image: obsidiandynamics/kafdrop:latest
+#    container_name: kafdrop
+#    ports:
+#      - 9000:9000
+#    environment:
+#      - KAFKA_BROKERCONNECT=kafka1:9092,kafka2:9092
+#    depends_on:
+#      - kafka1
+#      - kafka2
+#    networks:
+#      - ecommerce-kafka-network
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: 512M
+  akhq:
+    image: tchiotludo/akhq:latest
+    container_name: akhq
     ports:
-      - 9000:9000
-    environment:
-      - KAFKA_BROKERCONNECT=kafka1:9092,kafka2:9092
-      - JAVA_OPTS=-Xms128m -Xmx256m
+      - 9000:8080
+    volumes:
+      - ./akhq/akhq-application.yml:/app/application.yml
     depends_on:
       - kafka1
       - kafka2
     networks:
       - ecommerce-kafka-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'   # toplam cpu'dan en fazla %50 kullanabilir
+          memory: 512M
 
   prometheus:
     image: prom/prometheus:v2.44.0
@@ -187,6 +207,11 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./volume-data/prometheus-data:/prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'   # toplam cpu'dan en fazla %50 kullanabilir
+          memory: 512M
 
   grafana:
     image: grafana/grafana:9.5.2
@@ -200,6 +225,11 @@ services:
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./volume-data/grafana-data:/var/lib/grafana
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'   # toplam cpu'dan en fazla %50 kullanabilir
+          memory: 512M
 
 
 networks:
