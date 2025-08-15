@@ -1,8 +1,9 @@
 storage service yazılacak veya resimler için ne yapılabileceği araştırılacak.
 Category ve Products için resimler ayarlanmalı
 
-ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı
+ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı.
+Tüm servislere Swagger eklenmeli.
 
 NotificationService WebFlux ile yazılabilir.
 
-zookeeper ve kafka container'lar için ram ve cpu limiti eklendi. bu keycloak gibi fazla kaynak isteyen diğer container'lar için de uygulanmalı !
+kafka container'ları değişti. servislerin doğru çalışıp çalışmadığını kontrol et.
