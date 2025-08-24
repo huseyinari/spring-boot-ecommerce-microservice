@@ -1,5 +1,6 @@
 package tr.com.huseyinari.ecommerce.inventory.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +12,9 @@ import tr.com.huseyinari.ecommerce.inventory.service.InventoryService;
 @RestController
 @RequestMapping("/api/v1/inventory")
 @RequiredArgsConstructor
+@Tag(name = "Inventory Controller", description = "Envanter Yönetimi")
 public class InventoryController {
     private final InventoryService service;
-
-//    @PostMapping("{skuCode}")
-//    public ResponseEntity<Void> openProductStock(@PathVariable String skuCode) {
-//        this.service.openProductStock(skuCode);
-//        return ResponseEntity.ok().build();
-//    }
 
     @GetMapping("/is-in-stock")
     public ResponseEntity<Boolean> isInStock(@RequestParam String skuCode, @RequestParam Integer quantity) {

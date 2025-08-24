@@ -1,5 +1,6 @@
 package tr.com.huseyinari.ecommerce.order.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import tr.com.huseyinari.ecommerce.order.service.OrderService;
 @RestController
 @RequestMapping("/api/v1/order")
 @RequiredArgsConstructor
+@Tag(name = "Order Controller", description = "Sipariş Yönetimi")
 public class OrderController {
     private final OrderService service;
 

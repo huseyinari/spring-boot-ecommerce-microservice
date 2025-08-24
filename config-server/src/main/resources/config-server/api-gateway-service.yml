@@ -19,7 +19,7 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/product/**,/api/v1/product-image/**
+            - Path=/product/**,/api/v1/product/**,/api/v1/product-image/**
           # NOT => Filter'lar burada tanımlandığı sırayla çalışırlar !!! AbstractGatewayFilterFactory ile oluşturulan filter'lara Ordered işlemez. Buradaki sıra önemli
           filters:
             - AddAuthenticatedUserInHeaderFilter
@@ -27,21 +27,21 @@ spring:
         - id: order-service
           uri: lb://order-service
           predicates:
-            - Path=/api/v1/order/**
+            - Path=/order/**,/api/v1/order/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
             - LoggingFilter
         - id: inventory-service
           uri: lb://inventory-service
           predicates:
-            - Path=/api/v1/inventory/**
+            - Path=/inventory/**,/api/v1/inventory/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
             - LoggingFilter
         - id: category-service
           uri: lb://category-service
           predicates:
-            - Path=/api/v1/category/**,/api/v1/carousel-item/**
+            - Path=/category/**,/api/v1/category/**,/api/v1/carousel-item/**
           filters:
             - AddAuthenticatedUserInHeaderFilter
             - LoggingFilter
@@ -55,13 +55,34 @@ spring:
         - id: storage-service
           uri: lb://storage-service
           predicates:
-            - Path=/api/v1/storage/**,/public/storage/**
+            - Path=/storage/**,/api/v1/storage/**,/public/storage/**
           filters:
-            - LoggingFilter
             - AddAuthenticatedUserInHeaderFilter
+            - LoggingFilter
 eureka:
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: gateway-service
+        url: /v3/api-docs
+      - name: product-service
+        url: /product/swagger/v3/api-docs
+      - name: category-service
+        url: /category/swagger/v3/api-docs
+      - name: inventory-service
+        url: /inventory/swagger/v3/api-docs
+      - name: order-service
+        url: /order/swagger/v3/api-docs
+      - name: storage-service
+        url: /storage/swagger/v3/api-docs
