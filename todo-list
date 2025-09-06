@@ -1,5 +1,4 @@
 ProductService Prometheus ve Grafana Eklendi. Diğer servislere de eklenmeli. PromQL hakkında detaylı araştırma yapılmalı.
-Tüm servislere Swagger eklenmeli.
 ResponseBodyAdvice sınıfında, ignore edilecek url'ler abstract bir metod yardımıyla kullanacak olan child class'tan alınabilir.
 AddAuthenticatedUserInHeaderFilter içerisinde, gelen isteğin header'ında kullanıcı tarafından bir authenticated user bilgisi olup olmadığı kontrol edilmeli. dışarıdan bu bilgi asla gönderilmemelidir.
 Log'lama ve ELK ile log takibi.

@@ -8,8 +8,8 @@ public class CustomResponseBodyAdvice extends SinhaResponseBodyAdvice {
     @Override
     public String[] getIgnoreUrls() {
         return new String[] {
-                "/actuator/**",
-                "/auth/swagger/**"
+            "/actuator/**",
+            "/storage/swagger/**"
         };
     }
 }

@@ -37,6 +37,7 @@ public class SecurityConfig {
             "/inventory/swagger/**", "/inventory/swagger-ui/**",
             "/order/swagger/**", "/order/swagger-ui/**",
             "/storage/swagger/**", "/storage/swagger-ui/**",
+            "/auth/swagger/**", "/auth/swagger-ui/**",
             "/api/v1/auth/**",
             "/api/v1/storage/content/{id}",
             "/api/v1/category/menu",
