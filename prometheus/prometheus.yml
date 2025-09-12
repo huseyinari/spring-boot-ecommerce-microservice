@@ -1,4 +1,36 @@
 scrape_configs:
+  - job_name: 'AuthServiceMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8094' ]
+        labels:
+          application: 'Auth Service'
+
+  - job_name: 'CategoryServiceMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8093' ]
+        labels:
+          application: 'Category Service'
+
+  - job_name: 'InventoryServiceMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8092' ]
+        labels:
+          application: 'Inventory Service'
+
+  - job_name: 'OrderServiceMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8090' ]
+        labels:
+          application: 'Order Service'
+
   - job_name: 'ProductServiceMetrics'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 3s
@@ -6,3 +38,11 @@ scrape_configs:
       - targets: ['host.docker.internal:8091']
         labels:
           application: 'Product Service'
+
+  - job_name: 'StorageServiceMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: ['host.docker.internal:8095']
+        labels:
+          application: 'Storage Service'
