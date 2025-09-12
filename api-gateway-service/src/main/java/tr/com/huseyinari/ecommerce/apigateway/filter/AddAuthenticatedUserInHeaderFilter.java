@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Mono;
 import tr.com.huseyinari.ecommerce.apigateway.security.CustomAuthenticationToken;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 
@@ -20,6 +23,15 @@ public class AddAuthenticatedUserInHeaderFilter extends AbstractGatewayFilterFac
     @Override
     public GatewayFilter apply(AddAuthenticatedUserInHeaderFilter.Config config) {
         return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+
+            final boolean userId = request.getHeaders().containsKey(RequestHeaderConstants.AUTHENTICATED_USER_ID);
+            final boolean userName = request.getHeaders().containsKey(RequestHeaderConstants.AUTHENTICATED_USER_NAME);
+
+            if (userId || userName) {
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kullanıcı bilgilerini içeren bir istek gönderemezsiniz !"));
+            }
+
             return ReactiveSecurityContextHolder.getContext()
                     .flatMap(securityContext -> {
                         CustomAuthenticationToken authenticationToken = (CustomAuthenticationToken) securityContext.getAuthentication();
