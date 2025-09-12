@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,8 +34,8 @@ public class ProductController {
 
     @Operation(
         summary = "Ürün ara",
-        description = "Ürünleri kriterlere göre arar ve sayfalama yaparak bilgileri döner.",
-        security = @SecurityRequirement(name = "bearerAuth")
+        description = "Ürünleri kriterlere göre arar ve sayfalama yaparak bilgileri döner."
+//        security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses({
         @ApiResponse(
@@ -47,7 +48,7 @@ public class ProductController {
         )
     })
     @GetMapping("/search")
-    public ResponseEntity<ProductSearchPageableResponse> search(ProductSearchParameters params, Pageable pageable) {
+    public ResponseEntity<ProductSearchPageableResponse> search(ProductSearchParameters params, @ParameterObject Pageable pageable) {
         ProductSearchPageableResponse response = this.service.search(params, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
