@@ -27,7 +27,6 @@ import tr.com.huseyinari.ecommerce.auth.service.AuthService;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Validated
 public class AuthController {
     private final AuthService service;
 
@@ -48,7 +47,7 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Kullanıcı adı veya şifre hatalı !", content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = this.service.login(request);
         return ResponseEntity.ok(response);
     }
@@ -70,7 +69,7 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Refresh token hatalı !", content = @Content)
     })
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refresh(@RequestBody @Valid RefreshTokenRequest request) {
+    public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshTokenRequest request) {
         LoginResponse response = this.service.refresh(request);
         return ResponseEntity.ok(response);
     }
@@ -92,7 +91,7 @@ public class AuthController {
         @ApiResponse(responseCode = "500", description = "Kayıt işlemi başarısız !", content = @Content)
     })
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
         RegisterResponse response = this.service.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

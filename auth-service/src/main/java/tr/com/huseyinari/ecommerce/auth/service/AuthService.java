@@ -2,6 +2,7 @@ package tr.com.huseyinari.ecommerce.auth.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -12,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import tr.com.huseyinari.ecommerce.auth.config.ECommerceConfigurationProperties;
@@ -27,13 +29,14 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class AuthService {
     private final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final KeycloakAdminClientService keycloakAdminClientService;
     private final ECommerceConfigurationProperties configurationProperties;
 
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(@Valid LoginRequest request) {
         String loginUrl = new StringBuilder()
                 .append(this.configurationProperties.getKeycloak().getServerUrl())
                 .append("/realms/")
@@ -81,7 +84,7 @@ public class AuthService {
         }
     }
 
-    public LoginResponse refresh(RefreshTokenRequest request) {
+    public LoginResponse refresh(@Valid RefreshTokenRequest request) {
         String loginUrl = new StringBuilder()
                 .append(this.configurationProperties.getKeycloak().getServerUrl())
                 .append("/realms/")
@@ -126,7 +129,7 @@ public class AuthService {
         }
     }
 
-    public RegisterResponse register(RegisterRequest request) {
+    public RegisterResponse register(@Valid RegisterRequest request) {
         UsersResource usersResource = this.keycloakAdminClientService.getUsersResource();
 
         List<UserRepresentation> userRepresentationListByUsername = usersResource.search(request.userName());
