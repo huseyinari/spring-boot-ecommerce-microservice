@@ -46,3 +46,11 @@ scrape_configs:
       - targets: ['host.docker.internal:8095']
         labels:
           application: 'Storage Service'
+
+  - job_name: 'ConfigServerMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8888' ]
+        labels:
+          application: 'Config Server'
