@@ -12,6 +12,11 @@ services:
       POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
       POSTGRES_USER: ${ORDER_DB_USER}
       POSTGRES_DB: ${ORDER_DB}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   product-service-db:
     image: postgres:17.2
@@ -24,6 +29,11 @@ services:
       POSTGRES_PASSWORD: ${PRODUCT_DB_PASSWORD}
       POSTGRES_USER: ${PRODUCT_DB_USER}
       POSTGRES_DB: ${PRODUCT_DB}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   inventory-service-db:
     image: postgres:17.2
@@ -36,6 +46,11 @@ services:
       POSTGRES_PASSWORD: ${INVENTORY_DB_PASSWORD}
       POSTGRES_USER: ${INVENTORY_DB_USER}
       POSTGRES_DB: ${INVENTORY_DB}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   category-service-db:
     image: postgres:17.2
@@ -48,6 +63,11 @@ services:
       POSTGRES_PASSWORD: ${CATEGORY_DB_PASSWORD}
       POSTGRES_USER: ${CATEGORY_DB_USER}
       POSTGRES_DB: ${CATEGORY_DB}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   storage-service-db:
     image: postgres:17.2
@@ -60,6 +80,11 @@ services:
       POSTGRES_PASSWORD: ${STORAGE_DB_PASSWORD}
       POSTGRES_USER: ${STORAGE_DB_USER}
       POSTGRES_DB: ${STORAGE_DB}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   keycloak-db:
     image: postgres:17.2
@@ -72,6 +97,11 @@ services:
       POSTGRES_DB: ${KEYCLOAK_DB}
       POSTGRES_USER: ${KEYCLOAK_DB_USER}
       POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 521M
 
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.6
