@@ -21,7 +21,7 @@ NO CYCLE;
 CREATE TABLE category (
     id BIGINT,
     category_name VARCHAR(255) NOT NULL,
-    image_url VARCHAR(255) NOT NULL,
+    -- image_url VARCHAR(255) NOT NULL,
     total_product_count INTEGER NOT NULL DEFAULT 0,
     parent_id BIGINT,
     image_storage_object_id BIGINT NOT NULL,

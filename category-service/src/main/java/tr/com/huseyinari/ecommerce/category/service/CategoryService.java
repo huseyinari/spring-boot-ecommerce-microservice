@@ -47,10 +47,12 @@ public class CategoryService {
     }
 
     public List<MenuCategoryResponse> getMenuCategories() {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
         List<MenuCategoryResponse> allCategories =
                 this.repository.findAll()
                         .stream()
-                        .map(CategoryMapper::toMenuCategoriesResponse)
+                        .map(item -> CategoryMapper.toMenuCategoriesResponse(item, storageObjectContentUrl))
                         .toList();
 
         List<MenuCategoryResponse> menuCategoryResponseList = allCategories.stream().filter(item -> item.getParentId() == null).toList(); // root kategorileri ekle

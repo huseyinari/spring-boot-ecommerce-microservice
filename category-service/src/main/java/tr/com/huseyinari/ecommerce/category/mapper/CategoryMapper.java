@@ -17,24 +17,25 @@ public class CategoryMapper {
     public static Category toEntity(CategoryCreateRequest request) {
         return Category.builder()
                 .name(request.name())
-                .imageUrl("/images/category.jpg")   // <----- TODO: Örnek olarak yazıldı. Storage servis ayarlandıgı zaman resim kaydedilmeli ve url bilgisi tanımlanmalı
+                .parentId(request.parentId())
+                .imageStorageObjectId(Long.valueOf(-1))     // TODO: Kategori eklenirken resim seçilemeyecek diye düşündüm. Eğer bu imkan sağlanırsa düzenlenmeli
                 .totalProductCount(0)
                 .build();
     }
 
     public static CategorySearchResponse toSearchResponse(Category category) {
-        return new CategorySearchResponse(category.getId(), category.getName(), category.getImageUrl(), category.getTotalProductCount());
+        return new CategorySearchResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
     public static CategoryCreateResponse toCreateResponse(Category category) {
-        return new CategoryCreateResponse(category.getId(), category.getName(), category.getImageUrl(), category.getTotalProductCount());
+        return new CategoryCreateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
-    public static MenuCategoryResponse toMenuCategoriesResponse(Category category) {
+    public static MenuCategoryResponse toMenuCategoriesResponse(Category category, String storageObjectContentUrl) {
         MenuCategoryResponse response = new MenuCategoryResponse();
         response.setId(category.getId());
         response.setName(category.getName());
-        response.setImageUrl(category.getImageUrl());
+        response.setImageUrl(storageObjectContentUrl + "/" + category.getImageStorageObjectId());
         response.setTotalProductCount(category.getTotalProductCount());
         response.setParentId(category.getParentId());
         response.setSubCategories(new ArrayList<>());

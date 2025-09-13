@@ -20,8 +20,8 @@ public class Category extends AbstractAuditableEntity {
     @Column(name = "category_name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "image_url", nullable = false, unique = true)
-    private String imageUrl;
+//    @Column(name = "image_url", nullable = false, unique = true)
+//    private String imageUrl;
 
     @Column(name = "total_product_count", nullable = false)
     private Integer totalProductCount;
