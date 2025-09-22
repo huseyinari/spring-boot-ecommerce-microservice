@@ -6,4 +6,5 @@ Inventory service & Order service- servisler düzenlenmeli ve swagger açıklama
 
 NotificationService WebFlux ile yazılabilir.
 
-kafka container'ları değişti. servislerin doğru çalışıp çalışmadığını kontrol et.
+Servislere gelen istekler şuan sadece apigateway'de log'lanıyor. Fakat request body gibi detaylı log'lamayı Spring Aspect kullanarak
+servis controller'larında yakalayıp log'layabiliriz.

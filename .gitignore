@@ -1,7 +1,8 @@
 .DS_Store
 .mvn/
 .idea/
-volume-data/
 target/
 
 local-storage/
+volume-data/
+logs/
