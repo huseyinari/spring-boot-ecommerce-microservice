@@ -1,4 +1,20 @@
 scrape_configs:
+  - job_name: 'ApiGatewayServiceMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8080' ]
+        labels:
+          application: 'Api Gateway Service'
+
+  - job_name: 'EurekaServerMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'host.docker.internal:8761' ]
+        labels:
+          application: 'Eureka Server'
+
   - job_name: 'AuthServiceMetrics'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 3s

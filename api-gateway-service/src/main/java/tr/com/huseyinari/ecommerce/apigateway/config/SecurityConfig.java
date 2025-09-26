@@ -31,6 +31,7 @@ public class SecurityConfig {
         final String[] permittedUrls = {
             "/public/**",
             "/eureka/**",
+            "/actuator/**",
             "/swagger-ui/**", "/v3/api-docs/**",
             "/product/swagger/**", "/product/swagger-ui/**",
             "/category/swagger/**", "/category/swagger-ui/**",
