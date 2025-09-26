@@ -19,12 +19,21 @@
         <!-- Aktif dosya -->
         <file>${LOG_FILE_PATH}/${LOG_FILE_NAME}</file>
 
+        <!-- Dosyaya bir şey yazılacağı zaman mevcutun üzerine devam et -->
+        <append>true</append>
+
+        <!-- Uygulama ayağa kalkarken, arşivlemesi gereken log var mı diye kontrol eder ve eskileri arşivler -->
+        <cleanHistoryOnStart>true</cleanHistoryOnStart>
+
         <!-- Rolling Policy (günlük arşivleme + max boyut) -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- Günlük olarak veya dosya boyutu aştığında arşivlenecek dosya -->
             <fileNamePattern>${LOG_FILE_PATH}/archived/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
 
-            <maxHistory>1</maxHistory>
+            <!-- Archived klasöründe saklanan eski log dosyaları 30 gün sonra silinecek -->
+            <maxHistory>30</maxHistory>
+
+            <!-- Log dosyası 200MB aşarsa rolling tetiklenecek -->
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
                 <maxFileSize>200MB</maxFileSize>
