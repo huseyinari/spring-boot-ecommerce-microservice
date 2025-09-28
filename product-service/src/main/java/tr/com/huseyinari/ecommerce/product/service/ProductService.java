@@ -20,7 +20,7 @@ import tr.com.huseyinari.ecommerce.product.exception.ProductAlreadyExistExceptio
 import tr.com.huseyinari.ecommerce.product.exception.ProductNotFoundException;
 import tr.com.huseyinari.ecommerce.product.kafka.producer.ProductKafkaProducer;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductMapper;
-import tr.com.huseyinari.ecommerce.product.projection.MostViewedProductProjection;
+import tr.com.huseyinari.ecommerce.product.projection.MostInspectedProductProjection;
 import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
@@ -42,7 +42,7 @@ public class ProductService {
     private final ProductRepository repository;
     private final ProductKafkaProducer kafkaProducer;
     private final CategoryClient categoryClient;
-    private final ProductReviewService productReviewService;
+    private final ProductInspectService productInspectService;
     private final ProductImageService productImageService;
     private final ECommerceConfigurationProperties configurationProperties;
 
@@ -118,8 +118,8 @@ public class ProductService {
         return ProductMapper.toCreateResponse(product);
     }
 
-    public List<ProductMostViewedTodayResponse> getMostViewedTodayProducts() {
-        List<MostViewedProductProjection> result = this.productReviewService.getMostViewedProductsToday();
+    public List<ProductMostInspectedTodayResponse> getMostInspectedTodayProducts() {
+        List<MostInspectedProductProjection> result = this.productInspectService.getMostInspectedProductsToday();
         return result
                 .stream()
                 .map(item -> {
@@ -128,7 +128,7 @@ public class ProductService {
                     List<ProductImageSearchResponse> productImageList = this.productImageService.findByProductId(product.id());
                     String firstImageUrl = !productImageList.isEmpty() ? productImageList.get(0).imageUrl() : null;
 
-                    return new ProductMostViewedTodayResponse(
+                    return new ProductMostInspectedTodayResponse(
                         product.id(),
                         product.name(),
                         product.price(),

@@ -1,7 +1,7 @@
 DROP SEQUENCE IF EXISTS product_image_id_sequence;
-DROP SEQUENCE IF EXISTS product_reviews_id_sequence;
+DROP SEQUENCE IF EXISTS product_inspects_id_sequence;
 
-DROP TABLE IF EXISTS product_reviews;
+DROP TABLE IF EXISTS product_inspect;
 DROP TABLE IF EXISTS product_image;
 DROP TABLE IF EXISTS products;
 
@@ -51,16 +51,16 @@ ALTER TABLE product_image ADD CONSTRAINT pk_product_image_id PRIMARY KEY (id);
 ALTER TABLE product_image ADD CONSTRAINT fk_product_image_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 CREATE UNIQUE INDEX un_ind_product_image_product_id_storage_object_id ON product_image (product_id, storage_object_id);
 
-CREATE SEQUENCE product_reviews_id_sequence
+CREATE SEQUENCE product_inspects_id_sequence
 INCREMENT 1
 MINVALUE 1
 MAXVALUE 2147483647
 START 100000
 NO CYCLE;
 
-CREATE TABLE product_reviews (
+CREATE TABLE product_inspect (
     id BIGINT,
-    reviewed_ip_address VARCHAR(50) NOT NULL,
+    inspected_by_ip_address VARCHAR(50) NOT NULL,
     product_id VARCHAR(100) NOT NULL,
     --
     created_by VARCHAR(100),
@@ -69,5 +69,5 @@ CREATE TABLE product_reviews (
     updated_date TIMESTAMP
 );
 
-ALTER TABLE product_reviews ADD CONSTRAINT pk_product_reviews_id PRIMARY KEY (id);
-ALTER TABLE product_reviews ADD CONSTRAINT fk_product_reviews_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE product_inspect ADD CONSTRAINT pk_product_inspect_id PRIMARY KEY (id);
+ALTER TABLE product_inspect ADD CONSTRAINT fk_product_inspect_product_id FOREIGN KEY (product_id) REFERENCES products(id);

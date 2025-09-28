@@ -1,6 +1,6 @@
 package tr.com.huseyinari.ecommerce.product.projection;
 
-public interface MostViewedProductProjection {
+public interface MostInspectedProductProjection {
     String getProductId();
     Long getViewCount();
 }

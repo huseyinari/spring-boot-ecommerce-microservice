@@ -3,8 +3,8 @@ package tr.com.huseyinari.ecommerce.product.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import tr.com.huseyinari.ecommerce.product.projection.MostViewedProductProjection;
-import tr.com.huseyinari.ecommerce.product.repository.ProductReviewRepository;
+import tr.com.huseyinari.ecommerce.product.projection.MostInspectedProductProjection;
+import tr.com.huseyinari.ecommerce.product.repository.ProductInspectRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,10 +12,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductReviewService {
-    private final ProductReviewRepository repository;
+public class ProductInspectService {
+    private final ProductInspectRepository repository;
 
-    public List<MostViewedProductProjection> getMostViewedProductsToday() {
+    public List<MostInspectedProductProjection> getMostInspectedProductsToday() {
         LocalDate today = LocalDate.now();
 
         LocalDateTime startOfDay = today.atStartOfDay();
@@ -23,6 +23,6 @@ public class ProductReviewService {
 
         Pageable limitFour = Pageable.ofSize(4);
 
-        return this.repository.findMostViewedProductsByDate(startOfDay, endOfDay, limitFour);
+        return this.repository.getMostInspectedProductsToday(startOfDay, endOfDay, limitFour);
     }
 }

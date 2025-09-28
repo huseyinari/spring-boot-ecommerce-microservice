@@ -48,103 +48,103 @@ VALUES(nextval('product_image_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d5
 
 /* product reviews */
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.4', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.4', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.5', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.5', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.6', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.6', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.7', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.7', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.8', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.8', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.9', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.9', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.10', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), '7db7596b-306c-4ab9-a623-c835e421d533', '10.100.50.10', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.4', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.4', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.5', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'a2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.5', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'q2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.2', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.3', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.4', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.4', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.5', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.5', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.6', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 't2b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.6', now(), 'system');
 
-INSERT INTO public.product_reviews
-(id, product_id, reviewed_ip_address, created_date, created_by)
-VALUES(nextval('product_reviews_id_sequence'), 'p9b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
+INSERT INTO public.product_inspect
+(id, product_id, inspected_by_ip_address, created_date, created_by)
+VALUES(nextval('product_inspects_id_sequence'), 'p9b7596b-306c-4ab9-a623-c835e421d533', '10.100.50.1', now(), 'system');
 

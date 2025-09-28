@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductMostViewedTodayResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductMostInspectedTodayResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.service.ProductService;
@@ -129,13 +129,13 @@ public class ProductController {
             description = "En çok incelenen ürünler başarıyla getirildi.",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                array = @ArraySchema(schema = @Schema(implementation = ProductMostViewedTodayResponse.class))
+                array = @ArraySchema(schema = @Schema(implementation = ProductMostInspectedTodayResponse.class))
             )
         )
     })
-    @GetMapping("/most-viewed/today")
-    public ResponseEntity<List<ProductMostViewedTodayResponse>> mostViewed() {
-        List<ProductMostViewedTodayResponse> responseList = this.service.getMostViewedTodayProducts();
+    @GetMapping("/most-inspected/today")
+    public ResponseEntity<List<ProductMostInspectedTodayResponse>> mostInspected() {
+        List<ProductMostInspectedTodayResponse> responseList = this.service.getMostInspectedTodayProducts();
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 }
