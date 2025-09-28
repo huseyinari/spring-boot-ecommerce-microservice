@@ -63,6 +63,7 @@ public class ProductMapper {
             product.getPrice(),
             product.getDiscount(),
             product.getDiscountedPrice(),
+            product.getStatus(),
             imageStorageIds
         );
     }
