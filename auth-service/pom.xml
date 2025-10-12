@@ -21,6 +21,7 @@
 		<spring-cloud.version>2024.0.0</spring-cloud.version>
 		<springdoc-openapi-starter.version>2.8.5</springdoc-openapi-starter.version>
 		<huseyinari-spring-web.version>1.0-SNAPSHOT</huseyinari-spring-web.version>
+		<huseyinari-utils.version>1.0-SNAPSHOT</huseyinari-utils.version>
 		<common-service.version>0.0.1-SNAPSHOT</common-service.version>
 	</properties>
 
@@ -56,6 +57,12 @@
 			<groupId>tr.com.huseyinari.ecommerce</groupId>
 			<artifactId>common-service</artifactId>
 			<version>${common-service.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>tr.com.huseyinari</groupId>
+			<artifactId>utils</artifactId>
+			<version>${huseyinari-utils.version}</version>
 		</dependency>
 
 		<dependency>

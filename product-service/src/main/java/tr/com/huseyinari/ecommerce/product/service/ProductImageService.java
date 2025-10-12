@@ -1,14 +1,15 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import feign.FeignException;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.product.client.StorageClient;
-import tr.com.huseyinari.ecommerce.product.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductImage;
+import tr.com.huseyinari.ecommerce.product.mapper.ProductImageMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductImageRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductImageCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductImageCreateResponse;
@@ -19,39 +20,33 @@ import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 //@RequiredArgsConstructor
 public class ProductImageService {
+    private final Logger logger = LoggerFactory.getLogger(ProductImageService.class);
+
     private final ProductImageRepository repository;
+    private final ProductImageMapper mapper;
     private final ProductService productService;
     private final StorageClient storageClient;
-    private final ECommerceConfigurationProperties configurationProperties;
 
     public ProductImageService(
         ProductImageRepository repository,
+        ProductImageMapper mapper,
         @Lazy ProductService productService,
-        StorageClient storageClient,
-        ECommerceConfigurationProperties configurationProperties
+        StorageClient storageClient
     ) {
         this.repository = repository;
+        this.mapper = mapper;
         this.productService = productService;
         this.storageClient = storageClient;
-        this.configurationProperties = configurationProperties;
     }
 
     List<ProductImageSearchResponse> findByProductId(String productId) {
-        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
-
         return this.repository.findByProduct_IdOrderByCreatedDateAsc(productId)
                 .stream()
-                .map(item -> new ProductImageSearchResponse(
-                    item.getId(),
-                    item.getProduct().getId(),
-                    item.getStorageObjectId(),
-                    storageObjectContentUrl + "/" + item.getStorageObjectId()
-                ))
+                .map(this.mapper::toSearchResponse)
                 .toList();
     }
 

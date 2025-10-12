@@ -1,7 +1,6 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import feign.FeignException;
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import tr.com.huseyinari.ecommerce.common.constants.RequestHeaderConstants;
 import tr.com.huseyinari.ecommerce.product.client.CategoryClient;
-import tr.com.huseyinari.ecommerce.product.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.enums.ProductStatus;
 import tr.com.huseyinari.ecommerce.product.exception.ProductAlreadyExistException;
@@ -40,44 +38,37 @@ public class ProductService {
     private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository repository;
+    private final ProductMapper mapper;
     private final ProductKafkaProducer kafkaProducer;
     private final CategoryClient categoryClient;
     private final ProductInspectService productInspectService;
     private final ProductImageService productImageService;
-    private final ECommerceConfigurationProperties configurationProperties;
-
-    private String storageObjectContentUrl;
-
-    @PostConstruct
-    public void init() {
-        storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
-    }
 
     @Transactional(readOnly = true)
     public ProductSearchPageableResponse search(ProductSearchParameters params, Pageable pageable) {
         Page<Product> result = this.repository.findAll(pageable);
-        return ProductMapper.toSearchPageableResponse(result, this.storageObjectContentUrl);
+        return this.mapper.toSearchPageableResponse(result);
     }
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findById(String id) {
         Product product = this.repository.findById(id).orElseThrow(ProductNotFoundException::new);
 
-        return ProductMapper.toSearchResponse(product, this.storageObjectContentUrl);
+        return this.mapper.toSearchResponse(product);
     }
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findBySkuCode(String skuCode) {
         Product product = this.repository.findBySkuCode(skuCode).orElseThrow(ProductNotFoundException::new);
 
-        return ProductMapper.toSearchResponse(product, this.storageObjectContentUrl);
+        return this.mapper.toSearchResponse(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductSearchResponse> findAll() {
         return this.repository.findAll()
                 .stream()
-                .map(item -> ProductMapper.toSearchResponse(item, this.storageObjectContentUrl))
+                .map(this.mapper::toSearchResponse)
                 .toList();
     }
 
@@ -97,7 +88,7 @@ public class ProductService {
             throw new RuntimeException("Kategori servisine erişilemedi. Lütfen daha sonra tekrar deneyiniz.");
         }
 
-        Product product = ProductMapper.toEntity(request);
+        Product product = this.mapper.toEntity(request);
         product.setSkuCode(this.generateSkuCode(product.getName()));
         product.setUserId(currentUserId);
         product.setStatus(ProductStatus.PENDING);
@@ -115,15 +106,15 @@ public class ProductService {
 
         logger.info("ID: {} -> Product başarıyla oluşturuldu.", product.getId());
 
-        return ProductMapper.toCreateResponse(product);
+        return this.mapper.toCreateResponse(product);
     }
 
     public List<ProductMostInspectedTodayResponse> getMostInspectedTodayProducts() {
         List<MostInspectedProductProjection> result = this.productInspectService.getMostInspectedProductsToday();
         return result
                 .stream()
-                .map(item -> {
-                    ProductSearchResponse product = this.findById(item.getProductId());
+                .map(mostInspectedProduct -> {
+                    ProductSearchResponse product = this.findById(mostInspectedProduct.getProductId());
 
                     List<ProductImageSearchResponse> productImageList = this.productImageService.findByProductId(product.id());
                     String firstImageUrl = !productImageList.isEmpty() ? productImageList.get(0).imageUrl() : null;
@@ -135,7 +126,7 @@ public class ProductService {
                         product.discount(),
                         product.discountedPrice(),
                         firstImageUrl,
-                        item.getViewCount()
+                        mostInspectedProduct.getViewCount()
                     );
                 })
                 .toList();

@@ -1,24 +1,28 @@
 package tr.com.huseyinari.ecommerce.product.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
+import tr.com.huseyinari.ecommerce.product.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductImage;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
+import tr.com.huseyinari.utils.StringUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
+@RequiredArgsConstructor
 public class ProductMapper {
-    private ProductMapper() {
+    private final ECommerceConfigurationProperties configurationProperties;
 
-    }
-    public static Product toEntity(ProductCreateRequest request) {
+    public Product toEntity(ProductCreateRequest request) {
         return Product.builder()
                 .id(UUID.randomUUID().toString())
                 .name(request.name())
@@ -29,7 +33,13 @@ public class ProductMapper {
                 .build();
     }
 
-    public static ProductSearchResponse toSearchResponse(Product product, String storageObjectContentUrl) {
+    public ProductSearchResponse toSearchResponse(Product product) {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
+        if (StringUtils.isBlank(storageObjectContentUrl)) {
+            throw new RuntimeException("Ürün resmi için eksik bilgiler mevcut. Lütfen sistem yöneticiniz ile iletişime geçiniz.");
+        }
+
         Set<String> imageUrls =
                 product.getProductImages()
                         .stream()
@@ -48,7 +58,7 @@ public class ProductMapper {
                 imageUrls
         );
     }
-    public static ProductCreateResponse toCreateResponse(Product product) {
+    public ProductCreateResponse toCreateResponse(Product product) {
         Set<Long> imageStorageIds =
                 product.getProductImages()
                     .stream()
@@ -68,11 +78,11 @@ public class ProductMapper {
         );
     }
 
-    public static ProductSearchPageableResponse toSearchPageableResponse(Page<Product> pageResult, String storageObjectContentUrl) {
+    public ProductSearchPageableResponse toSearchPageableResponse(Page<Product> pageResult) {
         List<ProductSearchResponse> searchResponseList = pageResult
                 .getContent()
                 .stream()
-                .map(product -> ProductMapper.toSearchResponse(product, storageObjectContentUrl))
+                .map(this::toSearchResponse)
                 .toList();
 
         ProductSearchPageableResponse response = new ProductSearchPageableResponse();

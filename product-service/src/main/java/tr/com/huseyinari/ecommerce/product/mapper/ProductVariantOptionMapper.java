@@ -1,7 +1,10 @@
 package tr.com.huseyinari.ecommerce.product.mapper;
 
-public class ProductVariantOptionMapper {
-    private ProductVariantOptionMapper() {
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-    }
+@Component
+@RequiredArgsConstructor
+public class ProductVariantOptionMapper {
+
 }

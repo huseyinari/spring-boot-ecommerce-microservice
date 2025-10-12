@@ -24,6 +24,7 @@ public class OrderService {
     private final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository repository;
+    private final OrderMapper mapper;
     private final InventoryClient inventoryClient;
     private final ProductClient productClient;
 
@@ -43,7 +44,7 @@ public class OrderService {
         boolean isInStock = stockResponse.getData() != null && stockResponse.getData();
 
         if (isInStock) {
-            Order order = OrderMapper.toEntity(request);
+            Order order = this.mapper.toEntity(request);
 
             order.setPrice(product.getPrice());
             order = this.repository.save(order);
@@ -51,7 +52,7 @@ public class OrderService {
             logger.info("{} -> Sipariş başarıyla kaydedildi.", order.getId());
 
             // TODO: STOK DÜŞÜRÜLECEK
-            return OrderMapper.toCreateResponse(order);
+            return this.mapper.toCreateResponse(order);
         } else {
             throw new InsufficientStockException(request.skuCode());
         }

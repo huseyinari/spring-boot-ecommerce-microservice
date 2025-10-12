@@ -25,6 +25,7 @@ public class InventoryService {
     private final Logger logger = LoggerFactory.getLogger(InventoryService.class);
 
     private final InventoryRepository repository;
+    private final InventoryMapper mapper;
 
     @Transactional(readOnly = true)
     public boolean inInStock(String skuCode, Integer quantity) {
@@ -40,7 +41,7 @@ public class InventoryService {
 
         this.repository.save(currentStock);
 
-        return InventoryMapper.toIncreaseResponse(currentStock);
+        return this.mapper.toIncreaseResponse(currentStock);
     }
 
     @Transactional
@@ -54,6 +55,6 @@ public class InventoryService {
 
         inventory = this.repository.save(inventory);
 
-        return InventoryMapper.toCreateOpeningProductStockResponse(inventory);
+        return this.mapper.toCreateOpeningProductStockResponse(inventory);
     }
 }

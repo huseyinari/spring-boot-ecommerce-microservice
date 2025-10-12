@@ -1,0 +1,17 @@
+____________________________________________________________________
+------- PROJEDE KOD YAZARKEN DİKKAT ETTİĞİM BAZI STANDARTLAR -------
+____________________________________________________________________
+
+--> Sınıf içerisindeki değişkenleri kullanırken her zaman *this* keyword'ü kullandım.
+
+--> Stream API gibi fonksiyonel kullanımlarda lambda fonksiyonlarının parametrelerine (item -> ...), (i -> ...) gibi isimler vermek yerine
+    daha anlaşılır isimler verdim. Örneğin bir kategori ise (category -> ...), ürün ise (product -> ...) gibi
+
+--> Bir servisin veya controller'ın içerisinde kendi repository ve mapper'ının inject edileceği değişkene repository ve mapper ismini verdim.
+    Farklı bir servis veya mapper inject edilecekse xService, xMapper ismini verdim.
+
+--> Logger kullanacak tüm sınıfların ilk satırında logger oluşturdum.
+
+--> Engel bir durum yoksa tüm Request ve Response Dto'ları Record tipinde oluşturdum.
+
+--> Tek satırlık bir işlem bile olsa if blok'larında süslü parantez açmayı tercih ediyorum.

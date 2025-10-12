@@ -26,7 +26,7 @@ import tr.com.huseyinari.springweb.rest.IgnoreResponseBodyAdvice;
 @RequestMapping("/api/v1/storage")
 @RequiredArgsConstructor
 @Tag(name = "Storage Controller", description = "Depolama Yönetimi")
-public class StorageController {
+public class StorageObjectController {
     private final StorageObjectService service;
 
     @Operation(

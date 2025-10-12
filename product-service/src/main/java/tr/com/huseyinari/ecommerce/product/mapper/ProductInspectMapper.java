@@ -5,6 +5,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ProductVariantValueMapper {
-
+public class ProductInspectMapper {
 }

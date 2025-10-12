@@ -1,17 +1,17 @@
 package tr.com.huseyinari.ecommerce.storage.mapper;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.storage.domain.StorageObject;
 import tr.com.huseyinari.ecommerce.storage.request.StorageObjectCreateRequest;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectCreateResponse;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectSearchResponse;
 import tr.com.huseyinari.ecommerce.storage.response.UploadProductImageResponse;
 
-public class StorageMapper {
-    private StorageMapper() {
-
-    }
-
-    public static StorageObjectSearchResponse toSearchResponse(StorageObject storageObject) {
+@Component
+@RequiredArgsConstructor
+public class StorageObjectMapper {
+    public StorageObjectSearchResponse toSearchResponse(StorageObject storageObject) {
         return new StorageObjectSearchResponse(
             storageObject.getId(),
             storageObject.getFileName(),
@@ -22,7 +22,7 @@ public class StorageMapper {
         );
     }
 
-    public static StorageObject toEntity(StorageObjectCreateRequest request) {
+    public StorageObject toEntity(StorageObjectCreateRequest request) {
         return StorageObject
                 .builder()
                 .fileName(request.fileName())
@@ -35,7 +35,7 @@ public class StorageMapper {
                 .build();
     }
 
-    public static StorageObjectCreateResponse toCreateResponse(StorageObject storageObject) {
+    public StorageObjectCreateResponse toCreateResponse(StorageObject storageObject) {
         return new StorageObjectCreateResponse(
             storageObject.getId(),
             storageObject.getFileName(),
@@ -48,7 +48,7 @@ public class StorageMapper {
         );
     }
 
-    public static UploadProductImageResponse toUploadProductImageResponse(StorageObjectCreateResponse response) {
+    public UploadProductImageResponse toUploadProductImageResponse(StorageObjectCreateResponse response) {
         return new UploadProductImageResponse(
             response.id(),
             response.fileName(),

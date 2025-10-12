@@ -1,6 +1,8 @@
 package tr.com.huseyinari.ecommerce.storage.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +12,7 @@ import tr.com.huseyinari.ecommerce.storage.domain.StorageObject;
 import tr.com.huseyinari.ecommerce.storage.enums.StorageObjectType;
 import tr.com.huseyinari.ecommerce.storage.exception.StorageObjectAccessDeniedException;
 import tr.com.huseyinari.ecommerce.storage.exception.StorageObjectNotFoundException;
-import tr.com.huseyinari.ecommerce.storage.mapper.StorageMapper;
+import tr.com.huseyinari.ecommerce.storage.mapper.StorageObjectMapper;
 import tr.com.huseyinari.ecommerce.storage.repository.StorageObjectRepository;
 import tr.com.huseyinari.ecommerce.storage.request.*;
 import tr.com.huseyinari.ecommerce.storage.response.*;
@@ -20,7 +22,10 @@ import tr.com.huseyinari.utils.StringUtils;
 @Service
 @RequiredArgsConstructor
 public class StorageObjectService {
+    private final Logger logger = LoggerFactory.getLogger(StorageObjectService.class);
+
     private final StorageObjectRepository repository;
+    private final StorageObjectMapper mapper;
     private final StorageServiceFactory storageServiceFactory;
     private final ECommerceConfigurationProperties configurationProperties;
 
@@ -36,15 +41,15 @@ public class StorageObjectService {
             }
         }
 
-        return StorageMapper.toSearchResponse(storageObject);
+        return this.mapper.toSearchResponse(storageObject);
     }
 
     @Transactional
     public StorageObjectCreateResponse create(StorageObjectCreateRequest request) {
-        StorageObject storageObject = StorageMapper.toEntity(request);
+        StorageObject storageObject = this.mapper.toEntity(request);
         storageObject = this.repository.save(storageObject);
 
-        return StorageMapper.toCreateResponse(storageObject);
+        return this.mapper.toCreateResponse(storageObject);
     }
 
     @Transactional(readOnly = true)
@@ -93,7 +98,7 @@ public class StorageObjectService {
 
         StorageObjectCreateResponse storageObjectCreateResponse = this.create(storageObjectCreateRequest);
 
-        return StorageMapper.toUploadProductImageResponse(storageObjectCreateResponse);
+        return this.mapper.toUploadProductImageResponse(storageObjectCreateResponse);
     }
 
     public MediaType getMediaType(String fileExtension) {

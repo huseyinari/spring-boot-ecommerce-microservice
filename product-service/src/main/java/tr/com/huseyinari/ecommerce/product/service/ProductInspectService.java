@@ -1,8 +1,11 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tr.com.huseyinari.ecommerce.product.mapper.ProductInspectMapper;
 import tr.com.huseyinari.ecommerce.product.projection.MostInspectedProductProjection;
 import tr.com.huseyinari.ecommerce.product.repository.ProductInspectRepository;
 
@@ -13,7 +16,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductInspectService {
+    private final Logger logger = LoggerFactory.getLogger(ProductInspectService.class);
+
     private final ProductInspectRepository repository;
+    private final ProductInspectMapper mapper;
 
     public List<MostInspectedProductProjection> getMostInspectedProductsToday() {
         LocalDate today = LocalDate.now();

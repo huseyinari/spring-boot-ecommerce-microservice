@@ -1,7 +1,10 @@
 package tr.com.huseyinari.ecommerce.product.mapper;
 
-public class ProductAttributeValueMapper {
-    private ProductAttributeValueMapper() {
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-    }
+@Component
+@RequiredArgsConstructor
+public class ProductAttributeValueMapper {
+
 }

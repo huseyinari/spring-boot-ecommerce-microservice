@@ -1,20 +1,24 @@
 package tr.com.huseyinari.ecommerce.category.mapper;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
 import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
 import tr.com.huseyinari.ecommerce.category.response.PopularCategorySearchResponse;
+import tr.com.huseyinari.utils.StringUtils;
 
 import java.util.ArrayList;
 
+@Component
+@RequiredArgsConstructor
 public class CategoryMapper {
-    private CategoryMapper() {
+    private final ECommerceConfigurationProperties configurationProperties;
 
-    }
-
-    public static Category toEntity(CategoryCreateRequest request) {
+    public Category toEntity(CategoryCreateRequest request) {
         return Category.builder()
                 .name(request.name())
                 .parentId(request.parentId())
@@ -23,15 +27,21 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static CategorySearchResponse toSearchResponse(Category category) {
+    public CategorySearchResponse toSearchResponse(Category category) {
         return new CategorySearchResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
-    public static CategoryCreateResponse toCreateResponse(Category category) {
+    public CategoryCreateResponse toCreateResponse(Category category) {
         return new CategoryCreateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
-    public static MenuCategoryResponse toMenuCategoriesResponse(Category category, String storageObjectContentUrl) {
+    public MenuCategoryResponse toMenuCategoriesResponse(Category category) {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
+        if (StringUtils.isBlank(storageObjectContentUrl)) {
+            throw new RuntimeException("Menü resmi için eksik bilgiler mevcut. Lütfen sistem yöneticiniz ile iletişime geçiniz.");
+        }
+
         MenuCategoryResponse response = new MenuCategoryResponse();
         response.setId(category.getId());
         response.setName(category.getName());
@@ -43,7 +53,13 @@ public class CategoryMapper {
         return response;
     }
 
-    public static PopularCategorySearchResponse toPopularCategorySearchResponse(Category category, String storageObjectContentUrl) {
+    public PopularCategorySearchResponse toPopularCategorySearchResponse(Category category) {
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
+        if (StringUtils.isBlank(storageObjectContentUrl)) {
+            throw new RuntimeException("Kategori resmi için eksik bilgiler mevcut. Lütfen sistem yöneticiniz ile iletişime geçiniz.");
+        }
+
         return new PopularCategorySearchResponse(
             category.getName(),
             category.getTotalProductCount(),
