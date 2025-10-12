@@ -1,18 +1,18 @@
 package tr.com.huseyinari.ecommerce.product.repository;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tr.com.huseyinari.ecommerce.product.domain.ProductInspect;
 import tr.com.huseyinari.ecommerce.product.projection.MostInspectedProductProjection;
+import tr.com.huseyinari.springdatajpa.repository.BaseJpaQueryDslRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ProductInspectRepository extends JpaRepository<ProductInspect, Long> {
+public interface ProductInspectRepository extends BaseJpaQueryDslRepository<ProductInspect, Long> {
     @Query("""
         SELECT pi.product.id AS productId,
                COUNT(DISTINCT pi.id) AS viewCount

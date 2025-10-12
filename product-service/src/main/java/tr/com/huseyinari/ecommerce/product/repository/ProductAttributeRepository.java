@@ -1,9 +1,9 @@
 package tr.com.huseyinari.ecommerce.product.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import tr.com.huseyinari.ecommerce.product.domain.ProductAttribute;
+import tr.com.huseyinari.springdatajpa.repository.BaseJpaQueryDslRepository;
 
 @Repository
-public interface ProductAttributeRepository extends JpaRepository<ProductAttribute, Long> {
+public interface ProductAttributeRepository extends BaseJpaQueryDslRepository<ProductAttribute, Long> {
 }
