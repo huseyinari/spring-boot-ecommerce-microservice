@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantUiComponent;
-import tr.com.huseyinari.springdatajpa.AbstractAuditableEntity;
+import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
 @Entity(name = "ProductVariant")
 @Table(name = "product_variant")

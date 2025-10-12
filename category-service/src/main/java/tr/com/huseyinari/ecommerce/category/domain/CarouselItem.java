@@ -2,7 +2,7 @@ package tr.com.huseyinari.ecommerce.category.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import tr.com.huseyinari.springdatajpa.AbstractAuditableEntity;
+import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
 @Entity(name = "CarouselItem")
 @Table(name = "carousel_item")

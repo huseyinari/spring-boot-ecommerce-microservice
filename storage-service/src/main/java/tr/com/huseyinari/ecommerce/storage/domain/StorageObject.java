@@ -3,7 +3,7 @@ package tr.com.huseyinari.ecommerce.storage.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import tr.com.huseyinari.ecommerce.storage.enums.StorageObjectType;
-import tr.com.huseyinari.springdatajpa.AbstractAuditableEntity;
+import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
 @Entity(name = "StorageObject")
 @Table(name = "storage_objects")
