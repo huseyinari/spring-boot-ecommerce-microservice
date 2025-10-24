@@ -22,6 +22,9 @@ public class ProductVariant extends AbstractAuditableEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "query_name", nullable = false, unique = true)
+    private String queryName;
+
     @Column(name = "description")
     private String description;
 
@@ -34,8 +37,8 @@ public class ProductVariant extends AbstractAuditableEntity {
     private ProductVariantUiComponent uiComponent;
 
     @Column(name = "min_value", nullable = false)
-    private String minValue;
+    private Integer minValue;
 
     @Column(name = "max_value", nullable = false)
-    private String maxValue;
+    private Integer maxValue;
 }

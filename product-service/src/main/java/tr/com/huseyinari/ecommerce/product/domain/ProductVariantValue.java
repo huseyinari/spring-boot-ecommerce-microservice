@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
-import java.math.BigDecimal;
-
 @Entity(name = "ProductVariantValue")
 @Table(name = "product_variant_value")
 @Getter
@@ -21,18 +19,6 @@ public class ProductVariantValue extends AbstractAuditableEntity {
 
     @Column(name = "variant_value", nullable = false)
     private String variantValue;
-
-    @Column(name = "sku_code", nullable = false)
-    private String skuCode;
-
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
-    @Column(name = "discount")
-    private BigDecimal discount;
-
-    @Column(name = "discounted_price", nullable = false)
-    private BigDecimal discountedPrice;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)

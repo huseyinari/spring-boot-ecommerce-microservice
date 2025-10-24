@@ -1,5 +1,6 @@
 DROP SEQUENCE IF EXISTS product_attribute_value_id_sequence;
 DROP SEQUENCE IF EXISTS product_attribute_id_sequence;
+DROP SEQUENCE IF EXISTS product_variant_index_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_value_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_option_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_id_sequence;
@@ -8,6 +9,7 @@ DROP SEQUENCE IF EXISTS product_inspects_id_sequence;
 
 DROP TABLE IF EXISTS product_attribute_value;
 DROP TABLE IF EXISTS product_attribute;
+DROP TABLE IF EXISTS product_variant_index;
 DROP TABLE IF EXISTS product_variant_value;
 DROP TABLE IF EXISTS product_variant_option;
 DROP TABLE IF EXISTS product_variant;
@@ -92,6 +94,7 @@ NO CYCLE;
 CREATE TABLE product_attribute (
     id BIGINT,
     name VARCHAR(100) NOT NULL,
+    query_name VARCHAR(100) NOT NULL,
     description VARCHAR(1000),
     --
     created_by VARCHAR(100),
@@ -101,7 +104,7 @@ CREATE TABLE product_attribute (
 );
 
 ALTER TABLE product_attribute ADD CONSTRAINT pk_product_attribute_id PRIMARY KEY (id);
-ALTER TABLE product_attribute ADD CONSTRAINT un_product_attribute_name UNIQUE (name);
+ALTER TABLE product_attribute ADD CONSTRAINT un_product_attribute_query_name UNIQUE (query_name);
 
 CREATE SEQUENCE product_attribute_value_id_sequence
 INCREMENT 1
@@ -137,6 +140,7 @@ NO CYCLE;
 CREATE TABLE product_variant (
     id BIGINT,
     name VARCHAR(100) NOT NULL,
+    query_name VARCHAR(100) NOT NULL,
     description VARCHAR(1000),
     data_type VARCHAR(50) NOT NULL,
     ui_component VARCHAR(50) NOT NULL,
@@ -150,7 +154,7 @@ CREATE TABLE product_variant (
 );
 
 ALTER TABLE product_variant ADD CONSTRAINT pk_product_variant_id PRIMARY KEY (id);
--- ALTER TABLE product_variant ADD CONSTRAINT un_product_variant_name UNIQUE (name);  -  Örneğin farklı çeşitlerdeki ürünler için kullanılan Beden varyantı olabilir.
+ALTER TABLE product_variant ADD CONSTRAINT un_product_variant_query_name UNIQUE (query_name);
 
 CREATE SEQUENCE product_variant_option_id_sequence
 INCREMENT 1
@@ -185,11 +189,6 @@ CREATE TABLE product_variant_value (
     product_id VARCHAR(100) NOT NULL,
     product_variant_id BIGINT NOT NULL,
     variant_value VARCHAR(255) NOT NULL,
-    sku_code VARCHAR(255) NOT NULL,
-    price DEC(10, 2) NOT NULL,
-    discount DEC(10, 2),
-    discounted_price DEC(10, 2) NOT NULL,
-    --
     created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
     updated_by VARCHAR(100),
@@ -200,3 +199,30 @@ ALTER TABLE product_variant_value ADD CONSTRAINT pk_product_variant_value_id PRI
 ALTER TABLE product_variant_value ADD CONSTRAINT fk_product_variant_value_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 ALTER TABLE product_variant_value ADD CONSTRAINT fk_product_variant_value_product_variant_id FOREIGN KEY (product_variant_id) REFERENCES product_variant(id);
 CREATE UNIQUE INDEX un_ind_product_variant_value_product_id_product_variant_id_variant_value ON product_variant_value (product_id, product_variant_id, variant_value);
+
+CREATE SEQUENCE product_variant_index_id_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 2147483647
+START 100000
+NO CYCLE;
+
+CREATE TABLE product_variant_index (
+    id BIGINT,
+    product_id VARCHAR(100) NOT NULL,
+    variant_value_combination JSONB NOT NULL,
+    sku_code VARCHAR(255) NOT NULL,
+    stock INTEGER NOT NULL,
+    price DEC(10, 2) NOT NULL,
+    discount DEC(10, 2),
+    discounted_price DEC(10, 2) NOT NULL,
+    query_order INTEGER NOT NULL,
+    --
+    created_by VARCHAR(100),
+    created_date TIMESTAMP NOT NULL,
+    updated_by VARCHAR(100),
+    updated_date TIMESTAMP
+);
+ALTER TABLE product_variant_index ADD CONSTRAINT pk_product_variant_index_id PRIMARY KEY (id);
+ALTER TABLE product_variant_index ADD CONSTRAINT fk_product_variant_index_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE product_variant_index ADD CONSTRAINT un_product_variant_index_sku_code UNIQUE (sku_code);

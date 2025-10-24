@@ -1,17 +1,12 @@
+DROP SEQUENCE IF EXISTS category_products_filter_options_id_sequence;
 DROP SEQUENCE IF EXISTS category_id_sequence;
 DROP SEQUENCE IF EXISTS carousel_item_id_sequence;
 
+DROP TABLE IF EXISTS category_products_filter_options;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS carousel_item;
 
 CREATE SEQUENCE category_id_sequence
-INCREMENT 1
-MINVALUE 1
-MAXVALUE 2147483647
-START 100000
-NO CYCLE;
-
-CREATE SEQUENCE carousel_item_id_sequence
 INCREMENT 1
 MINVALUE 1
 MAXVALUE 2147483647
@@ -36,6 +31,13 @@ ALTER TABLE category ADD CONSTRAINT pk_category_id PRIMARY KEY (id);
 ALTER TABLE category ADD CONSTRAINT un_category_name UNIQUE (category_name);
 ALTER TABLE category ADD CONSTRAINT fk_category_parent_id FOREIGN KEY (parent_id) REFERENCES category(id);
 
+CREATE SEQUENCE carousel_item_id_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 2147483647
+START 100000
+NO CYCLE;
+
 CREATE TABLE carousel_item (
     id BIGINT,
     title VARCHAR(100),
@@ -53,3 +55,30 @@ CREATE TABLE carousel_item (
 );
 
 ALTER TABLE carousel_item ADD CONSTRAINT pk_carousel_item_id PRIMARY KEY (id);
+
+CREATE SEQUENCE category_products_filter_options_id_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 2147483647
+START 100000
+NO CYCLE;
+
+CREATE TABLE category_products_filter_options (
+    id BIGINT,
+    category_id BIGINT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    query_name VARCHAR(255) NOT NULL,
+    filter_type VARCHAR(50) NOT NULL DEFAULT 'ALL_OPTIONS',
+    ui_component VARCHAR(50) NOT NULL,
+    max_filter_option INTEGER,
+    --
+    created_by VARCHAR(100),
+    created_date TIMESTAMP NOT NULL,
+    updated_by VARCHAR(100),
+    updated_date TIMESTAMP
+);
+
+ALTER TABLE category_products_filter_options ADD CONSTRAINT pk_category_products_filter_options_id PRIMARY KEY (id);
+ALTER TABLE category_products_filter_options ADD CONSTRAINT fk_category_products_filter_options_category_id FOREIGN KEY (category_id) REFERENCES category(id);
+ALTER TABLE category_products_filter_options ADD CONSTRAINT un_category_query_name UNIQUE (query_name);
+CREATE UNIQUE INDEX un_ind_category_products_filter_options_category_id_name ON category_products_filter_options (category_id, query_name);

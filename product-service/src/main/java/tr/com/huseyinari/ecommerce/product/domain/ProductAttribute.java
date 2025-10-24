@@ -17,8 +17,11 @@ public class ProductAttribute extends AbstractAuditableEntity {
     @SequenceGenerator(name = "product_attribute_id_sequence", sequenceName = "product_attribute_id_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "query_name", nullable = false, unique = true)
+    private String queryName;
 
     @Column(name = "description")
     private String description;

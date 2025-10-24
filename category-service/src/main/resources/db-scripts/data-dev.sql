@@ -66,3 +66,5 @@ VALUES(nextval('carousel_item_id_sequence'), 'Samsung Galaxy S25 Edge Kampanya',
 INSERT INTO public.carousel_item
 (id, title, subtitle, link, link_title, carousel_name, carousel_list_order, image_storage_object_id, created_by, created_date, updated_by, updated_date)
 VALUES(nextval('carousel_item_id_sequence'), 'Kitaplarda Sepette %50 İndirim', NULL, '/test', 'Keşfet', 'homepage-carousel', 3, 100002, 'system', '2025-04-12', NULL, NULL);
+
+----------- category products filter options -----------
