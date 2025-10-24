@@ -12,6 +12,10 @@ import tr.com.huseyinari.ecommerce.storage.response.UploadProductImageResponse;
 @RequiredArgsConstructor
 public class StorageObjectMapper {
     public StorageObjectSearchResponse toSearchResponse(StorageObject storageObject) {
+        if (storageObject == null) {
+            return null;
+        }
+
         return new StorageObjectSearchResponse(
             storageObject.getId(),
             storageObject.getFileName(),
@@ -23,6 +27,10 @@ public class StorageObjectMapper {
     }
 
     public StorageObject toEntity(StorageObjectCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
         return StorageObject
                 .builder()
                 .fileName(request.fileName())
@@ -36,6 +44,10 @@ public class StorageObjectMapper {
     }
 
     public StorageObjectCreateResponse toCreateResponse(StorageObject storageObject) {
+        if (storageObject == null) {
+            return null;
+        }
+
         return new StorageObjectCreateResponse(
             storageObject.getId(),
             storageObject.getFileName(),
@@ -49,6 +61,10 @@ public class StorageObjectMapper {
     }
 
     public UploadProductImageResponse toUploadProductImageResponse(StorageObjectCreateResponse response) {
+        if (response == null) {
+            return null;
+        }
+
         return new UploadProductImageResponse(
             response.id(),
             response.fileName(),

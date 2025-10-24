@@ -10,10 +10,18 @@ import tr.com.huseyinari.ecommerce.inventory.response.StockIncreaseResponse;
 @RequiredArgsConstructor
 public class InventoryMapper {
     public StockIncreaseResponse toIncreaseResponse(Inventory inventory) {
+        if (inventory == null) {
+            return null;
+        }
+
         return new StockIncreaseResponse(inventory.getSkuCode(), inventory.getQuantity());
     }
 
     public CreateOpeningProductStockResponse toCreateOpeningProductStockResponse(Inventory inventory) {
+        if (inventory == null) {
+            return null;
+        }
+
         return new CreateOpeningProductStockResponse(inventory.getId(), inventory.getSkuCode(), inventory.getQuantity());
     }
 }

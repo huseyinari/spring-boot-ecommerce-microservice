@@ -19,6 +19,10 @@ public class CategoryMapper {
     private final ECommerceConfigurationProperties configurationProperties;
 
     public Category toEntity(CategoryCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
         return Category.builder()
                 .name(request.name())
                 .parentId(request.parentId())
@@ -28,14 +32,26 @@ public class CategoryMapper {
     }
 
     public CategorySearchResponse toSearchResponse(Category category) {
+        if (category == null) {
+            return null;
+        }
+
         return new CategorySearchResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
     public CategoryCreateResponse toCreateResponse(Category category) {
+        if (category == null) {
+            return null;
+        }
+
         return new CategoryCreateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
     public MenuCategoryResponse toMenuCategoriesResponse(Category category) {
+        if (category == null) {
+            return null;
+        }
+
         final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
 
         if (StringUtils.isBlank(storageObjectContentUrl)) {
@@ -54,6 +70,10 @@ public class CategoryMapper {
     }
 
     public PopularCategorySearchResponse toPopularCategorySearchResponse(Category category) {
+        if (category == null) {
+            return null;
+        }
+
         final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
 
         if (StringUtils.isBlank(storageObjectContentUrl)) {

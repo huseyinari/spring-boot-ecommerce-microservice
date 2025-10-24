@@ -13,6 +13,10 @@ public class CarouselItemMapper {
     private final ECommerceConfigurationProperties configurationProperties;
 
     public CarouselItemSearchResponse toSearchResponse(CarouselItem carouselItem) {
+        if (carouselItem == null) {
+            return null;
+        }
+
         final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
 
         if (StringUtils.isBlank(storageObjectContentUrl)) {

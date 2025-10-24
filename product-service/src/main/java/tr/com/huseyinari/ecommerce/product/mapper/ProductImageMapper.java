@@ -13,6 +13,10 @@ public class ProductImageMapper {
     private final ECommerceConfigurationProperties configurationProperties;
 
     public ProductImageSearchResponse toSearchResponse(ProductImage productImage) {
+        if (productImage == null) {
+            return null;
+        }
+
         final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
 
         if (StringUtils.isBlank(storageObjectContentUrl)) {

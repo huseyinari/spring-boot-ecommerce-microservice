@@ -23,6 +23,10 @@ public class ProductMapper {
     private final ECommerceConfigurationProperties configurationProperties;
 
     public Product toEntity(ProductCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
         return Product.builder()
                 .id(UUID.randomUUID().toString())
                 .name(request.name())
@@ -34,6 +38,10 @@ public class ProductMapper {
     }
 
     public ProductSearchResponse toSearchResponse(Product product) {
+        if (product == null) {
+            return null;
+        }
+
         final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
 
         if (StringUtils.isBlank(storageObjectContentUrl)) {
@@ -59,6 +67,10 @@ public class ProductMapper {
         );
     }
     public ProductCreateResponse toCreateResponse(Product product) {
+        if (product == null) {
+            return null;
+        }
+
         Set<Long> imageStorageIds =
                 product.getProductImages()
                     .stream()
@@ -79,6 +91,10 @@ public class ProductMapper {
     }
 
     public ProductSearchPageableResponse toSearchPageableResponse(Page<Product> pageResult) {
+        if (pageResult == null) {
+            return null;
+        }
+
         List<ProductSearchResponse> searchResponseList = pageResult
                 .getContent()
                 .stream()
