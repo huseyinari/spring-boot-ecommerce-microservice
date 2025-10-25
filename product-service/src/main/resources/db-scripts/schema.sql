@@ -176,6 +176,7 @@ CREATE TABLE product_variant_option (
 
 ALTER TABLE product_variant_option ADD CONSTRAINT pk_product_variant_option_id PRIMARY KEY (id);
 ALTER TABLE product_variant_option ADD CONSTRAINT fk_product_variant_option_product_variant_id FOREIGN KEY (product_variant_id) REFERENCES product_variant(id);
+CREATE UNIQUE INDEX un_ind_product_variant_option_product_variant_id_option_value ON product_variant_option (product_variant_id, option_value);
 
 CREATE SEQUENCE product_variant_value_id_sequence
 INCREMENT 1

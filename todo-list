@@ -9,5 +9,4 @@ NotificationService WebFlux ile yazılabilir.
 Servislere gelen istekler şuan sadece apigateway'de log'lanıyor. Fakat request body gibi detaylı log'lamayı Spring Aspect kullanarak
 servis controller'larında yakalayıp log'layabiliriz.
 
-Tüm mapper metotlarında gelen parametrenin null kontrolü yapılmalı
 /api/v1/category/products-filter-option/{categoryId} sonuçları dönerken, toplam ürün sayısı da dönmeli
