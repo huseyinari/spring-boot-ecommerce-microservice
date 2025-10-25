@@ -150,116 +150,72 @@ VALUES(nextval('product_inspects_id_sequence'), 'p9b7596b-306c-4ab9-a623-c835e42
 
 
 /* product attributes and product variants */
-/*
--- Ürün özellikleri (product_attribute)
-INSERT INTO product_attribute (id, name, description, created_by, created_date)
-VALUES
-(10001, 'Renk', 'Ürün renk seçenekleri', 'system', now()),
-(10002, 'Depolama', 'Depolama kapasitesi', 'system', now()),
-(10003, 'RAM', 'RAM kapasitesi', 'system', now()),
-(10004, 'Beden', 'Ürün bedeni', 'system', now()),
-(10005, 'Materyal', 'Ürün materyali', 'system', now()),
-(10006, 'Format', 'Ürün formatı', 'system', now()),
-(10007, 'Ağırlık', 'Ürün ağırlığı', 'system', now()),
-(10008, 'Şarj Aleti', 'Ürün şarj aleti', 'system', now());
-
--- Ürün özellik değerleri (product_attribute_value)
-INSERT INTO product_attribute_value (id, product_id, product_attribute_id, attribute_value, created_by, created_date)
-VALUES
--- iPhone 14
-(801, '7db7596b-306c-4ab9-a623-c835e421d533', 10001, 'Siyah', 'system', now()),
-(802, '7db7596b-306c-4ab9-a623-c835e421d533', 10002, '128GB', 'system', now()),
-(803, '7db7596b-306c-4ab9-a623-c835e421d533', 10003, '6GB', 'system', now()),
-(804, '7db7596b-306c-4ab9-a623-c835e421d533', 10008, 'USB-C', 'system', now()),
-
--- MacBook Air 2025
-(805, 'a2b7596b-306c-4ab9-a623-c835e421d533', 10001, 'Gümüş', 'system', now()),
-(806, 'a2b7596b-306c-4ab9-a623-c835e421d533', 10002, '256GB', 'system', now()),
-(807, 'a2b7596b-306c-4ab9-a623-c835e421d533', 10003, '16GB', 'system', now()),
-(808, 'a2b7596b-306c-4ab9-a623-c835e421d533', 10008, 'USB-C', 'system', now()),
-
--- Nike Spor Ayakkabı
-(809, 'b4b7596b-306c-4ab9-a623-c835e421d533', 10001, 'Siyah', 'system', now()),
-(810, 'b4b7596b-306c-4ab9-a623-c835e421d533', 10004, '42', 'system', now()),
-(811, 'b4b7596b-306c-4ab9-a623-c835e421d533', 10005, 'Tekstil', 'system', now()),
-
--- Sagopa Kajmer Albüm
-(812, 'c6b7596b-306c-4ab9-a623-c835e421d533', 10006, 'CD', 'system', now()),
-
--- Seiko Saat
-(813, 'u7b7596b-306c-4ab9-a623-c835e421d533', 10001, 'Gümüş', 'system', now()),
-(814, 'u7b7596b-306c-4ab9-a623-c835e421d533', 10005, 'Çelik', 'system', now()),
-(815, 'u7b7596b-306c-4ab9-a623-c835e421d533', 10008, 'USB-A', 'system', now()),
-
--- Sinangil Un
-(816, 'p9b7596b-306c-4ab9-a623-c835e421d533', 10007, '1 KG', 'system', now()),
-
--- Samsung Tablet
-(817, 'q2b7596b-306c-4ab9-a623-c835e421d533', 10001, 'Siyah', 'system', now()),
-(818, 'q2b7596b-306c-4ab9-a623-c835e421d533', 10002, '64GB', 'system', now()),
-(819, 'q2b7596b-306c-4ab9-a623-c835e421d533', 10003, '4GB', 'system', now()),
-(820, 'q2b7596b-306c-4ab9-a623-c835e421d533', 10008, 'USB-B', 'system', now()),
-
--- Lenovo Mouse
-(821, 't2b7596b-306c-4ab9-a623-c835e421d533', 10001, 'Siyah', 'system', now());
-
--- Varyant tanımları (product_variant)
-INSERT INTO product_variant (id, name, description, data_type, ui_component, created_by, created_date)
-VALUES
-(801, 'Renk', 'Ürün renk seçenekleri', 'STRING', 'SELECT', 'system', now()),
-(802, 'Depolama', 'Depolama seçenekleri', 'STRING', 'SELECT', 'system', now()),
-(803, 'Beden', 'Beden seçenekleri', 'STRING', 'SELECT', 'system', now()),
-(804, 'Format', 'Format seçenekleri', 'STRING', 'SELECT', 'system', now());
-
--- Varyant seçenekleri (product_variant_option)
-INSERT INTO product_variant_option (id, product_variant_id, option_value, created_by, created_date)
-VALUES
--- Renk seçenekleri
-(1351, 801, 'Siyah', 'system', now()),
-(1352, 801, 'Beyaz', 'system', now()),
-(1353, 801, 'Gümüş', 'system', now()),
-(1354, 801, 'Mavi', 'system', now()),
--- Depolama seçenekleri
-(1355, 802, '64GB', 'system', now()),
-(1356, 802, '128GB', 'system', now()),
-(1357, 802, '256GB', 'system', now()),
-(1358, 802, '512GB', 'system', now()),
--- Beden seçenekleri
-(1359, 803, '40', 'system', now()),
-(1360, 803, '41', 'system', now()),
-(1361, 803, '42', 'system', now()),
-(1362, 803, '43', 'system', now()),
--- Format seçenekleri
-(1363, 804, 'CD', 'system', now()),
-(1364, 804, 'Vinyl', 'system', now()),
-(1365, 804, 'Digital', 'system', now());
-
--- Ürün varyant değerleri (product_variant_value)
-INSERT INTO product_variant_value (id, product_id, product_variant_id, variant_value, created_by, created_date)
-VALUES
--- iPhone 14 varyantları
-(45001, '7db7596b-306c-4ab9-a623-c835e421d533', 801, 'Siyah', 'system', now()),
-(45002, '7db7596b-306c-4ab9-a623-c835e421d533', 801, 'Beyaz', 'system', now()),
-(45003, '7db7596b-306c-4ab9-a623-c835e421d533', 802, '128GB', 'system', now()),
-(45004, '7db7596b-306c-4ab9-a623-c835e421d533', 802, '256GB', 'system', now()),
-
--- MacBook Air varyantları
-(45005, 'a2b7596b-306c-4ab9-a623-c835e421d533', 801, 'Gümüş', 'system', now()),
-(45006, 'a2b7596b-306c-4ab9-a623-c835e421d533', 801, 'Uzay Grisi', 'system', now()),
-
--- Nike Spor Ayakkabı varyantları
-(45007, 'b4b7596b-306c-4ab9-a623-c835e421d533', 801, 'Siyah', 'system', now()),
-(45008, 'b4b7596b-306c-4ab9-a623-c835e421d533', 803, '42', 'system', now()),
-(45009, 'b4b7596b-306c-4ab9-a623-c835e421d533', 803, '43', 'system', now()),
-
--- Sagopa Albüm varyantları
-(45010, 'c6b7596b-306c-4ab9-a623-c835e421d533', 804, 'CD', 'system', now()),
-(45011, 'c6b7596b-306c-4ab9-a623-c835e421d533', 804, 'Digital', 'system', now()),
-
--- Samsung Tablet varyantları
-(45012, 'q2b7596b-306c-4ab9-a623-c835e421d533', 801, 'Siyah', 'system', now()),
-(45013, 'q2b7596b-306c-4ab9-a623-c835e421d533', 802, '64GB', 'system', now()),
-
--- Lenovo Mouse varyantları
-(45014, 't2b7596b-306c-4ab9-a623-c835e421d533', 801, 'Siyah', 'system', now());
-*/
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(100, 'Yüz Tanım', 'faceRecognition', 'Üründe yüz tanıma özelliği var mı ?', 'huseyinari', '2025-10-25 12:51:41.385', 'huseyinari', '2025-10-25 12:51:41.385');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(101, 'İşlemci Türü', 'cpuType', 'Üründe kullanılan işlemci', 'huseyinari', '2025-10-25 12:53:32.136', 'huseyinari', '2025-10-25 12:53:32.136');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(102, 'İşlemci Hızı (GHz)', 'cpuSpeed', 'Üründe kullanılan işlemcinin hızı', 'huseyinari', '2025-10-25 12:54:06.561', 'huseyinari', '2025-10-25 12:54:06.561');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(103, 'İşlemci Çekirdek Sayısı', 'cpuCount', 'Üründe kullanılan işlemci çekirdek sayısı', 'huseyinari', '2025-10-25 12:55:24.278', 'huseyinari', '2025-10-25 12:55:24.278');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(104, 'Ekran Boyutu (inch)', 'screenSize', 'Ekran boyutu', 'huseyinari', '2025-10-25 12:56:07.511', 'huseyinari', '2025-10-25 12:56:07.511');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(105, 'Ekran Tipi', 'screenType', 'Cihazda kullanılan ekranın türü', 'huseyinari', '2025-10-25 12:56:51.096', 'huseyinari', '2025-10-25 12:56:51.096');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(106, 'Ekran Yenileme Hızı (Hz)', 'screenHz', 'Ekran yenileme hızı', 'huseyinari', '2025-10-25 12:57:50.901', 'huseyinari', '2025-10-25 12:57:50.901');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(107, 'Arka kamera sayısı', 'rearCameraCount', 'Arka kamera sayısı', 'huseyinari', '2025-10-25 12:59:11.672', 'huseyinari', '2025-10-25 12:59:11.672');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(108, 'Arka Kamera Çözünürlüğü', 'rearCameraResolution', 'Arka kamera çözünürlüğü', 'huseyinari', '2025-10-25 12:58:31.924', 'huseyinari', '2025-10-25 12:58:31.924');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(109, 'Ön kamera çözünürlüğü', 'frontCameraResolution', 'Ön kamera çözünürlüğü', 'huseyinari', '2025-10-25 13:11:23.299', 'huseyinari', '2025-10-25 13:11:23.299');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(110, 'Wi-Fi', 'wifi', 'Cihazda Wifi var mı ?', 'huseyinari', '2025-10-25 13:13:25.974', 'huseyinari', '2025-10-25 13:13:25.974');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(111, 'Bluetooth', 'bluetooth', 'Cihazda Bluetooth var mı ?', 'huseyinari', '2025-10-25 13:13:58.713', 'huseyinari', '2025-10-25 13:13:58.713');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(112, 'Şarj Girişi', 'chargingPort', 'Cihaz şarj soketi tipi', 'huseyinari', '2025-10-25 13:14:37.427', 'huseyinari', '2025-10-25 13:14:37.427');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(113, 'Pil Gücü', 'batteryPower', 'Batarya gücü', 'huseyinari', '2025-10-25 13:15:13.213', 'huseyinari', '2025-10-25 13:15:13.213');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(114, 'Kablosuz Şarj', 'wirelessCharging', 'Kablosuz Şarj', 'huseyinari', '2025-10-25 13:18:04.658', 'huseyinari', '2025-10-25 13:18:04.658');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(115, 'Hızlı Şarj', 'quickCharging', 'Hızlı Şarj', 'huseyinari', '2025-10-25 13:18:24.309', 'huseyinari', '2025-10-25 13:18:24.309');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(116, 'Garanti Süresi (Ay)', 'warrantyPeriod', 'Garanti süresi', 'huseyinari', '2025-10-25 13:19:40.422', 'huseyinari', '2025-10-25 13:19:40.422');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(117, 'Dahili Hafıza', 'internalDisk', 'Dahili hafıza', 'huseyinari', '2025-10-25 13:20:38.536', 'huseyinari', '2025-10-25 13:20:38.536');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(118, 'İşletim Sistemi', 'os', 'İşletim sistemi', 'huseyinari', '2025-10-25 13:21:08.770', 'huseyinari', '2025-10-25 13:21:08.770');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(119, 'Ağırlık', 'weight', 'Ağırlık', 'huseyinari', '2025-10-25 13:22:10.515', 'huseyinari', '2025-10-25 13:22:10.515');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(120, 'Genişlik', 'width', 'Genişlik', 'huseyinari', '2025-10-25 13:22:35.596', 'huseyinari', '2025-10-25 13:22:35.596');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(121, 'Kalınlık', 'thick', 'Kalınlık', 'huseyinari', '2025-10-25 13:23:09.381', 'huseyinari', '2025-10-25 13:23:09.381');
+INSERT INTO public.product_attribute
+(id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
+VALUES(122, 'Yükseklik', 'height', 'Yükseklik', 'huseyinari', '2025-10-25 13:23:26.835', 'huseyinari', '2025-10-25 13:23:26.835');
