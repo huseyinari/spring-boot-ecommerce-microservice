@@ -51,19 +51,17 @@ public class ProductAttributeMapper {
         );
     }
 
-    public ProductAttribute fromUpdateRequestToEntity(ProductAttributeUpdateRequest request, ProductAttribute productAttribute) {
+    public void fromUpdateRequestToEntity(ProductAttributeUpdateRequest request, ProductAttribute productAttribute) {
         if (productAttribute == null) {
-            return null;
+            return;
         }
         if (request == null) {
-            return productAttribute;
+            return;
         }
 
         productAttribute.setName(request.name());
         productAttribute.setQueryName(request.queryName());
         productAttribute.setDescription(request.description());
-
-        return productAttribute;
     }
 
     public ProductAttributeUpdateResponse toUpdateResponse(ProductAttribute productAttribute) {

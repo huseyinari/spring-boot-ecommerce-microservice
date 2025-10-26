@@ -6,6 +6,8 @@ import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantUiComponent;
 import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
+import java.util.List;
+
 @Entity(name = "ProductVariant")
 @Table(name = "product_variant")
 @Getter
@@ -41,4 +43,7 @@ public class ProductVariant extends AbstractAuditableEntity {
 
     @Column(name = "max_value", nullable = false)
     private Integer maxValue;
+
+    @OneToMany(mappedBy = "productVariant")
+    private List<ProductVariantOption> options;
 }

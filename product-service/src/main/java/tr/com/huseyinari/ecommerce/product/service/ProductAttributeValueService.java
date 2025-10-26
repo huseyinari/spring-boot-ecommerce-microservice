@@ -11,7 +11,10 @@ import tr.com.huseyinari.ecommerce.product.domain.ProductAttributeValue;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductAttributeValueMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductAttributeValueRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeValueCreateRequest;
+import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueCreateResponse;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,9 +27,9 @@ public class ProductAttributeValueService {
     private final ProductAttributeValueMapper mapper;
 
     @Transactional
-    public void saveAll(@Valid List<ProductAttributeValueCreateRequest> requestList) {
+    public List<ProductAttributeValueCreateResponse> saveAll(@Valid List<ProductAttributeValueCreateRequest> requestList) {
         if (requestList == null || requestList.isEmpty()) {
-            return;
+            return Collections.emptyList();
         }
 
         boolean allProductIdsAreSame = requestList.stream()
@@ -52,6 +55,8 @@ public class ProductAttributeValueService {
             }
         }
 
+        List<ProductAttributeValue> result = new ArrayList<>();
+
         // Olmayanları ekle, olanları güncelle
         for (ProductAttributeValueCreateRequest request : requestList) {
             ProductAttributeValue hasExistList = existList.stream()
@@ -62,10 +67,19 @@ public class ProductAttributeValueService {
             if (hasExistList != null) {
                 hasExistList.setAttributeValue(request.attributeValue());
                 this.repository.save(hasExistList);
+
+                result.add(hasExistList);
             } else {
                 ProductAttributeValue productAttributeValue = this.mapper.toEntity(request);
                 this.repository.save(productAttributeValue);
+
+                result.add(productAttributeValue);
             }
         }
+
+        return result
+                .stream()
+                .map(this.mapper::toCreateResponse)
+                .toList();
     }
 }
