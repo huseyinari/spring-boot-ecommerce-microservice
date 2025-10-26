@@ -27,7 +27,7 @@ public class ProductAttributeValueService {
     private final ProductAttributeValueMapper mapper;
 
     @Transactional
-    public List<ProductAttributeValueCreateResponse> saveAll(@Valid List<ProductAttributeValueCreateRequest> requestList) {
+    public List<ProductAttributeValueCreateResponse> createOrUpdateAll(@Valid List<ProductAttributeValueCreateRequest> requestList) {
         if (requestList == null || requestList.isEmpty()) {
             return Collections.emptyList();
         }
@@ -42,9 +42,9 @@ public class ProductAttributeValueService {
         }
 
         final String productId = requestList.get(0).productId();
-        final List<ProductAttributeValue> existList = this.repository.findByProduct_Id(productId);
+        final List<ProductAttributeValue> existList = this.repository.findAllByProduct_Id(productId);
 
-        // Yeni listede olmayanları sil
+        // Yeni listede olmayan attribute'leri sil
         for (ProductAttributeValue exist : existList) {
             boolean hasRequest = requestList
                 .stream()
@@ -55,20 +55,20 @@ public class ProductAttributeValueService {
             }
         }
 
-        List<ProductAttributeValue> result = new ArrayList<>();
+        final List<ProductAttributeValue> result = new ArrayList<>();
 
         // Olmayanları ekle, olanları güncelle
         for (ProductAttributeValueCreateRequest request : requestList) {
-            ProductAttributeValue hasExistList = existList.stream()
+            ProductAttributeValue exist = existList.stream()
                     .filter(attributeValue -> attributeValue.getProductAttribute().getId().equals(request.productAttributeId()))
                     .findFirst()
                     .orElse(null);
 
-            if (hasExistList != null) {
-                hasExistList.setAttributeValue(request.attributeValue());
-                this.repository.save(hasExistList);
+            if (exist != null) {
+                exist.setAttributeValue(request.attributeValue());
+                exist = this.repository.save(exist);
 
-                result.add(hasExistList);
+                result.add(exist);
             } else {
                 ProductAttributeValue productAttributeValue = this.mapper.toEntity(request);
                 this.repository.save(productAttributeValue);

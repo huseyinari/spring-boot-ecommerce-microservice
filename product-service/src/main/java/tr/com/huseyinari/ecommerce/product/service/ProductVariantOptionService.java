@@ -27,7 +27,7 @@ public class ProductVariantOptionService {
     private final ProductVariantOptionMapper mapper;
 
     @Transactional
-    public List<ProductVariantOptionCreateResponse> saveAll(@Valid List<ProductVariantOptionCreateRequest> requestList) {
+    public List<ProductVariantOptionCreateResponse> createAll(@Valid List<ProductVariantOptionCreateRequest> requestList) {
         if (requestList == null || requestList.isEmpty()) {
             return Collections.emptyList();
         }

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import tr.com.huseyinari.ecommerce.product.domain.ProductAttribute;
 import tr.com.huseyinari.ecommerce.product.domain.ProductVariant;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductVariantMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductVariantRepository;
@@ -52,7 +51,7 @@ public class ProductVariantService {
                 optionCreateRequestList.add(new ProductVariantOptionCreateRequest(productVariant.getId(), option));
             }
 
-            this.productVariantOptionService.saveAll(optionCreateRequestList);
+            this.productVariantOptionService.createAll(optionCreateRequestList);
         }
 
         return this.mapper.toCreateResponse(productVariant);
@@ -81,7 +80,7 @@ public class ProductVariantService {
             for (String option : request.options()) {
                 optionCreateRequestList.add(new ProductVariantOptionCreateRequest(exist.getId(), option));
             }
-            this.productVariantOptionService.saveAll(optionCreateRequestList);
+            this.productVariantOptionService.createAll(optionCreateRequestList);
         }
 
         return this.mapper.toUpdateResponse(exist);
