@@ -10,6 +10,7 @@ import tr.com.huseyinari.ecommerce.product.response.ProductVariantCreateResponse
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantSearchResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantUpdateResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -54,7 +55,10 @@ public class ProductVariantMapper {
             return null;
         }
 
-        List<String> options = productVariant.getOptions().stream().map(ProductVariantOption::getOptionValue).toList();
+        List<String> options = new ArrayList<>();
+        if (productVariant.getOptions() != null) {
+            options = productVariant.getOptions().stream().map(ProductVariantOption::getOptionValue).toList();
+        }
 
         return new ProductVariantCreateResponse(
             productVariant.getId(),

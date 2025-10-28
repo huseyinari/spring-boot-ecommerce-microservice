@@ -10,3 +10,8 @@ Servislere gelen istekler şuan sadece apigateway'de log'lanıyor. Fakat request
 servis controller'larında yakalayıp log'layabiliriz.
 
 /api/v1/category/products-filter-option/{categoryId} sonuçları dönerken, toplam ürün sayısı da dönmeli
+
+Bir ürün için hem ProductVariant hem de ProductAttribute tablosunda aynı queryName'e ait varyant ve özellik kaydedilmemeli.
+Çünkü bu index tablosundaki JSON için sorunlu bir durum. JSON'da aynı key'e ait birden fazla property tanımlamayı gerektirir.
+
+ProductVariant ve ProductAttribute veya value'lar silindiğinde mevcut ürünlerde nasıl değişiklikler olmalı (örneğin index tablosundaki JSON'lar)

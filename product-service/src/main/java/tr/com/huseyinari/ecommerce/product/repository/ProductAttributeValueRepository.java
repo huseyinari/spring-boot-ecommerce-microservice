@@ -12,8 +12,8 @@ import java.util.List;
 public interface ProductAttributeValueRepository extends BaseJpaQueryDslRepository<ProductAttributeValue, Long> {
     @Query(
         "SELECT pav FROM ProductAttributeValue pav " +
-        "INNER JOIN FETCH pav.productAttribute pa" +
-        "INNER JOIN FETCH pav.product p" +
+        "INNER JOIN FETCH pav.productAttribute pa " +
+        "INNER JOIN FETCH pav.product p " +
         "WHERE p.id = :productId"
     )
     List<ProductAttributeValue> findAllByProduct_Id(@Param("productId") String productId);

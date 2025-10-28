@@ -57,6 +57,6 @@ public class ProductVariantOptionService {
     @Transactional
     public void deleteAllByProductVariantId(@NotNull Long productVariantId) {
         List<ProductVariantOption> productVariantOptionList = this.repository.findByProductVariant_Id(productVariantId);
-        productVariantOptionList.forEach(this.repository::delete);
+        this.repository.deleteAll(productVariantOptionList);
     }
 }

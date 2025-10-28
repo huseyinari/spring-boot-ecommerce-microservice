@@ -1,6 +1,9 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,9 @@ public class ProductVariantService {
     private final ProductVariantMapper mapper;
     private final ProductVariantOptionService productVariantOptionService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Transactional(readOnly = true)
     public List<ProductVariantSearchResponse> findAll() {
         return this.repository.findAll()
@@ -54,6 +60,10 @@ public class ProductVariantService {
             this.productVariantOptionService.createAll(optionCreateRequestList);
         }
 
+        // Oluşturulan option'lara entity üzerinden ulaşabilmek için flush işlemini yaparak veritabanından tekrar sorguluyorum
+        entityManager.flush();
+        entityManager.refresh(productVariant);
+
         return this.mapper.toCreateResponse(productVariant);
     }
 
@@ -74,6 +84,8 @@ public class ProductVariantService {
         // option'ların tamamını sil ve yeni gelenleri kaydet
         this.productVariantOptionService.deleteAllByProductVariantId(exist.getId());
 
+        entityManager.flush();  // Silme sorguları DB'ye gönderilsin. Yeni oluştururken unique kısıtlamalarına takılmayalım.
+
         if (request.options() != null && !request.options().isEmpty()) {
             List<ProductVariantOptionCreateRequest> optionCreateRequestList = new ArrayList<>();
 
@@ -83,6 +95,20 @@ public class ProductVariantService {
             this.productVariantOptionService.createAll(optionCreateRequestList);
         }
 
+        entityManager.flush();
+        entityManager.refresh(exist); // Güncellenen option'lar Entity -> mapper'a gitmeden önce alınsın.
+
         return this.mapper.toUpdateResponse(exist);
+    }
+
+    @Transactional
+    public void delete(@NotNull Long id) {
+        Optional<ProductVariant> optional = this.repository.findById(id);
+
+        if (optional.isPresent()) {
+            this.repository.delete(optional.get());
+        } else {
+            throw new RuntimeException("Ürün varyantı bulunamadı !");
+        }
     }
 }
