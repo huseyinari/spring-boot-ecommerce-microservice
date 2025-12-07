@@ -19,6 +19,7 @@ import tr.com.huseyinari.ecommerce.product.request.ProductVariantUpdateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantSearchResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantUpdateResponse;
+import tr.com.huseyinari.utils.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class ProductVariantService {
     private final ProductVariantOptionService productVariantOptionService;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Transactional(readOnly = true)
     public List<ProductVariantSearchResponse> findAll() {
@@ -61,8 +62,8 @@ public class ProductVariantService {
         }
 
         // Oluşturulan option'lara entity üzerinden ulaşabilmek için flush işlemini yaparak veritabanından tekrar sorguluyorum
-        entityManager.flush();
-        entityManager.refresh(productVariant);
+        this.entityManager.flush();
+        this.entityManager.refresh(productVariant);
 
         return this.mapper.toCreateResponse(productVariant);
     }
@@ -84,7 +85,7 @@ public class ProductVariantService {
         // option'ların tamamını sil ve yeni gelenleri kaydet
         this.productVariantOptionService.deleteAllByProductVariantId(exist.getId());
 
-        entityManager.flush();  // Silme sorguları DB'ye gönderilsin. Yeni oluştururken unique kısıtlamalarına takılmayalım.
+        this.entityManager.flush();  // Silme sorguları DB'ye gönderilsin. Yeni oluştururken unique kısıtlamalarına takılmayalım.
 
         if (request.options() != null && !request.options().isEmpty()) {
             List<ProductVariantOptionCreateRequest> optionCreateRequestList = new ArrayList<>();
@@ -95,8 +96,8 @@ public class ProductVariantService {
             this.productVariantOptionService.createAll(optionCreateRequestList);
         }
 
-        entityManager.flush();
-        entityManager.refresh(exist); // Güncellenen option'lar Entity -> mapper'a gitmeden önce alınsın.
+        this.entityManager.flush();
+        this.entityManager.refresh(exist); // Güncellenen option'lar Entity -> mapper'a gitmeden önce alınsın.
 
         return this.mapper.toUpdateResponse(exist);
     }
@@ -104,11 +105,19 @@ public class ProductVariantService {
     @Transactional
     public void delete(@NotNull Long id) {
         Optional<ProductVariant> optional = this.repository.findById(id);
-
-        if (optional.isPresent()) {
-            this.repository.delete(optional.get());
-        } else {
+        if (optional.isEmpty()) {
             throw new RuntimeException("Ürün varyantı bulunamadı !");
         }
+
+        ProductVariant productVariant = optional.get();
+
+        // Varsa option'ları sil
+        if (CollectionUtils.isNotEmpty(productVariant.getOptions())) {
+            this.productVariantOptionService.deleteAllByProductVariantId(productVariant.getId());
+
+            this.entityManager.flush();
+        }
+
+        this.repository.delete(productVariant);
     }
 }

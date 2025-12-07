@@ -10,6 +10,8 @@ import tr.com.huseyinari.ecommerce.product.mapper.ProductVariantValueMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductVariantValueRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantValueCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantValueCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductVariantValueSearchResponse;
+import tr.com.huseyinari.utils.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,9 +25,17 @@ public class ProductVariantValueService {
     private final ProductVariantValueRepository repository;
     private final ProductVariantValueMapper mapper;
 
+    @Transactional(readOnly = true)
+    public List<ProductVariantValueSearchResponse> findAllByProductIdOrderByProductVariantId(String productId) {
+        return this.repository.findAllByProductIdOrderByProductVariantId(productId)
+                .stream()
+                .map(this.mapper::toSearchResponse)
+                .toList();
+    }
+
     @Transactional
     public List<ProductVariantValueCreateResponse> createOrUpdateAll(List<ProductVariantValueCreateRequest> requestList) {
-        if (requestList == null || requestList.isEmpty()) {
+        if (CollectionUtils.isEmpty(requestList)) {
             return Collections.emptyList();
         }
 
@@ -39,7 +49,7 @@ public class ProductVariantValueService {
         }
 
         final String productId = requestList.get(0).productId();
-        final List<ProductVariantValue> existList = this.repository.findAllByProductId(productId);
+        final List<ProductVariantValue> existList = this.repository.findAllByProductIdOrderByProductVariantId(productId);
 
         // yeni listede olmayan varyantları sil
         for (ProductVariantValue exist : existList) {

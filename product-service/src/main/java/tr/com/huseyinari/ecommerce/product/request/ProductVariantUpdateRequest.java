@@ -23,5 +23,8 @@ public record ProductVariantUpdateRequest(
     ProductVariantUiComponent uiComponent,
     Integer minValue,
     Integer maxValue,
+    @NotNull(message = "Sıra numarası zorunludur.")
+    @Min(value = 1, message = "Sıra numarası alanı geçersiz.")
+    Integer productVariantIndexJsonOrderNumber,
     List<String> options
 ) {}

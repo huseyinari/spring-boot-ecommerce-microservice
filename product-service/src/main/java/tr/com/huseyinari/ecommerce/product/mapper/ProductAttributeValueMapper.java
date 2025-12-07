@@ -7,10 +7,13 @@ import tr.com.huseyinari.ecommerce.product.domain.ProductAttribute;
 import tr.com.huseyinari.ecommerce.product.domain.ProductAttributeValue;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeValueCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueSearchResponse;
 
 @Component
 @RequiredArgsConstructor
 public class ProductAttributeValueMapper {
+    private final ProductAttributeMapper productAttributeMapper;
+
     public ProductAttributeValue toEntity(ProductAttributeValueCreateRequest request) {
         if (request == null) {
             return null;
@@ -37,6 +40,19 @@ public class ProductAttributeValueMapper {
         return new ProductAttributeValueCreateResponse(
             productAttributeValue.getId(),
             productAttributeValue.getProductAttribute().getId(),
+            productAttributeValue.getProduct().getId(),
+            productAttributeValue.getAttributeValue()
+        );
+    }
+
+    public ProductAttributeValueSearchResponse toSearchResponse(ProductAttributeValue productAttributeValue) {
+        if (productAttributeValue == null) {
+            return null;
+        }
+
+        return new ProductAttributeValueSearchResponse(
+            productAttributeValue.getId(),
+            productAttributeMapper.toSearchResponse(productAttributeValue.getProductAttribute()),
             productAttributeValue.getProduct().getId(),
             productAttributeValue.getAttributeValue()
         );

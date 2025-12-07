@@ -14,7 +14,8 @@ public interface ProductAttributeValueRepository extends BaseJpaQueryDslReposito
         "SELECT pav FROM ProductAttributeValue pav " +
         "INNER JOIN FETCH pav.productAttribute pa " +
         "INNER JOIN FETCH pav.product p " +
-        "WHERE p.id = :productId"
+        "WHERE p.id = :productId " +
+        "ORDER BY pa.id ASC"
     )
-    List<ProductAttributeValue> findAllByProduct_Id(@Param("productId") String productId);
+    List<ProductAttributeValue> findAllByProductIdOrderByProductAttributeId(@Param("productId") String productId);
 }

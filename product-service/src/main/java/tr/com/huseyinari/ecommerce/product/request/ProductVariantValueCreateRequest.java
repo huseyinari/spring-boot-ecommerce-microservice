@@ -9,7 +9,7 @@ public record ProductVariantValueCreateRequest(
     @Min(value = 1, message = "Geçersiz ürün varyantı.")
     Long productVariantId,
 
-    @NotBlank(message = "Ürün alanı zorunludur.")
+//    @NotBlank(message = "Ürün alanı zorunludur.") - variant_value'lar ürün oluşturulma aşamasında kaydedileceği için productId alanı servis içerisinde doldurulacaktır.
     String productId,
 
     @NotBlank(message = "Varyant değeri alanı zorunludur.")

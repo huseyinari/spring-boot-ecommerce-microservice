@@ -146,6 +146,7 @@ CREATE TABLE product_variant (
     ui_component VARCHAR(50) NOT NULL,
     min_value VARCHAR(100),
     max_value VARCHAR(100),
+    product_variant_index_json_order_number INTEGER NOT NULL,
     --
     created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
@@ -155,6 +156,7 @@ CREATE TABLE product_variant (
 
 ALTER TABLE product_variant ADD CONSTRAINT pk_product_variant_id PRIMARY KEY (id);
 ALTER TABLE product_variant ADD CONSTRAINT un_product_variant_query_name UNIQUE (query_name);
+CREATE UNIQUE INDEX un_ind_product_variant_product_variant_index_json_order_number ON product_variant (product_variant_index_json_order_number);
 
 CREATE SEQUENCE product_variant_option_id_sequence
 INCREMENT 1
@@ -227,3 +229,4 @@ CREATE TABLE product_variant_index (
 ALTER TABLE product_variant_index ADD CONSTRAINT pk_product_variant_index_id PRIMARY KEY (id);
 ALTER TABLE product_variant_index ADD CONSTRAINT fk_product_variant_index_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 ALTER TABLE product_variant_index ADD CONSTRAINT un_product_variant_index_sku_code UNIQUE (sku_code);
+ALTER TABLE product_variant_index ADD CONSTRAINT un_product_variant_index_query_order_product_id UNIQUE (query_order, product_id);

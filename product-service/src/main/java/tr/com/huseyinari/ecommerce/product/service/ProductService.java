@@ -20,12 +20,15 @@ import tr.com.huseyinari.ecommerce.product.kafka.producer.ProductKafkaProducer;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductMapper;
 import tr.com.huseyinari.ecommerce.product.projection.MostInspectedProductProjection;
 import tr.com.huseyinari.ecommerce.product.repository.ProductRepository;
+import tr.com.huseyinari.ecommerce.product.request.ProductAttributeValueCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
+import tr.com.huseyinari.ecommerce.product.request.ProductVariantValueCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.*;
 import tr.com.huseyinari.ecommerce.product.shared.response.CategorySearchResponse;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
+import tr.com.huseyinari.utils.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,6 +46,8 @@ public class ProductService {
     private final CategoryClient categoryClient;
     private final ProductInspectService productInspectService;
     private final ProductImageService productImageService;
+    private final ProductAttributeValueService productAttributeValueService;
+    private final ProductVariantValueService productVariantValueService;
 
     @Transactional(readOnly = true)
     public ProductSearchPageableResponse search(ProductSearchParameters params, Pageable pageable) {
@@ -102,11 +107,43 @@ public class ProductService {
 
         product = this.repository.save(product);
 
+        final ProductCreateResponse productCreateResponse = this.mapper.toCreateResponse(product);
+
+        // product attribute values
+        if (CollectionUtils.isNotEmpty(request.attributeValues())) {
+            final Product finalProduct = product;
+            List<ProductAttributeValueCreateRequest> attributeValues = request.attributeValues()
+                    .stream()
+                    .map(productAttributeValue -> {
+                        // Kaydedilen ürün'ün id'si attribute value listesindeki item'lara ekleniyor.
+                        return new ProductAttributeValueCreateRequest(productAttributeValue.productAttributeId(), finalProduct.getId(), productAttributeValue.attributeValue());
+                    })
+                    .toList();
+
+            List<ProductAttributeValueCreateResponse> attributeValueCreateResponseList = this.productAttributeValueService.createOrUpdateAll(attributeValues);
+            productCreateResponse.setAttributeValues(attributeValueCreateResponseList);
+        }
+
+        // product variant values
+        if (CollectionUtils.isNotEmpty(request.variantValues())) {
+            final Product finalProduct = product;
+            List<ProductVariantValueCreateRequest> variantValues = request.variantValues()
+                    .stream()
+                    .map(productVariantValue -> {
+                        // Kaydedilen ürün'ün id'si variant value listesindeki item'lara ekleniyor.
+                        return new ProductVariantValueCreateRequest(productVariantValue.productVariantId(), finalProduct.getId(), productVariantValue.variantValue());
+                    })
+                    .toList();
+
+            List<ProductVariantValueCreateResponse> variantValueCreateResponseList = this.productVariantValueService.createOrUpdateAll(variantValues);
+            productCreateResponse.setVariantValues(variantValueCreateResponseList);
+        }
+
         this.kafkaProducer.createOpeningProductStock(product);
 
         logger.info("ID: {} -> Product başarıyla oluşturuldu.", product.getId());
 
-        return this.mapper.toCreateResponse(product);
+        return productCreateResponse;
     }
 
     public List<ProductMostInspectedTodayResponse> getMostInspectedTodayProducts() {

@@ -9,7 +9,7 @@ public record ProductAttributeValueCreateRequest(
     @Min(value = 1, message = "Geçersiz ürün özelliği")
     Long productAttributeId,
 
-    @NotBlank(message = "Ürün alanı zorunludur.")
+//    @NotBlank(message = "Ürün alanı zorunludur.") - attribute_value'lar ürün oluşturulma aşamasında kaydedileceği için productId alanı servis içerisinde doldurulacaktır.
     String productId,
 
     @NotBlank(message = "Özellik değeri zorunludur.")

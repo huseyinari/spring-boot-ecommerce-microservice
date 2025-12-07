@@ -77,17 +77,18 @@ public class ProductMapper {
                     .map(ProductImage::getStorageObjectId)
                     .collect(Collectors.toSet());
 
-        return new ProductCreateResponse(
-            product.getId(),
-            product.getName(),
-            product.getDescription(),
-            product.getSkuCode(),
-            product.getPrice(),
-            product.getDiscount(),
-            product.getDiscountedPrice(),
-            product.getStatus(),
-            imageStorageIds
-        );
+        ProductCreateResponse response = new ProductCreateResponse();
+        response.setId(product.getId());
+        response.setName(product.getName());
+        response.setDescription(product.getDescription());
+        response.setSkuCode(product.getSkuCode());
+        response.setPrice(product.getPrice());
+        response.setDiscount(product.getDiscount());
+        response.setDiscountedPrice(product.getDiscountedPrice());
+        response.setStatus(product.getStatus());
+        response.setImageStorageIds(imageStorageIds);
+
+        return response;
     }
 
     public ProductSearchPageableResponse toSearchPageableResponse(Page<Product> pageResult) {

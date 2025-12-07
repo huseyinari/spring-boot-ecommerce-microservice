@@ -14,5 +14,6 @@ public record ProductVariantUpdateResponse(
     ProductVariantUiComponent uiComponent,
     Integer minValue,
     Integer maxValue,
+    Integer productVariantIndexJsonOrderNumber,
     List<String> options
 ) {}

@@ -1,15 +1,17 @@
 package tr.com.huseyinari.ecommerce.product.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import tr.com.huseyinari.ecommerce.product.domain.converter.ProductVariantIndexConverter;
 import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Entity(name = "ProductVariantIndex")
 @Table(name = "product_variant_index")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,8 +21,9 @@ public class ProductVariantIndex extends AbstractAuditableEntity {
     @SequenceGenerator(name = "product_variant_index_id_sequence", sequenceName = "product_variant_index_id_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "variant_value_index", nullable = false) // TODO: JSON OLACAK
-    private String variantValueIndex;
+    @Convert(converter = ProductVariantIndexConverter.class)
+    @Column(name = "variant_value_index", nullable = false)
+    private Map<String, Object> variantValueIndex;
 
     @Column(name = "sku_code", nullable = false, unique = true)
     private String skuCode;
@@ -38,7 +41,7 @@ public class ProductVariantIndex extends AbstractAuditableEntity {
     private BigDecimal discountedPrice;
 
     @Column(name = "query_order", nullable = false)
-    private Integer queryOrder;
+    private Integer queryOrder;     // Ürüne ait arama yapıldığında gösterilme sırası
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)

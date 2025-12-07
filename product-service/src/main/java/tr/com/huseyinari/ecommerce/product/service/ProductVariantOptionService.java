@@ -13,6 +13,7 @@ import tr.com.huseyinari.ecommerce.product.mapper.ProductVariantOptionMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductVariantOptionRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantOptionCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantOptionCreateResponse;
+import tr.com.huseyinari.utils.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ProductVariantOptionService {
 
     @Transactional
     public List<ProductVariantOptionCreateResponse> createAll(@Valid List<ProductVariantOptionCreateRequest> requestList) {
-        if (requestList == null || requestList.isEmpty()) {
+        if (CollectionUtils.isEmpty(requestList)) {
             return Collections.emptyList();
         }
 

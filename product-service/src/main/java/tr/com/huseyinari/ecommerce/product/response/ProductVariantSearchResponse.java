@@ -3,6 +3,8 @@ package tr.com.huseyinari.ecommerce.product.response;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantUiComponent;
 
+import java.util.List;
+
 public record ProductVariantSearchResponse(
     Long id,
     String name,
@@ -11,5 +13,7 @@ public record ProductVariantSearchResponse(
     ProductVariantDataType dataType,
     ProductVariantUiComponent uiComponent,
     Integer minValue,
-    Integer maxValue
+    Integer maxValue,
+    Integer productVariantIndexJsonOrderNumber,
+    List<String> options
 ) {}

@@ -1,5 +1,6 @@
 package tr.com.huseyinari.ecommerce.product.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
@@ -25,6 +26,10 @@ public record ProductVariantCreateRequest(
     Integer minValue,
 
     Integer maxValue,
+
+    @NotNull(message = "Sıra numarası zorunludur.")
+    @Min(value = 1, message = "Sıra numarası alanı geçersiz.")
+    Integer productVariantIndexJsonOrderNumber,
 
     List<String> options
 ) {}

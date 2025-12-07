@@ -21,6 +21,14 @@ public class ProductVariantMapper {
             return null;
         }
 
+        List<String> options = null;
+        if (productVariant.getOptions() != null) {
+            options = productVariant.getOptions()
+                    .stream()
+                    .map(ProductVariantOption::getOptionValue)
+                    .toList();
+        }
+
         return new ProductVariantSearchResponse(
             productVariant.getId(),
             productVariant.getName(),
@@ -29,7 +37,9 @@ public class ProductVariantMapper {
             productVariant.getDataType(),
             productVariant.getUiComponent(),
             productVariant.getMinValue(),
-            productVariant.getMaxValue()
+            productVariant.getMaxValue(),
+            productVariant.getProductVariantIndexJsonOrderNumber(),
+            options
         );
     }
 
@@ -46,6 +56,7 @@ public class ProductVariantMapper {
         productVariant.setUiComponent(request.uiComponent());
         productVariant.setMinValue(request.minValue());
         productVariant.setMaxValue(request.maxValue());
+        productVariant.setProductVariantIndexJsonOrderNumber(request.productVariantIndexJsonOrderNumber());
 
         return productVariant;
     }
@@ -69,6 +80,7 @@ public class ProductVariantMapper {
             productVariant.getUiComponent(),
             productVariant.getMinValue(),
             productVariant.getMaxValue(),
+            productVariant.getProductVariantIndexJsonOrderNumber(),
             options
         );
     }
@@ -88,6 +100,7 @@ public class ProductVariantMapper {
         productVariant.setUiComponent(request.uiComponent());
         productVariant.setMinValue(request.minValue());
         productVariant.setMaxValue(request.maxValue());
+        productVariant.setProductVariantIndexJsonOrderNumber(request.productVariantIndexJsonOrderNumber());
     }
 
     public ProductVariantUpdateResponse toUpdateResponse(ProductVariant productVariant) {
@@ -106,6 +119,7 @@ public class ProductVariantMapper {
             productVariant.getUiComponent(),
             productVariant.getMinValue(),
             productVariant.getMaxValue(),
+            productVariant.getProductVariantIndexJsonOrderNumber(),
             options
         );
     }

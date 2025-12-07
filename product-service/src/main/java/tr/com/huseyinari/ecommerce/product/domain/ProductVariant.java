@@ -44,6 +44,9 @@ public class ProductVariant extends AbstractAuditableEntity {
     @Column(name = "max_value", nullable = false)
     private Integer maxValue;
 
+    @Column(name = "product_variant_index_json_order_number", nullable = false, unique = true)
+    private Integer productVariantIndexJsonOrderNumber;         // ProductVariantIndex tablosundaki JSON içerisine property olarak yazılma sırası
+
     @OneToMany(mappedBy = "productVariant")
     private List<ProductVariantOption> options;
 }

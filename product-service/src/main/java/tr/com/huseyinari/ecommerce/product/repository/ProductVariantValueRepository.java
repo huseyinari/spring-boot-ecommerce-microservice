@@ -14,7 +14,8 @@ public interface ProductVariantValueRepository extends BaseJpaQueryDslRepository
         "SELECT pvv FROM ProductVariantValue pvv " +
         "INNER JOIN FETCH pvv.productVariant pv " +
         "INNER JOIN FETCH pvv.product p " +
-        "WHERE p.id = :productId"
+        "WHERE p.id = :productId " +
+        "ORDER BY pv.id ASC"
     )
-    List<ProductVariantValue> findAllByProductId(@Param("productId") String productId);
+    List<ProductVariantValue> findAllByProductIdOrderByProductVariantId(@Param("productId") String productId);
 }

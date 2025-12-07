@@ -1,6 +1,7 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,8 @@ import tr.com.huseyinari.ecommerce.product.mapper.ProductAttributeValueMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductAttributeValueRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeValueCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueSearchResponse;
+import tr.com.huseyinari.utils.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,9 +29,17 @@ public class ProductAttributeValueService {
     private final ProductAttributeValueRepository repository;
     private final ProductAttributeValueMapper mapper;
 
+    @Transactional(readOnly = true)
+    public List<ProductAttributeValueSearchResponse> findAllByProductIdOrderByProductAttributeId(@NotBlank(message = "Ürün belirtilmedi") String productId) {
+        return this.repository.findAllByProductIdOrderByProductAttributeId(productId)
+                .stream()
+                .map(this.mapper::toSearchResponse)
+                .toList();
+    }
+
     @Transactional
     public List<ProductAttributeValueCreateResponse> createOrUpdateAll(@Valid List<ProductAttributeValueCreateRequest> requestList) {
-        if (requestList == null || requestList.isEmpty()) {
+        if (CollectionUtils.isEmpty(requestList)) {
             return Collections.emptyList();
         }
 
@@ -42,7 +53,7 @@ public class ProductAttributeValueService {
         }
 
         final String productId = requestList.get(0).productId();
-        final List<ProductAttributeValue> existList = this.repository.findAllByProduct_Id(productId);
+        final List<ProductAttributeValue> existList = this.repository.findAllByProductIdOrderByProductAttributeId(productId);
 
         // Yeni listede olmayan attribute'leri sil
         for (ProductAttributeValue exist : existList) {

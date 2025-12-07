@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Schema(description = "Product Create Request")
 public record ProductCreateRequest(
@@ -24,5 +25,11 @@ public record ProductCreateRequest(
 
     @Schema(description = "Ürün kategorisi", example = "100000")
     @NotNull(message = "Lütfen kategori seçiniz.")
-    Long categoryId
+    Long categoryId,
+
+    @Schema(description = "Ürün attribute değerleri", example = "[{\"productAttributeId\": 104, \"attributeValue\": \"14.6 inc\"}]")
+    List<ProductAttributeValueCreateRequest> attributeValues,
+
+    @Schema(description = "Ürün varyant değerleri", example = "[{\"productVariantId\": 1, \"variantValue\": \"Beyaz\"}]")
+    List<ProductVariantValueCreateRequest> variantValues
 ) {}
