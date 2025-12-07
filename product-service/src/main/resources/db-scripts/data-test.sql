@@ -31,6 +31,10 @@ INSERT INTO public.products
 (id, "name", description, sku_code, price, discount, discounted_price, category_id, status, user_id, created_date, created_by)
 VALUES('t2b7596b-306c-4ab9-a623-c835e421d533', 'Lenovo 400 Wireless Kablosuz Mouse Siyah GY50R91293', 'mouse', 'lenovo_400_wireless_kablosuz_siyah_mouse_gy50r91293', 299, 100, 399, 100009, 'SUCCESS', 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', '2025-07-26T07:00:00', 'system');
 
+INSERT INTO public.products
+(id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
+VALUES('5511cb86-f91f-4485-a57a-06cdd55d093f', 'Mavi T-Shirt', 'Mavi tshirt', 'mavi_t-shirt', 900.00, 150.00, 750.00, 100000, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2025-12-07 13:53:48.587', 'huseyinari', '2025-12-07 13:53:48.587');
+
 /* product images */
 INSERT INTO public.product_image
 (id, product_id, storage_object_id, created_by, created_date, updated_by, updated_date)
@@ -235,6 +239,23 @@ INSERT INTO public.product_attribute
 (id, "name", query_name, description, created_by, created_date, updated_by, updated_date)
 VALUES(127, 'Kesim Tarzı', 'cutType', 'Kesim Tarzı (Slim Fit, Regular Fit, Oversize vb.)', 'huseyinari', '2025-10-25 13:23:26.835', 'huseyinari', '2025-10-25 13:23:26.835');
 
+/* product attribute values */
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(100000, '5511cb86-f91f-4485-a57a-06cdd55d093f', 123, '%100 Kumaş', 'huseyinari', '2025-12-07 13:53:48.655', 'huseyinari', '2025-12-07 13:53:48.655');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(100001, '5511cb86-f91f-4485-a57a-06cdd55d093f', 124, 'Düz Renk', 'huseyinari', '2025-12-07 13:53:48.661', 'huseyinari', '2025-12-07 13:53:48.661');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(100002, '5511cb86-f91f-4485-a57a-06cdd55d093f', 125, 'Bisiklet Yaka', 'huseyinari', '2025-12-07 13:53:48.663', 'huseyinari', '2025-12-07 13:53:48.663');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(100003, '5511cb86-f91f-4485-a57a-06cdd55d093f', 126, 'Kısa Kol', 'huseyinari', '2025-12-07 13:53:48.664', 'huseyinari', '2025-12-07 13:53:48.664');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(100004, '5511cb86-f91f-4485-a57a-06cdd55d093f', 127, 'Loose Fit', 'huseyinari', '2025-12-07 13:53:48.665', 'huseyinari', '2025-12-07 13:53:48.665');
+
 /* product variants */
 INSERT INTO public.product_variant
 (id, "name", query_name, description, data_type, ui_component, min_value, max_value, product_variant_index_json_order_number, created_by, created_date, updated_by, updated_date)
@@ -242,6 +263,32 @@ VALUES(100, 'Renk', 'color', 'Ürün rengi', 'STRING', 'TEXT_INPUT', NULL, NULL,
 INSERT INTO public.product_variant
 (id, "name", query_name, description, data_type, ui_component, min_value, max_value, product_variant_index_json_order_number, created_by, created_date, updated_by, updated_date)
 VALUES(101, 'Beden', 'size', 'Ürün bedeni', 'STRING', 'TEXT_INPUT', NULL, NULL, 2, 'huseyinari', '2025-12-06 01:24:31.827', 'huseyinari', '2025-12-06 01:24:31.827');
+
+/* product variant values */
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100000, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Beyaz', 'huseyinari', '2025-12-07 13:53:48.678', 'huseyinari', '2025-12-07 13:53:48.678');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100001, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Bordo', 'huseyinari', '2025-12-07 13:53:48.680', 'huseyinari', '2025-12-07 13:53:48.680');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100002, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Yeşil', 'huseyinari', '2025-12-07 13:53:48.681', 'huseyinari', '2025-12-07 13:53:48.681');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100003, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Kırmızı', 'huseyinari', '2025-12-07 13:53:48.682', 'huseyinari', '2025-12-07 13:53:48.682');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100004, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'S', 'huseyinari', '2025-12-07 13:53:48.683', 'huseyinari', '2025-12-07 13:53:48.683');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100005, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'M', 'huseyinari', '2025-12-07 13:53:48.684', 'huseyinari', '2025-12-07 13:53:48.684');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100006, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'L', 'huseyinari', '2025-12-07 13:53:48.685', 'huseyinari', '2025-12-07 13:53:48.685');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100007, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'XL', 'huseyinari', '2025-12-07 13:53:48.686', 'huseyinari', '2025-12-07 13:53:48.686');
 
 /* product variant options */
 INSERT INTO public.product_variant_option

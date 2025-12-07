@@ -6,3 +6,4 @@ INSERT INTO inventory(id, sku_code, quantity, created_date, created_by) VALUES (
 INSERT INTO inventory(id, sku_code, quantity, created_date, created_by) VALUES (nextval('inventory_id_sequence'), 'sinangil_un_1kg', 40, '2025-07-26T00:00:00', 'system');
 INSERT INTO inventory(id, sku_code, quantity, created_date, created_by) VALUES (nextval('inventory_id_sequence'), 'samsung_galaxy_tab_a9', 3, '2025-07-26T00:00:00', 'system');
 INSERT INTO inventory(id, sku_code, quantity, created_date, created_by) VALUES (nextval('inventory_id_sequence'), 'lenovo_400_wireless_kablosuz_siyah_mouse_gy50r91293', 9, '2025-07-26T00:00:00', 'system');
+INSERT INTO inventory(id, sku_code, quantity, created_date, created_by) VALUES (nextval('inventory_id_sequence'), 'mavi_t-shirt', 0, '2025-12-07T00:00:00', 'system');
