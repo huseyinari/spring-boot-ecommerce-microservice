@@ -6,4 +6,5 @@ import tr.com.huseyinari.springdatajpa.repository.BaseJpaQueryDslRepository;
 
 @Repository
 public interface ProductVariantIndexRepository extends BaseJpaQueryDslRepository<ProductVariantIndex, Long> {
+    void deleteByProductId(String productId);
 }

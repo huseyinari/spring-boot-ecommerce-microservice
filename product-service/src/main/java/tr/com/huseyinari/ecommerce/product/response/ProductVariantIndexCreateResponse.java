@@ -1,7 +1,16 @@
 package tr.com.huseyinari.ecommerce.product.response;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Map;
 
 public record ProductVariantIndexCreateResponse(
-    List<ProductVariantValueCreateResponse> variantValueCombinations
+        Long id,
+        Map<String, Object> variantValueIndex,
+        String skuCode,
+        Integer stock,
+        BigDecimal price,
+        BigDecimal discount,
+        BigDecimal discountedPrice,
+        Integer queryOrder,
+        String productId
 ) {}

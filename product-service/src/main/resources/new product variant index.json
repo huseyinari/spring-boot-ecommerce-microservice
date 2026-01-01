@@ -1,0 +1,46 @@
+[
+  {
+    "productId": "...",
+    "productVariantValueIdCombination": [
+      100000, 100004
+    ],
+    "skuCode": "basic-tshirt-beyaz-XS",
+    "stock": 10,
+    "price": 500,
+    "discount": 0,
+    "queryOrder": 1
+  },
+  {
+    "productId": "...",
+    "productVariantValueIdCombination": [
+      100000, 100007
+    ],
+    "skuCode": "basic-tshirt-beyaz-L",
+    "stock": 10,
+    "price": 500,
+    "discount": 0,
+    "queryOrder": 2
+  },
+  {
+    "productId": "...",
+    "productVariantValueIdCombination": [
+      100002, 100006
+    ],
+    "skuCode": "basic-tshirt-yesil-M",
+    "stock": 10,
+    "price": 500,
+    "discount": 0,
+    "queryOrder": 3
+  },
+  {
+    "productId": "...",
+    "productVariantValueIdCombination": [
+      100003, 100008
+    ],
+    "skuCode": "basic-tshirt-siyah-XL",
+    "stock": 10,
+    "price": 500,
+    "discount": 0,
+    "queryOrder": 4
+  }
+]

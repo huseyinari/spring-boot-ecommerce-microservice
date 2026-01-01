@@ -22,4 +22,5 @@ public class ProductCreateResponse {
     private Set<Long> imageStorageIds;
     private List<ProductAttributeValueCreateResponse> attributeValues;
     private List<ProductVariantValueCreateResponse> variantValues;
+    private ProductVariantIndexCreateResponse variantIndex;
 }

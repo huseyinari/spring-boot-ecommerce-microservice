@@ -2,7 +2,8 @@ package tr.com.huseyinari.ecommerce.product.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import tr.com.huseyinari.ecommerce.product.domain.converter.ProductVariantIndexConverter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
 import java.math.BigDecimal;
@@ -21,8 +22,8 @@ public class ProductVariantIndex extends AbstractAuditableEntity {
     @SequenceGenerator(name = "product_variant_index_id_sequence", sequenceName = "product_variant_index_id_sequence", allocationSize = 1)
     private Long id;
 
-    @Convert(converter = ProductVariantIndexConverter.class)
-    @Column(name = "variant_value_index", nullable = false)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "variant_value_index", columnDefinition = "jsonb", nullable = false)
     private Map<String, Object> variantValueIndex;
 
     @Column(name = "sku_code", nullable = false, unique = true)

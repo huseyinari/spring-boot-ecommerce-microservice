@@ -11,7 +11,7 @@ public record ProductVariantIndexCreateRequest(
     String productId,
 
     @NotEmpty(message = "Ürün varyantı kombinasyonu zorunludur.")
-    List<@NotEmpty(message = "Ürün varyantı değerleri zorunludur.")List<Long>> productVariantValueIdCombinations,
+    List<Long> productVariantValueIdCombination,
 
     String skuCode,
     Integer stock,

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import tr.com.huseyinari.ecommerce.product.domain.ProductAttributeValue;
 import tr.com.huseyinari.springdatajpa.repository.BaseJpaQueryDslRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,7 @@ public interface ProductAttributeValueRepository extends BaseJpaQueryDslReposito
         "ORDER BY pa.id ASC"
     )
     List<ProductAttributeValue> findAllByProductIdOrderByProductAttributeId(@Param("productId") String productId);
+
+//    @Query("SELECT pav FROM ProductAttributeValue pav WHERE pav.id IN :idList ORDER BY ID ASC")
+    List<ProductAttributeValue> findByIdInOrderById(Collection<Long> idList);
 }

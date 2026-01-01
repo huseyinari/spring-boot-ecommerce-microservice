@@ -1,6 +1,8 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import feign.FeignException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -48,6 +50,10 @@ public class ProductService {
     private final ProductImageService productImageService;
     private final ProductAttributeValueService productAttributeValueService;
     private final ProductVariantValueService productVariantValueService;
+    private final ProductVariantIndexService productVariantIndexService;
+
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     @Transactional(readOnly = true)
     public ProductSearchPageableResponse search(ProductSearchParameters params, Pageable pageable) {
@@ -138,6 +144,14 @@ public class ProductService {
             List<ProductVariantValueCreateResponse> variantValueCreateResponseList = this.productVariantValueService.createOrUpdateAll(variantValues);
             productCreateResponse.setVariantValues(variantValueCreateResponseList);
         }
+
+        this.entityManager.flush();
+        this.entityManager.clear(); // <--- Product Variant Index kaydedilirken ProductAttributeValue içerisindeki ProductAttribute'ün sadece id'si geliyor. Çünkü mapper'ında kaydedilirken yalnızca id setleniyor.
+                                    //      Onun için entityManager'ı temizledim ve sorgulamada tekrar çekilmesini sağladım.
+        
+        // Ürüne ait variant_index kaydı oluştur.
+        ProductVariantIndexCreateResponse variantIndex = this.productVariantIndexService.initProduct(productCreateResponse);
+        productCreateResponse.setVariantIndex(variantIndex);
 
         this.kafkaProducer.createOpeningProductStock(product);
 

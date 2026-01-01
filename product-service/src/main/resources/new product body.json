@@ -1,0 +1,67 @@
+{
+  "name": "Basic T-Shirt",
+  "description": "Düz t-shirt",
+  "price": 1000,
+  "discount": 250,
+  "categoryId": 100001,
+  "attributeValues": [
+    {
+      "productAttributeId": 123,
+      "attributeValue": "%100 Pamuk"
+    },
+    {
+      "productAttributeId": 124,
+      "attributeValue": "Düz"
+    },
+    {
+      "productAttributeId": 125,
+      "attributeValue": "Bisiklet Yaka"
+    },
+    {
+      "productAttributeId": 126,
+      "attributeValue": "Kısa Kol"
+    },
+    {
+      "productAttributeId": 127,
+      "attributeValue": "Oversize"
+    }
+  ],
+  "variantValues": [
+    {
+      "productVariantId": 100,
+      "variantValue": "Beyaz"
+    },
+    {
+      "productVariantId": 100,
+      "variantValue": "Bordo"
+    },
+    {
+      "productVariantId": 100,
+      "variantValue": "Yeşil"
+    },
+    {
+      "productVariantId": 100,
+      "variantValue": "Siyah"
+    },
+    {
+      "productVariantId": 101,
+      "variantValue": "XS"
+    },
+    {
+      "productVariantId": 101,
+      "variantValue": "S"
+    },
+    {
+      "productVariantId": 101,
+      "variantValue": "M"
+    },
+    {
+      "productVariantId": 101,
+      "variantValue": "L"
+    },
+    {
+      "productVariantId": 101,
+      "variantValue": "XL"
+    }
+  ]
+}

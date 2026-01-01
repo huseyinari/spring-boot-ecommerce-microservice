@@ -30,6 +30,15 @@ public class ProductAttributeValueService {
     private final ProductAttributeValueMapper mapper;
 
     @Transactional(readOnly = true)
+    public List<ProductAttributeValueSearchResponse> findByIdInOrderById(List<Long> idList) {
+        List<ProductAttributeValue> productAttributeValue = this.repository.findByIdInOrderById(idList);
+        return productAttributeValue
+                .stream()
+                .map(this.mapper::toSearchResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<ProductAttributeValueSearchResponse> findAllByProductIdOrderByProductAttributeId(@NotBlank(message = "Ürün belirtilmedi") String productId) {
         return this.repository.findAllByProductIdOrderByProductAttributeId(productId)
                 .stream()

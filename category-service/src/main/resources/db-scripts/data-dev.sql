@@ -4,7 +4,7 @@ VALUES(nextval('category_id_sequence'), 'Elektronik', 35, null, 100004, 'system'
 
 INSERT INTO public.category
 (id, category_name, total_product_count, parent_id, image_storage_object_id, created_by, created_date, updated_by, updated_date)
-VALUES(nextval('category_id_sequence'), 'Moda', 28, null, 100009, 'system', '2025-04-12', NULL, NULL);
+VALUES(nextval('category_id_sequence'), 'Giyim', 28, null, 100009, 'system', '2025-04-12', NULL, NULL);
 
 INSERT INTO public.category
 (id, category_name, total_product_count, parent_id, image_storage_object_id, created_by, created_date, updated_by, updated_date)

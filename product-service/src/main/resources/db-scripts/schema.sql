@@ -213,7 +213,7 @@ NO CYCLE;
 CREATE TABLE product_variant_index (
     id BIGINT,
     product_id VARCHAR(100) NOT NULL,
-    variant_value_combination JSONB NOT NULL,
+    variant_value_index JSONB NOT NULL,
     sku_code VARCHAR(255) NOT NULL,
     stock INTEGER NOT NULL,
     price DEC(10, 2) NOT NULL,
