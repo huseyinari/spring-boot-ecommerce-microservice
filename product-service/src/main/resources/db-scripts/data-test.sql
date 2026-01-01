@@ -31,9 +31,25 @@ INSERT INTO public.products
 (id, "name", description, sku_code, price, discount, discounted_price, category_id, status, user_id, created_date, created_by)
 VALUES('t2b7596b-306c-4ab9-a623-c835e421d533', 'Lenovo 400 Wireless Kablosuz Mouse Siyah GY50R91293', 'mouse', 'lenovo_400_wireless_kablosuz_siyah_mouse_gy50r91293', 299, 100, 399, 100009, 'SUCCESS', 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', '2025-07-26T07:00:00', 'system');
 
+--INSERT INTO public.products
+--(id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
+--VALUES('5511cb86-f91f-4485-a57a-06cdd55d093f', 'Mavi T-Shirt', 'Mavi tshirt', 'mavi_t-shirt', 900.00, 150.00, 750.00, 100000, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2025-12-07 13:53:48.587', 'huseyinari', '2025-12-07 13:53:48.587');
+
 INSERT INTO public.products
 (id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
-VALUES('5511cb86-f91f-4485-a57a-06cdd55d093f', 'Mavi T-Shirt', 'Mavi tshirt', 'mavi_t-shirt', 900.00, 150.00, 750.00, 100000, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2025-12-07 13:53:48.587', 'huseyinari', '2025-12-07 13:53:48.587');
+VALUES('0c9f4199-235d-4c20-8280-c29105737cff', 'Altınyıldız Classics Erkek Sweatshirt', 'Altınyıldız Classics Erkek Antrasit Anti-pilling Tüylenme Yapmayan Standart Fit Dik Yaka Soğuk Geçirmez Polar Sweatshirt', 'altınyıldız_classics_erkek_sweatshirt', 483.99, 0.00, 483.99, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2026-01-01 13:38:45.415', 'huseyinari', '2026-01-01 13:38:45.415');
+
+INSERT INTO public.products
+(id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
+VALUES('e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 'Grimelange Travıs Erkek Sweatshirt', 'Grimelange Travıs Erkek Organik Kumaşlı Yumuşacık Regular Fit Yuvarlak Yakalı Lacivert Sweatshirt', 'grimelange_travıs_erkek_sweatshirt', 477.35, 0.00, 477.35, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2026-01-01 13:50:07.379', 'huseyinari', '2026-01-01 13:50:07.779');
+
+INSERT INTO public.products
+(id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
+VALUES('eb8ac00d-d1df-4898-b764-0c814f40cdfb', 'Tudors Unisex Relax Fit Erkek Sweatshirt', 'Tudors Unisex Relax Fit Rahat Kesim Pamuklu İçi Polarlı Yarım Fermuarlı Haki Dik Yaka Sweatshirt', 'tudors_unisex_relax_fit_erkek_sweatshirt', 549.95, 0.00, 549.95, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2026-01-01 14:00:10.227', 'huseyinari', '2026-01-01 14:00:10.410');
+
+INSERT INTO public.products
+(id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
+VALUES('c6b6f7f1-3581-493f-be4f-e6734b83744e', 'Basic T-Shirt', 'Düz t-shirt', 'basic_t-shirt', 615.50, 115.50, 500.00, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2026-01-01 14:06:51.676', 'huseyinari', '2026-01-01 14:06:51.833');
 
 /* product images */
 INSERT INTO public.product_image
@@ -240,21 +256,21 @@ INSERT INTO public.product_attribute
 VALUES(127, 'Kesim Tarzı', 'cutType', 'Kesim Tarzı (Slim Fit, Regular Fit, Oversize vb.)', 'huseyinari', '2025-10-25 13:23:26.835', 'huseyinari', '2025-10-25 13:23:26.835');
 
 /* product attribute values */
-INSERT INTO public.product_attribute_value
-(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
-VALUES(100000, '5511cb86-f91f-4485-a57a-06cdd55d093f', 123, '%100 Kumaş', 'huseyinari', '2025-12-07 13:53:48.655', 'huseyinari', '2025-12-07 13:53:48.655');
-INSERT INTO public.product_attribute_value
-(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
-VALUES(100001, '5511cb86-f91f-4485-a57a-06cdd55d093f', 124, 'Düz Renk', 'huseyinari', '2025-12-07 13:53:48.661', 'huseyinari', '2025-12-07 13:53:48.661');
-INSERT INTO public.product_attribute_value
-(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
-VALUES(100002, '5511cb86-f91f-4485-a57a-06cdd55d093f', 125, 'Bisiklet Yaka', 'huseyinari', '2025-12-07 13:53:48.663', 'huseyinari', '2025-12-07 13:53:48.663');
-INSERT INTO public.product_attribute_value
-(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
-VALUES(100003, '5511cb86-f91f-4485-a57a-06cdd55d093f', 126, 'Kısa Kol', 'huseyinari', '2025-12-07 13:53:48.664', 'huseyinari', '2025-12-07 13:53:48.664');
-INSERT INTO public.product_attribute_value
-(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
-VALUES(100004, '5511cb86-f91f-4485-a57a-06cdd55d093f', 127, 'Loose Fit', 'huseyinari', '2025-12-07 13:53:48.665', 'huseyinari', '2025-12-07 13:53:48.665');
+--INSERT INTO public.product_attribute_value
+--(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100000, '5511cb86-f91f-4485-a57a-06cdd55d093f', 123, '%100 Kumaş', 'huseyinari', '2025-12-07 13:53:48.655', 'huseyinari', '2025-12-07 13:53:48.655');
+--INSERT INTO public.product_attribute_value
+--(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100001, '5511cb86-f91f-4485-a57a-06cdd55d093f', 124, 'Düz Renk', 'huseyinari', '2025-12-07 13:53:48.661', 'huseyinari', '2025-12-07 13:53:48.661');
+--INSERT INTO public.product_attribute_value
+--(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100002, '5511cb86-f91f-4485-a57a-06cdd55d093f', 125, 'Bisiklet Yaka', 'huseyinari', '2025-12-07 13:53:48.663', 'huseyinari', '2025-12-07 13:53:48.663');
+--INSERT INTO public.product_attribute_value
+--(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100003, '5511cb86-f91f-4485-a57a-06cdd55d093f', 126, 'Kısa Kol', 'huseyinari', '2025-12-07 13:53:48.664', 'huseyinari', '2025-12-07 13:53:48.664');
+--INSERT INTO public.product_attribute_value
+--(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100004, '5511cb86-f91f-4485-a57a-06cdd55d093f', 127, 'Loose Fit', 'huseyinari', '2025-12-07 13:53:48.665', 'huseyinari', '2025-12-07 13:53:48.665');
 
 /* product variants */
 INSERT INTO public.product_variant
@@ -265,30 +281,30 @@ INSERT INTO public.product_variant
 VALUES(101, 'Beden', 'size', 'Ürün bedeni', 'STRING', 'TEXT_INPUT', NULL, NULL, 2, 'huseyinari', '2025-12-06 01:24:31.827', 'huseyinari', '2025-12-06 01:24:31.827');
 
 /* product variant values */
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100000, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Beyaz', 'huseyinari', '2025-12-07 13:53:48.678', 'huseyinari', '2025-12-07 13:53:48.678');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100001, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Bordo', 'huseyinari', '2025-12-07 13:53:48.680', 'huseyinari', '2025-12-07 13:53:48.680');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100002, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Yeşil', 'huseyinari', '2025-12-07 13:53:48.681', 'huseyinari', '2025-12-07 13:53:48.681');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100003, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Kırmızı', 'huseyinari', '2025-12-07 13:53:48.682', 'huseyinari', '2025-12-07 13:53:48.682');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100004, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'S', 'huseyinari', '2025-12-07 13:53:48.683', 'huseyinari', '2025-12-07 13:53:48.683');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100005, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'M', 'huseyinari', '2025-12-07 13:53:48.684', 'huseyinari', '2025-12-07 13:53:48.684');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100006, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'L', 'huseyinari', '2025-12-07 13:53:48.685', 'huseyinari', '2025-12-07 13:53:48.685');
-INSERT INTO public.product_variant_value
-(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
-VALUES(100007, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'XL', 'huseyinari', '2025-12-07 13:53:48.686', 'huseyinari', '2025-12-07 13:53:48.686');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100000, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Beyaz', 'huseyinari', '2025-12-07 13:53:48.678', 'huseyinari', '2025-12-07 13:53:48.678');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100001, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Bordo', 'huseyinari', '2025-12-07 13:53:48.680', 'huseyinari', '2025-12-07 13:53:48.680');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100002, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Yeşil', 'huseyinari', '2025-12-07 13:53:48.681', 'huseyinari', '2025-12-07 13:53:48.681');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100003, '5511cb86-f91f-4485-a57a-06cdd55d093f', 100, 'Kırmızı', 'huseyinari', '2025-12-07 13:53:48.682', 'huseyinari', '2025-12-07 13:53:48.682');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100004, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'S', 'huseyinari', '2025-12-07 13:53:48.683', 'huseyinari', '2025-12-07 13:53:48.683');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100005, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'M', 'huseyinari', '2025-12-07 13:53:48.684', 'huseyinari', '2025-12-07 13:53:48.684');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100006, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'L', 'huseyinari', '2025-12-07 13:53:48.685', 'huseyinari', '2025-12-07 13:53:48.685');
+--INSERT INTO public.product_variant_value
+--(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+--VALUES(100007, '5511cb86-f91f-4485-a57a-06cdd55d093f', 101, 'XL', 'huseyinari', '2025-12-07 13:53:48.686', 'huseyinari', '2025-12-07 13:53:48.686');
 
 /* product variant options */
 INSERT INTO public.product_variant_option
@@ -326,19 +342,199 @@ INSERT INTO public.product_variant_option
 VALUES(510, 100, 'Mor', 'huseyinari', '2025-12-06 01:21:42.021', 'huseyinari', '2025-12-06 01:21:42.021');
 INSERT INTO public.product_variant_option
 (id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
-VALUES(511, 101, 'XXL', 'huseyinari', '2025-12-06 01:24:31.830', 'huseyinari', '2025-12-06 01:24:31.830');
+VALUES(511, 100, 'Antrasit', 'huseyinari', '2025-12-06 01:21:42.021', 'huseyinari', '2025-12-06 01:21:42.021');
 INSERT INTO public.product_variant_option
 (id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
-VALUES(512, 101, 'XL', 'huseyinari', '2025-12-06 01:24:31.831', 'huseyinari', '2025-12-06 01:24:31.831');
+VALUES(512, 101, 'XXL', 'huseyinari', '2025-12-06 01:24:31.830', 'huseyinari', '2025-12-06 01:24:31.830');
 INSERT INTO public.product_variant_option
 (id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
-VALUES(513, 101, 'L', 'huseyinari', '2025-12-06 01:24:31.832', 'huseyinari', '2025-12-06 01:24:31.832');
+VALUES(513, 101, 'XL', 'huseyinari', '2025-12-06 01:24:31.831', 'huseyinari', '2025-12-06 01:24:31.831');
 INSERT INTO public.product_variant_option
 (id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
-VALUES(514, 101, 'M', 'huseyinari', '2025-12-06 01:24:31.834', 'huseyinari', '2025-12-06 01:24:31.834');
+VALUES(514, 101, 'L', 'huseyinari', '2025-12-06 01:24:31.832', 'huseyinari', '2025-12-06 01:24:31.832');
 INSERT INTO public.product_variant_option
 (id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
-VALUES(515, 101, 'S', 'huseyinari', '2025-12-06 01:24:31.835', 'huseyinari', '2025-12-06 01:24:31.835');
+VALUES(515, 101, 'M', 'huseyinari', '2025-12-06 01:24:31.834', 'huseyinari', '2025-12-06 01:24:31.834');
 INSERT INTO public.product_variant_option
 (id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
-VALUES(516, 101, 'XS', 'huseyinari', '2025-12-06 01:24:31.836', 'huseyinari', '2025-12-06 01:24:31.836');
+VALUES(516, 101, 'S', 'huseyinari', '2025-12-06 01:24:31.835', 'huseyinari', '2025-12-06 01:24:31.835');
+INSERT INTO public.product_variant_option
+(id, product_variant_id, option_value, created_by, created_date, updated_by, updated_date)
+VALUES(517, 101, 'XS', 'huseyinari', '2025-12-06 01:24:31.836', 'huseyinari', '2025-12-06 01:24:31.836');
+
+/* product attribute value */
+
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', 123, '%100 Pamuk', 'huseyinari', '2026-01-01 13:38:45.497', 'huseyinari', '2026-01-01 13:38:45.497');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(101, '0c9f4199-235d-4c20-8280-c29105737cff', 124, 'Düz', 'huseyinari', '2026-01-01 13:38:45.504', 'huseyinari', '2026-01-01 13:38:45.504');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(102, '0c9f4199-235d-4c20-8280-c29105737cff', 125, 'Kapüşonlu', 'huseyinari', '2026-01-01 13:38:45.506', 'huseyinari', '2026-01-01 13:38:45.506');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(103, '0c9f4199-235d-4c20-8280-c29105737cff', 126, 'Uzun Kol', 'huseyinari', '2026-01-01 13:38:45.507', 'huseyinari', '2026-01-01 13:38:45.507');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(104, '0c9f4199-235d-4c20-8280-c29105737cff', 127, 'Regular', 'huseyinari', '2026-01-01 13:38:45.512', 'huseyinari', '2026-01-01 13:38:45.512');
+
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(105, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 123, '%75 Pamuk, %25 Polyester', 'huseyinari', '2026-01-01 13:50:07.406', 'huseyinari', '2026-01-01 13:50:07.406');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(106, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 124, 'Düz', 'huseyinari', '2026-01-01 13:50:07.410', 'huseyinari', '2026-01-01 13:50:07.410');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(107, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 125, 'Bisiklet Yaka', 'huseyinari', '2026-01-01 13:50:07.411', 'huseyinari', '2026-01-01 13:50:07.411');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(108, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 126, 'Uzun Kol', 'huseyinari', '2026-01-01 13:50:07.412', 'huseyinari', '2026-01-01 13:50:07.412');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(109, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 127, 'Regular', 'huseyinari', '2026-01-01 13:50:07.414', 'huseyinari', '2026-01-01 13:50:07.414');
+
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(110, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 123, 'Pamuk', 'huseyinari', '2026-01-01 14:00:10.243', 'huseyinari', '2026-01-01 14:00:10.243');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(111, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 124, 'Düz', 'huseyinari', '2026-01-01 14:00:10.246', 'huseyinari', '2026-01-01 14:00:10.246');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(112, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 125, 'Dik Yaka', 'huseyinari', '2026-01-01 14:00:10.247', 'huseyinari', '2026-01-01 14:00:10.247');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(113, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 126, 'Uzun Kol', 'huseyinari', '2026-01-01 14:00:10.249', 'huseyinari', '2026-01-01 14:00:10.249');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(114, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 127, 'Regular Fit', 'huseyinari', '2026-01-01 14:00:10.250', 'huseyinari', '2026-01-01 14:00:10.250');
+
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(115, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 123, '%100 Pamuk', 'huseyinari', '2026-01-01 14:06:51.692', 'huseyinari', '2026-01-01 14:06:51.692');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(116, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 124, 'Düz', 'huseyinari', '2026-01-01 14:06:51.697', 'huseyinari', '2026-01-01 14:06:51.697');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(117, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 125, 'Bisiklet Yaka', 'huseyinari', '2026-01-01 14:06:51.699', 'huseyinari', '2026-01-01 14:06:51.699');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(118, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 126, 'Kısa Kol', 'huseyinari', '2026-01-01 14:06:51.700', 'huseyinari', '2026-01-01 14:06:51.700');
+INSERT INTO public.product_attribute_value
+(id, product_id, product_attribute_id, attribute_value, created_by, created_date, updated_by, updated_date)
+VALUES(119, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 127, 'Oversize', 'huseyinari', '2026-01-01 14:06:51.702', 'huseyinari', '2026-01-01 14:06:51.702');
+
+/* product variant value */
+
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', 100, 'Turuncu', 'huseyinari', '2026-01-01 13:38:45.536', 'huseyinari', '2026-01-01 13:38:45.536');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(101, '0c9f4199-235d-4c20-8280-c29105737cff', 100, 'Yeşil', 'huseyinari', '2026-01-01 13:38:45.538', 'huseyinari', '2026-01-01 13:38:45.538');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(102, '0c9f4199-235d-4c20-8280-c29105737cff', 100, 'Antrasit', 'huseyinari', '2026-01-01 13:38:45.539', 'huseyinari', '2026-01-01 13:38:45.539');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(103, '0c9f4199-235d-4c20-8280-c29105737cff', 101, 'S', 'huseyinari', '2026-01-01 13:38:45.540', 'huseyinari', '2026-01-01 13:38:45.540');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(104, '0c9f4199-235d-4c20-8280-c29105737cff', 101, 'M', 'huseyinari', '2026-01-01 13:38:45.541', 'huseyinari', '2026-01-01 13:38:45.541');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(105, '0c9f4199-235d-4c20-8280-c29105737cff', 101, 'L', 'huseyinari', '2026-01-01 13:38:45.542', 'huseyinari', '2026-01-01 13:38:45.542');
+
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(106, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 100, 'Lacivert', 'huseyinari', '2026-01-01 13:50:07.422', 'huseyinari', '2026-01-01 13:50:07.422');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(107, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 100, 'Bordo', 'huseyinari', '2026-01-01 13:50:07.424', 'huseyinari', '2026-01-01 13:50:07.424');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(108, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 101, 'M', 'huseyinari', '2026-01-01 13:38:45.541', 'huseyinari', '2026-01-01 13:38:45.541');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(109, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', 101, 'L', 'huseyinari', '2026-01-01 13:38:45.542', 'huseyinari', '2026-01-01 13:38:45.542');
+
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(110, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 100, 'Yeşil', 'huseyinari', '2026-01-01 14:00:10.268', 'huseyinari', '2026-01-01 14:00:10.268');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(111, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 100, 'Mavi', 'huseyinari', '2026-01-01 14:00:10.270', 'huseyinari', '2026-01-01 14:00:10.270');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(112, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 100, 'Krem', 'huseyinari', '2026-01-01 14:00:10.271', 'huseyinari', '2026-01-01 14:00:10.271');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(113, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 101, 'XS', 'huseyinari', '2026-01-01 14:00:10.274', 'huseyinari', '2026-01-01 14:00:10.274');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(114, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 101, 'M', 'huseyinari', '2026-01-01 14:00:10.276', 'huseyinari', '2026-01-01 14:00:10.276');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(115, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 101, 'L', 'huseyinari', '2026-01-01 14:00:10.280', 'huseyinari', '2026-01-01 14:00:10.280');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(116, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', 101, 'XL', 'huseyinari', '2026-01-01 14:00:10.282', 'huseyinari', '2026-01-01 14:00:10.282');
+
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(117, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 100, 'Beyaz', 'huseyinari', '2026-01-01 14:06:51.708', 'huseyinari', '2026-01-01 14:06:51.708');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(118, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 100, 'Bordo', 'huseyinari', '2026-01-01 14:06:51.709', 'huseyinari', '2026-01-01 14:06:51.709');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(119, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 100, 'Yeşil', 'huseyinari', '2026-01-01 14:06:51.711', 'huseyinari', '2026-01-01 14:06:51.711');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(120, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 100, 'Siyah', 'huseyinari', '2026-01-01 14:06:51.713', 'huseyinari', '2026-01-01 14:06:51.713');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(121, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 101, 'XS', 'huseyinari', '2026-01-01 14:06:51.714', 'huseyinari', '2026-01-01 14:06:51.714');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(122, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 101, 'S', 'huseyinari', '2026-01-01 14:06:51.715', 'huseyinari', '2026-01-01 14:06:51.715');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(123, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 101, 'M', 'huseyinari', '2026-01-01 14:06:51.716', 'huseyinari', '2026-01-01 14:06:51.716');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(124, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 101, 'L', 'huseyinari', '2026-01-01 14:06:51.718', 'huseyinari', '2026-01-01 14:06:51.718');
+INSERT INTO public.product_variant_value
+(id, product_id, product_variant_id, variant_value, created_by, created_date, updated_by, updated_date)
+VALUES(125, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 101, 'XL', 'huseyinari', '2026-01-01 14:06:51.719', 'huseyinari', '2026-01-01 14:06:51.719');
+
+/* product variant index */
+
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', '{"armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Kapüşonlu", "fabricContent": "%100 Pamuk"}'::jsonb, 'altınyıldız_classics_erkek_sweatshirt', 0, 483.99, 0.00, 483.99, 1, 'huseyinari', '2026-01-01 13:38:45.597', 'huseyinari', '2026-01-01 13:38:45.597');
+
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(101, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', '{"armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%75 Pamuk, %25 Polyester"}'::jsonb, 'grimelange_travıs_erkek_sweatshirt', 0, 477.35, 0.00, 477.35, 1, 'huseyinari', '2026-01-01 13:50:07.446', 'huseyinari', '2026-01-01 13:50:07.446');
+
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(102, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', '{"armType": "Uzun Kol", "cutType": "Regular Fit", "pattern": "Düz", "collarType": "Dik Yaka", "fabricContent": "Pamuk"}'::jsonb, 'tudors_unisex_relax_fit_erkek_sweatshirt', 0, 549.95, 0.00, 549.95, 1, 'huseyinari', '2026-01-01 14:00:10.307', 'huseyinari', '2026-01-01 14:00:10.307');
+
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(103, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "XS", "color": "Beyaz", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-beyaz-XS', 10, 500.00, 0.00, 500.00, 1, 'huseyinari', '2026-01-01 14:14:48.247', 'huseyinari', '2026-01-01 14:14:48.247');
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(104, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "L", "color": "Beyaz", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-beyaz-L', 10, 500.00, 0.00, 500.00, 2, 'huseyinari', '2026-01-01 14:14:48.257', 'huseyinari', '2026-01-01 14:14:48.257');
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(105, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "M", "color": "Yeşil", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-yesil-M', 10, 500.00, 0.00, 500.00, 3, 'huseyinari', '2026-01-01 14:14:48.258', 'huseyinari', '2026-01-01 14:14:48.258');
+INSERT INTO public.product_variant_index
+(id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
+VALUES(106, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "XL", "color": "Siyah", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-siyah-XL', 10, 500.00, 0.00, 500.00, 4, 'huseyinari', '2026-01-01 14:14:48.259', 'huseyinari', '2026-01-01 14:14:48.259');
