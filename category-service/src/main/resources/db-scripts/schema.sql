@@ -67,10 +67,10 @@ CREATE TABLE category_products_filter_options (
     id BIGINT,
     category_id BIGINT NOT NULL,
     name VARCHAR(255) NOT NULL,
-    query_name VARCHAR(255) NOT NULL,
-    filter_type VARCHAR(50) NOT NULL DEFAULT 'ALL_OPTIONS',
+    query_name VARCHAR(255) NOT NULL UNIQUE,
+    filter_type VARCHAR(50) NOT NULL DEFAULT 'ALL_OPTIONS',     --- ALL_OPTIONS / RANGE
     ui_component VARCHAR(50) NOT NULL,
-    max_filter_option INTEGER,
+    max_filter_option INTEGER,  --- En fazla kaç adet seçenek olabilir ?
     --
     created_by VARCHAR(100),
     created_date TIMESTAMP NOT NULL,
