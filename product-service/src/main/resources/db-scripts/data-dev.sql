@@ -516,25 +516,25 @@ VALUES(125, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 101, 'XL', 'huseyinari', '20
 
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', '{"armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Kapüşonlu", "fabricContent": "%100 Pamuk"}'::jsonb, 'altınyıldız_classics_erkek_sweatshirt', 0, 483.99, 0.00, 483.99, 1, 'huseyinari', '2026-01-01 13:38:45.597', 'huseyinari', '2026-01-01 13:38:45.597');
+VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', '{"armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Kapüşonlu", "fabricContent": "%100 Pamuk", "price": 483.99}'::jsonb, 'altınyıldız_classics_erkek_sweatshirt', 0, 483.99, 0.00, 483.99, 1, 'huseyinari', '2026-01-01 13:38:45.597', 'huseyinari', '2026-01-01 13:38:45.597');
 
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(101, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', '{"armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%75 Pamuk, %25 Polyester"}'::jsonb, 'grimelange_travıs_erkek_sweatshirt', 0, 477.35, 0.00, 477.35, 1, 'huseyinari', '2026-01-01 13:50:07.446', 'huseyinari', '2026-01-01 13:50:07.446');
+VALUES(101, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', '{"armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%75 Pamuk, %25 Polyester", "price": 477.35}'::jsonb, 'grimelange_travıs_erkek_sweatshirt', 0, 477.35, 0.00, 477.35, 1, 'huseyinari', '2026-01-01 13:50:07.446', 'huseyinari', '2026-01-01 13:50:07.446');
 
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(102, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', '{"armType": "Uzun Kol", "cutType": "Regular Fit", "pattern": "Düz", "collarType": "Dik Yaka", "fabricContent": "Pamuk"}'::jsonb, 'tudors_unisex_relax_fit_erkek_sweatshirt', 0, 549.95, 0.00, 549.95, 1, 'huseyinari', '2026-01-01 14:00:10.307', 'huseyinari', '2026-01-01 14:00:10.307');
+VALUES(102, 'eb8ac00d-d1df-4898-b764-0c814f40cdfb', '{"armType": "Uzun Kol", "cutType": "Regular Fit", "pattern": "Düz", "collarType": "Dik Yaka", "fabricContent": "Pamuk", "price": 549.95}'::jsonb, 'tudors_unisex_relax_fit_erkek_sweatshirt', 0, 549.95, 0.00, 549.95, 1, 'huseyinari', '2026-01-01 14:00:10.307', 'huseyinari', '2026-01-01 14:00:10.307');
 
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(103, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "XS", "color": "Beyaz", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-beyaz-XS', 10, 500.00, 0.00, 500.00, 1, 'huseyinari', '2026-01-01 14:14:48.247', 'huseyinari', '2026-01-01 14:14:48.247');
+VALUES(103, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "XS", "color": "Beyaz", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk", "price": 500.00}'::jsonb, 'basic-tshirt-beyaz-XS', 10, 500.00, 0.00, 500.00, 1, 'huseyinari', '2026-01-01 14:14:48.247', 'huseyinari', '2026-01-01 14:14:48.247');
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(104, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "L", "color": "Beyaz", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-beyaz-L', 10, 500.00, 0.00, 500.00, 2, 'huseyinari', '2026-01-01 14:14:48.257', 'huseyinari', '2026-01-01 14:14:48.257');
+VALUES(104, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "L", "color": "Beyaz", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk", "price": 500.00}'::jsonb, 'basic-tshirt-beyaz-L', 10, 500.00, 0.00, 500.00, 2, 'huseyinari', '2026-01-01 14:14:48.257', 'huseyinari', '2026-01-01 14:14:48.257');
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(105, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "M", "color": "Yeşil", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-yesil-M', 10, 500.00, 0.00, 500.00, 3, 'huseyinari', '2026-01-01 14:14:48.258', 'huseyinari', '2026-01-01 14:14:48.258');
+VALUES(105, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "M", "color": "Yeşil", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk", "price": 500.00}'::jsonb, 'basic-tshirt-yesil-M', 10, 500.00, 0.00, 500.00, 3, 'huseyinari', '2026-01-01 14:14:48.258', 'huseyinari', '2026-01-01 14:14:48.258');
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(106, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "XL", "color": "Siyah", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk"}'::jsonb, 'basic-tshirt-siyah-XL', 10, 500.00, 0.00, 500.00, 4, 'huseyinari', '2026-01-01 14:14:48.259', 'huseyinari', '2026-01-01 14:14:48.259');
+VALUES(106, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', '{"size": "XL", "color": "Siyah", "armType": "Kısa Kol", "cutType": "Oversize", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%100 Pamuk", "price": 500.00}'::jsonb, 'basic-tshirt-siyah-XL', 10, 500.00, 0.00, 500.00, 4, 'huseyinari', '2026-01-01 14:14:48.259', 'huseyinari', '2026-01-01 14:14:48.259');

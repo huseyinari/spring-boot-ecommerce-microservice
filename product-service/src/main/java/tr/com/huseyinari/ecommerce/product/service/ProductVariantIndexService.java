@@ -3,6 +3,7 @@ package tr.com.huseyinari.ecommerce.product.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductVariantIndex;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductVariantIndexMapper;
+import tr.com.huseyinari.ecommerce.product.projection.ProductVariantIndexGroupsByQueryName;
 import tr.com.huseyinari.ecommerce.product.repository.ProductVariantIndexRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantIndexCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.*;
@@ -40,6 +42,20 @@ public class ProductVariantIndexService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Transactional(readOnly = true)
+    public List<ProductVariantIndexGroupSearchResponse> findProductVariantIndexGroupsByQueryNameList(@NotEmpty(message = "Sorgu adı listesi boş olamaz.") List<String> queryNameList) {
+        List<ProductVariantIndexGroupsByQueryName> productVariantIndexList = this.repository.findProductVariantIndexGroupsByQueryNameList(queryNameList);
+        return productVariantIndexList.stream()
+                .map(productVariantIndexGroupsByQueryName ->
+                     new ProductVariantIndexGroupSearchResponse(
+                        productVariantIndexGroupsByQueryName.getQueryName(),
+                        productVariantIndexGroupsByQueryName.getQueryValue(),
+                        productVariantIndexGroupsByQueryName.getTotal()
+                    )
+                )
+                .toList();
+    }
 
     @Transactional
     public ProductVariantIndexCreateResponse initProduct(ProductCreateResponse product) {
@@ -164,6 +180,8 @@ public class ProductVariantIndexService {
             }
 
             productVariantIndex.setDiscountedPrice(productVariantIndex.getPrice().subtract(productVariantIndex.getDiscount()));
+
+            productVariantIndex.getVariantValueIndex().put("price", productVariantIndex.getDiscountedPrice());
 
             productVariantIndex = this.repository.save(productVariantIndex);
             responseList.add(this.mapper.toCreateResponse(productVariantIndex));

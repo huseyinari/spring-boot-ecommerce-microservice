@@ -12,12 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantIndexCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantIndexCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductVariantIndexGroupSearchResponse;
 import tr.com.huseyinari.ecommerce.product.service.ProductVariantIndexService;
 
 import java.util.List;
@@ -28,6 +26,26 @@ import java.util.List;
 @Tag(name = "Product Variant Index Controller", description = "Ürün Varyant Kombinasyonu Yönetimi")
 public class ProductVariantIndexController {
     private final ProductVariantIndexService service;
+
+    @Operation(
+        summary = "Ürün Varyant Kombinasyonlarını Sorgu Adına Göre Gruplar",
+        description = "Gönderilen sorgu adı listesini içerek ürün varyant kombinasyonlarını gruplayarak, değerlerini ve total ürün sayısını döndürür.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ürün varyant kombinasyonları gruplandı ve listelendi.",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                array = @ArraySchema(schema = @Schema(implementation = ProductVariantIndexGroupSearchResponse.class))
+            )
+        )
+    })
+    @GetMapping("/group")
+    public List<ProductVariantIndexGroupSearchResponse> findProductVariantIndexGroupsByQueryNameList(@RequestParam List<String> queryNameList) {
+        return this.service.findProductVariantIndexGroupsByQueryNameList(queryNameList);
+    }
 
     @Operation(
         summary = "Ürün Varyant Kombinasyonları oluştur",
