@@ -26,16 +26,45 @@ public interface ProductVariantIndexRepository extends BaseJpaQueryDslRepository
                 
                 --- Yalnızca 1 queryName yerine bir queryName listesine göre gruplamak için aşağıdaki sorguyu (lateral jsonb_each_text) kullandım ---
                 */
+                
+                WITH product_key_value_totals AS (
+                    SELECT DISTINCT
+                        p.id        AS product_id,
+                        e.key       AS queryName,
+                        e.value     AS queryValue
+                    FROM product_variant_index pvi
+                    INNER JOIN products p ON pvi.product_id = p.id
+                    CROSS JOIN LATERAL jsonb_each_text(pvi.variant_value_index) e 
+                    WHERE
+                        e.key IN (:queryNameList)
+                        AND (p.category_id IS NULL OR p.category_id = :categoryId)
+                )
+                
+                SELECT
+                    queryName,
+                    queryValue,
+                    COUNT(product_id) AS total
+                FROM product_key_value_totals
+                GROUP BY queryName, queryValue
+                ORDER BY queryName ASC, total DESC
+            
+            /*
                 SELECT
                     e.key   AS queryName,
                     e.value AS queryValue,
-                    COUNT(*) AS total
+                    COUNT(p.id) AS total
                 FROM product_variant_index pvi
                 INNER JOIN products p ON pvi.product_id = p.id
                 CROSS JOIN LATERAL jsonb_each_text(pvi.variant_value_index) e
-                WHERE e.key IN (:queryNameList)
+                WHERE 
+                    e.key IN (:queryNameList)
+                    AND (p.category_id IS NULL OR p.category_id = :categoryId)        
                 GROUP BY e.key, e.value
-                ORDER BY total DESC;
+                ORDER BY queryName ASC, total DESC;
+            */
             """, nativeQuery = true)
-    List<ProductVariantIndexGroupsByQueryName> findProductVariantIndexGroupsByQueryNameList(@Param("queryNameList") List<String> queryNameList);
+    List<ProductVariantIndexGroupsByQueryName> findProductVariantIndexGroupsByQueryNameList(
+            @Param("queryNameList") List<String> queryNameList,
+            @Param("categoryId") Long categoryId
+    );
 }

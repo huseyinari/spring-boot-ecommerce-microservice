@@ -55,11 +55,11 @@ public class ProductService {
     @PersistenceContext
     private final EntityManager entityManager;
 
-    @Transactional(readOnly = true)
-    public ProductSearchPageableResponse search(ProductSearchParameters params, Pageable pageable) {
-        Page<Product> result = this.repository.findAll(pageable);
-        return this.mapper.toSearchPageableResponse(result);
-    }
+//    @Transactional(readOnly = true)
+//    public ProductSearchPageableResponse search(ProductSearchParameters params, Pageable pageable) {
+//        Page<Product> result = this.repository.findAll(pageable);
+//        return this.mapper.toSearchPageableResponse(result);
+//    }
 
     @Transactional(readOnly = true)
     public ProductSearchResponse findById(String id) {

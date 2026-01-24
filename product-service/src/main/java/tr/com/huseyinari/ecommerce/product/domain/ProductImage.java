@@ -20,12 +20,16 @@ public class ProductImage extends AbstractAuditableEntity {
     @SequenceGenerator(name = "product_image_id_sequence", sequenceName = "product_image_id_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "storage_object_id")
+    @Column(name = "storage_object_id", nullable = false)
     private Long storageObjectId;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "product_variant_index_id", referencedColumnName = "id")
+    private ProductVariantIndex productVariantIndex;
 
     // ------
 

@@ -9,13 +9,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantIndexCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantIndexCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantIndexGroupSearchResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductVariantIndexSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.service.ProductVariantIndexService;
 
 import java.util.List;
@@ -26,6 +30,27 @@ import java.util.List;
 @Tag(name = "Product Variant Index Controller", description = "Ürün Varyant Kombinasyonu Yönetimi")
 public class ProductVariantIndexController {
     private final ProductVariantIndexService service;
+
+    @Operation(
+        summary = "Ürün ara",
+        description = "Attribute veya Varyant değerleriyle eşleşen ürünleri döndürür.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ürünler listelendi.",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                array = @ArraySchema(schema = @Schema(implementation = ProductVariantIndexSearchPageableResponse.class))
+            )
+        )
+    })
+    @PostMapping("/search")
+    public ResponseEntity<ProductVariantIndexSearchPageableResponse> searchProducts(@RequestBody ProductSearchParameters params, @ParameterObject Pageable pageable) {
+        ProductVariantIndexSearchPageableResponse response = this.service.searchProduct(params, pageable);
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(
         summary = "Ürün Varyant Kombinasyonlarını Sorgu Adına Göre Gruplar",
@@ -43,8 +68,12 @@ public class ProductVariantIndexController {
         )
     })
     @GetMapping("/group")
-    public List<ProductVariantIndexGroupSearchResponse> findProductVariantIndexGroupsByQueryNameList(@RequestParam List<String> queryNameList) {
-        return this.service.findProductVariantIndexGroupsByQueryNameList(queryNameList);
+    public ResponseEntity<List<ProductVariantIndexGroupSearchResponse>> findProductVariantIndexGroupsByQueryNameList(
+            @RequestParam List<String> queryNameList,
+            @RequestParam(required = false) Long categoryId
+    ) {
+        List<ProductVariantIndexGroupSearchResponse> response = this.service.findProductVariantIndexGroupsByQueryNameList(queryNameList, categoryId);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(

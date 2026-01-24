@@ -56,3 +56,19 @@ VALUES(nextval('storage_objects_id_sequence'), 'dab4d8af-f3a7-4467-ac8b-bfc9d297
 INSERT INTO public.storage_objects
 (id, file_name, storage_name, file_size, file_extension, is_private_access, owner_id, storage_type, created_by, created_date, updated_by, updated_date)
 VALUES(nextval('storage_objects_id_sequence'), '6915ce71-4934-4c1c-86c4-2e9afacb9c72.jpg', 'ecommerce-product-images-bucket', 333541, 'jpg', false, NULL, 'S3', 'system', '2025-07-27', NULL, NULL);
+
+INSERT INTO public.storage_objects
+(id, file_name, storage_name, file_size, file_extension, is_private_access, owner_id, storage_type, created_by, created_date, updated_by, updated_date)
+VALUES(nextval('storage_objects_id_sequence'), 'cd3e2e0e-c43e-4636-a9a8-5e387373eee7.webp', 'ecommerce-product-images-bucket', 67290, 'webp', false, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'S3', 'huseyinari', '2026-01-24 15:15:44.044', 'huseyinari', '2026-01-24 15:15:44.044');
+
+INSERT INTO public.storage_objects
+(id, file_name, storage_name, file_size, file_extension, is_private_access, owner_id, storage_type, created_by, created_date, updated_by, updated_date)
+VALUES(nextval('storage_objects_id_sequence'), 'fbca6339-e1ce-4fc4-ad02-f41bbace1435.jpg', 'ecommerce-product-images-bucket', 149537, 'jpg', false, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'S3', 'huseyinari', '2026-01-24 15:17:33.469', 'huseyinari', '2026-01-24 15:17:33.469');
+
+INSERT INTO public.storage_objects
+(id, file_name, storage_name, file_size, file_extension, is_private_access, owner_id, storage_type, created_by, created_date, updated_by, updated_date)
+VALUES(nextval('storage_objects_id_sequence'), '12a0548c-3d8d-4ee5-81ec-7a8f4a5bed37.jpg', 'ecommerce-product-images-bucket', 68812, 'jpg', false, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'S3', 'huseyinari', '2026-01-24 15:18:32.640', 'huseyinari', '2026-01-24 15:18:32.640');
+
+INSERT INTO public.storage_objects
+(id, file_name, storage_name, file_size, file_extension, is_private_access, owner_id, storage_type, created_by, created_date, updated_by, updated_date)
+VALUES(nextval('storage_objects_id_sequence'), '927f3d27-45f0-476d-a0c2-13e0ea44999d.webp', 'ecommerce-product-images-bucket', 142620, 'webp', false, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'S3', 'huseyinari', '2026-01-24 15:19:04.329', 'huseyinari', '2026-01-24 15:19:04.329');

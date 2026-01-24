@@ -77,7 +77,7 @@ INSERT INTO public.category_products_filter_options
 VALUES(2, 100001, 'Desen', 'pattern', 'ALL_OPTIONS', 'CHECKBOX', 5, 'huseyinari', '2026-01-01 00:00:00.000', NULL, NULL);
 INSERT INTO public.category_products_filter_options
 (id, category_id, "name", query_name, filter_type, ui_component, max_filter_option, created_by, created_date, updated_by, updated_date)
-VALUES(3, 100001, 'Kesim Tarzı', 'cutType', 'ALL_OPTIONS', 'CHECKBOX', 2, 'huseyinari', '2026-01-01 00:00:00.000', NULL, NULL);
+VALUES(3, 100001, 'Kesim Tarzı', 'cutType', 'ALL_OPTIONS', 'CHECKBOX', 3, 'huseyinari', '2026-01-01 00:00:00.000', NULL, NULL);
 INSERT INTO public.category_products_filter_options
 (id, category_id, "name", query_name, filter_type, ui_component, max_filter_option, created_by, created_date, updated_by, updated_date)
 VALUES(4, 100001, 'Yaka Stili', 'collarType', 'ALL_OPTIONS', 'CHECKBOX', 3, 'huseyinari', '2026-01-01 00:00:00.000', NULL, NULL);

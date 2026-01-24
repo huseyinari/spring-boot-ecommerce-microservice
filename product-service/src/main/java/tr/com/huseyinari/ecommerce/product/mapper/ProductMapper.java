@@ -1,18 +1,15 @@
 package tr.com.huseyinari.ecommerce.product.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.product.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductImage;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.utils.StringUtils;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -91,26 +88,26 @@ public class ProductMapper {
         return response;
     }
 
-    public ProductSearchPageableResponse toSearchPageableResponse(Page<Product> pageResult) {
-        if (pageResult == null) {
-            return null;
-        }
-
-        List<ProductSearchResponse> searchResponseList = pageResult
-                .getContent()
-                .stream()
-                .map(this::toSearchResponse)
-                .toList();
-
-        ProductSearchPageableResponse response = new ProductSearchPageableResponse();
-        response.setItems(searchResponseList);
-        response.setPage(pageResult.getNumber());
-        response.setSize(pageResult.getSize());
-        response.setTotalElements(pageResult.getTotalElements());
-        response.setTotalPages(pageResult.getTotalPages());
-        response.setFirst(pageResult.isFirst());
-        response.setLast(pageResult.isLast());
-
-        return response;
-    }
+//    public ProductSearchPageableResponse toSearchPageableResponse(Page<Product> pageResult) {
+//        if (pageResult == null) {
+//            return null;
+//        }
+//
+//        List<ProductSearchResponse> searchResponseList = pageResult
+//                .getContent()
+//                .stream()
+//                .map(this::toSearchResponse)
+//                .toList();
+//
+//        ProductSearchPageableResponse response = new ProductSearchPageableResponse();
+//        response.setItems(searchResponseList);
+//        response.setPage(pageResult.getNumber());
+//        response.setSize(pageResult.getSize());
+//        response.setTotalElements(pageResult.getTotalElements());
+//        response.setTotalPages(pageResult.getTotalPages());
+//        response.setFirst(pageResult.isFirst());
+//        response.setLast(pageResult.isLast());
+//
+//        return response;
+//    }
 }

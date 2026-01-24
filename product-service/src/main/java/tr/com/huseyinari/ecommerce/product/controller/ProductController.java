@@ -9,17 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
-import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductMostInspectedTodayResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.service.ProductService;
 
@@ -32,26 +28,26 @@ import java.util.List;
 public class ProductController {
     private final ProductService service;
 
-    @Operation(
-        summary = "Ürün ara",
-        description = "Ürünleri kriterlere göre arar ve sayfalama yaparak bilgileri döner."
-//        security = @SecurityRequirement(name = "bearerAuth")
-    )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Arama kriterlerine göre ürünler bulundu.",
-            content = @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = ProductSearchPageableResponse.class)
-            )
-        )
-    })
-    @GetMapping("/search")
-    public ResponseEntity<ProductSearchPageableResponse> search(ProductSearchParameters params, @ParameterObject Pageable pageable) {
-        ProductSearchPageableResponse response = this.service.search(params, pageable);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @Operation(
+//        summary = "Ürün ara",
+//        description = "Ürünleri kriterlere göre arar ve sayfalama yaparak bilgileri döner."
+////        security = @SecurityRequirement(name = "bearerAuth")
+//    )
+//    @ApiResponses({
+//        @ApiResponse(
+//            responseCode = "200",
+//            description = "Arama kriterlerine göre ürünler bulundu.",
+//            content = @Content(
+//                mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                schema = @Schema(implementation = ProductSearchPageableResponse.class)
+//            )
+//        )
+//    })
+//    @GetMapping("/search")
+//    public ResponseEntity<ProductSearchPageableResponse> search(ProductSearchParameters params, @ParameterObject Pageable pageable) {
+//        ProductSearchPageableResponse response = this.service.search(params, pageable);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     @Operation(
         summary = "Tüm ürünleri getir",

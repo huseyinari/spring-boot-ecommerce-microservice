@@ -1,5 +1,13 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
@@ -9,19 +17,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import tr.com.huseyinari.ecommerce.product.domain.Product;
-import tr.com.huseyinari.ecommerce.product.domain.ProductVariantIndex;
+import tr.com.huseyinari.ecommerce.product.domain.*;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductVariantIndexMapper;
 import tr.com.huseyinari.ecommerce.product.projection.ProductVariantIndexGroupsByQueryName;
 import tr.com.huseyinari.ecommerce.product.repository.ProductVariantIndexRepository;
+import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantIndexCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.*;
 import tr.com.huseyinari.utils.CollectionUtils;
 import tr.com.huseyinari.utils.DateUtils;
+import tr.com.huseyinari.utils.NumberUtils;
+import tr.com.huseyinari.utils.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -37,6 +50,7 @@ public class ProductVariantIndexService {
     private final ProductVariantIndexMapper mapper;
     private final ProductVariantValueService productVariantValueService;
     private final ProductAttributeValueService productAttributeValueService;
+
     @Autowired
     @Lazy private ProductService productService;
 
@@ -44,8 +58,129 @@ public class ProductVariantIndexService {
     private EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public List<ProductVariantIndexGroupSearchResponse> findProductVariantIndexGroupsByQueryNameList(@NotEmpty(message = "Sorgu adı listesi boş olamaz.") List<String> queryNameList) {
-        List<ProductVariantIndexGroupsByQueryName> productVariantIndexList = this.repository.findProductVariantIndexGroupsByQueryNameList(queryNameList);
+    public ProductVariantIndexSearchPageableResponse searchProduct(ProductSearchParameters productSearchParameters, Pageable pageable) {
+        QProductVariantIndex qProductVariantIndex = QProductVariantIndex.productVariantIndex;
+        QProduct qProduct = QProduct.product;
+        QProductImage qProductImage = QProductImage.productImage;
+
+        BooleanBuilder where = new BooleanBuilder();
+        where.and(qProductVariantIndex.queryOrder.eq(1));   // Yalnızca ilk sırada gösterilecek variant index'leri getir.
+
+        if (StringUtils.isNotBlank(productSearchParameters.getName())) {
+            where.and(qProductVariantIndex.product.name.likeIgnoreCase("%" + productSearchParameters.getName() + "%"));
+        }
+        if (NumberUtils.greaterThen(productSearchParameters.getCategoryId(), 0L)) {
+            where.and(qProductVariantIndex.product.categoryId.eq(productSearchParameters.getCategoryId()));
+        }
+        if (productSearchParameters.getParams() != null) {
+            for (Map.Entry<String, List<ProductSearchParameters.ProductSearchCompareValue>> entry : productSearchParameters.getParams().entrySet()) {
+                String key = entry.getKey();
+                List<ProductSearchParameters.ProductSearchCompareValue> valueList = entry.getValue();
+
+                BooleanBuilder keyConditions = new BooleanBuilder();
+
+                for (ProductSearchParameters.ProductSearchCompareValue compareValue : valueList) {
+                    if (StringUtils.isNotBlank(key) && compareValue != null) {
+                        BooleanBuilder valueCondition = new BooleanBuilder();
+
+                        if (NumberUtils.greaterThen(compareValue.getMin(), BigDecimal.ZERO) && NumberUtils.greaterThen(compareValue.getMax(), BigDecimal.ZERO)) {
+                            NumberTemplate<BigDecimal> numberTemplate =
+                                    Expressions.numberTemplate(
+                                            BigDecimal.class,
+                                            "cast(function('jsonb_extract_path_text', {0}, {1}) as double)",
+                                            qProductVariantIndex.variantValueIndex,
+                                            Expressions.constant(key) // "price"
+                                    );
+
+                            valueCondition.or(
+                                numberTemplate.between(
+                                    compareValue.getMin().doubleValue(),
+                                    compareValue.getMax().doubleValue()
+                                )
+                            );
+                        }
+
+                        if (compareValue.getValue() != null) {
+                            StringTemplate stringTemplate = Expressions.stringTemplate(
+                                    "jsonb_extract_path_text({0}, {1})",
+                                    qProductVariantIndex.variantValueIndex,
+                                    key
+                            );
+
+                            valueCondition.or(stringTemplate.eq(compareValue.getValue().toString()));
+                        }
+
+                        if (valueCondition.hasValue()) {
+                            keyConditions.or(valueCondition);
+                        }
+                    }
+                }
+
+                if (keyConditions.hasValue()) {
+                    where.and(keyConditions);
+                }
+            }
+        }
+
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(this.entityManager);
+
+        Long total = jpaQueryFactory
+                .select(qProductVariantIndex.count())
+                .from(qProductVariantIndex)
+                .where(where)
+                .fetchOne();
+
+        OrderSpecifier[] orderList = this.getOrderSpecifier(pageable);
+
+        List<ProductVariantIndex> productVariantIndexList = jpaQueryFactory
+                .selectFrom(qProductVariantIndex)
+                .innerJoin(qProduct).on(qProductVariantIndex.product.id.eq(qProduct.id))
+                .where(where)
+                .orderBy(orderList)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // Ürünlerin resimlerini getir
+        JPAQueryFactory productImageQuery = new JPAQueryFactory(this.entityManager);
+
+        Set<String> productIdList = productVariantIndexList
+                .stream()
+                .map(productVariantIndex -> productVariantIndex.getProduct().getId())
+                .collect(Collectors.toSet());
+
+        List<ProductImage> productImages = productImageQuery
+                .select(qProductImage)
+                .from(qProductImage)
+                .innerJoin(qProduct).on(qProductImage.product.id.eq(qProduct.id))
+                .where(qProductImage.product.id.in(productIdList))
+                .fetch();
+
+        productVariantIndexList = productVariantIndexList
+                .stream()
+                .map(productVariantIndex ->  {
+                    // Ürün varyantı farketmeksizin o ürüne ait bütün fotoğrafları client'a dön.
+                    List<ProductImage> images = productImages
+                            .stream()
+                            .filter(productImage -> productImage.getProduct().getId().equals(productVariantIndex.getProduct().getId()))
+                            .toList();
+
+                    productVariantIndex.setImages(images);
+
+                    return productVariantIndex;
+                })
+                .toList();
+
+        Page<ProductVariantIndex> pageResult = new PageImpl<>(productVariantIndexList, pageable, total != null ? total : 0L);
+        return this.mapper.toSearchPageableResponse(pageResult);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductVariantIndexGroupSearchResponse> findProductVariantIndexGroupsByQueryNameList(
+            @NotEmpty(message = "Sorgu adı listesi boş olamaz.") List<String> queryNameList,
+            Long categoryId
+    ) {
+        List<ProductVariantIndexGroupsByQueryName> productVariantIndexList = this.repository.findProductVariantIndexGroupsByQueryNameList(queryNameList, categoryId);
         return productVariantIndexList.stream()
                 .map(productVariantIndexGroupsByQueryName ->
                      new ProductVariantIndexGroupSearchResponse(
@@ -82,6 +217,8 @@ public class ProductVariantIndexService {
 
             indexJson.put(key, value);
         }
+        indexJson.put("price", product.getDiscountedPrice());
+
         variantIndex.setVariantValueIndex(indexJson);
 
         Product productEntity = new Product();
@@ -221,5 +358,31 @@ public class ProductVariantIndexService {
                 return null;
             }
         }
+    }
+
+    private OrderSpecifier<?>[] getOrderSpecifier(Pageable pageable) {
+        QProductVariantIndex qProductVariantIndex = QProductVariantIndex.productVariantIndex;
+
+        if (pageable.getSort().isEmpty()) {
+            return new OrderSpecifier[]{new OrderSpecifier(Order.ASC, qProductVariantIndex.product.name)};
+        }
+
+        return pageable.getSort().stream().map(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+
+            switch (property) {
+                case "productName":
+                    return new OrderSpecifier(direction, qProductVariantIndex.product.name);
+                case "price":
+                    return new OrderSpecifier(direction, qProductVariantIndex.discountedPrice);
+                case "date":
+                    return new OrderSpecifier(direction, qProductVariantIndex.createdDate);
+                default:
+                    // Gönderilen property'ye göre uygun path'i belirleme
+                    PathBuilder<ProductVariantIndex> pathBuilder = new PathBuilder<>(ProductVariantIndex.class, "productVariantIndex");
+                    return new OrderSpecifier(direction, pathBuilder.get(property));
+            }
+        }).toArray(OrderSpecifier[]::new);
     }
 }

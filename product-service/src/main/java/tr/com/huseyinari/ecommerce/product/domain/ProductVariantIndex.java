@@ -7,6 +7,7 @@ import org.hibernate.type.SqlTypes;
 import tr.com.huseyinari.springdatajpa.domain.AbstractAuditableEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @Entity(name = "ProductVariantIndex")
@@ -47,4 +48,7 @@ public class ProductVariantIndex extends AbstractAuditableEntity {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
+
+    @OneToMany(mappedBy = "productVariantIndex")
+    private List<ProductImage> images;
 }

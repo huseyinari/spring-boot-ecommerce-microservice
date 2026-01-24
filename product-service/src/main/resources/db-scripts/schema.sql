@@ -1,12 +1,13 @@
+DROP SEQUENCE IF EXISTS product_image_id_sequence;
 DROP SEQUENCE IF EXISTS product_attribute_value_id_sequence;
 DROP SEQUENCE IF EXISTS product_attribute_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_index_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_value_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_option_id_sequence;
 DROP SEQUENCE IF EXISTS product_variant_id_sequence;
-DROP SEQUENCE IF EXISTS product_image_id_sequence;
 DROP SEQUENCE IF EXISTS product_inspects_id_sequence;
 
+DROP TABLE IF EXISTS product_image;
 DROP TABLE IF EXISTS product_attribute_value;
 DROP TABLE IF EXISTS product_attribute;
 DROP TABLE IF EXISTS product_variant_index;
@@ -14,7 +15,6 @@ DROP TABLE IF EXISTS product_variant_value;
 DROP TABLE IF EXISTS product_variant_option;
 DROP TABLE IF EXISTS product_variant;
 DROP TABLE IF EXISTS product_inspect;
-DROP TABLE IF EXISTS product_image;
 DROP TABLE IF EXISTS products;
 
 CREATE TABLE products (
@@ -39,29 +39,6 @@ CREATE TABLE products (
 ALTER TABLE products ADD CONSTRAINT pk_products_id PRIMARY KEY (id);
 ALTER TABLE products ADD CONSTRAINT un_products_name UNIQUE (name);
 ALTER TABLE products ADD CONSTRAINT un_products_sku_code UNIQUE (sku_code);
-
-
-CREATE SEQUENCE product_image_id_sequence
-INCREMENT 1
-MINVALUE 1
-MAXVALUE 2147483647
-START 100000
-NO CYCLE;
-
-CREATE TABLE product_image (
-    id BIGINT,
-    product_id VARCHAR(100) NOT NULL,
-    storage_object_id BIGINT NOT NULL,
-    --
-    created_by VARCHAR(100),
-    created_date TIMESTAMP NOT NULL,
-    updated_by VARCHAR(100),
-    updated_date TIMESTAMP
-);
-
-ALTER TABLE product_image ADD CONSTRAINT pk_product_image_id PRIMARY KEY (id);
-ALTER TABLE product_image ADD CONSTRAINT fk_product_image_product_id FOREIGN KEY (product_id) REFERENCES products(id);
-CREATE UNIQUE INDEX un_ind_product_image_product_id_storage_object_id ON product_image (product_id, storage_object_id);
 
 CREATE SEQUENCE product_inspects_id_sequence
 INCREMENT 1
@@ -230,3 +207,27 @@ ALTER TABLE product_variant_index ADD CONSTRAINT pk_product_variant_index_id PRI
 ALTER TABLE product_variant_index ADD CONSTRAINT fk_product_variant_index_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 ALTER TABLE product_variant_index ADD CONSTRAINT un_product_variant_index_sku_code UNIQUE (sku_code);
 ALTER TABLE product_variant_index ADD CONSTRAINT un_product_variant_index_query_order_product_id UNIQUE (query_order, product_id);
+
+CREATE SEQUENCE product_image_id_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 2147483647
+START 100000
+NO CYCLE;
+
+CREATE TABLE product_image (
+    id BIGINT,
+    product_id VARCHAR(100) NOT NULL,
+    product_variant_index_id BIGINT,
+    storage_object_id BIGINT NOT NULL,
+    --
+    created_by VARCHAR(100),
+    created_date TIMESTAMP NOT NULL,
+    updated_by VARCHAR(100),
+    updated_date TIMESTAMP
+);
+
+ALTER TABLE product_image ADD CONSTRAINT pk_product_image_id PRIMARY KEY (id);
+ALTER TABLE product_image ADD CONSTRAINT fk_product_image_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE product_image ADD CONSTRAINT fk_product_image_product_variant_index_id FOREIGN KEY (product_variant_index_id) REFERENCES product_variant_index(id);
+CREATE UNIQUE INDEX un_ind_product_image_product_id_product_variant_index_id_storage_object_id ON product_image (product_id, product_variant_index_id, storage_object_id);

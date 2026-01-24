@@ -9,8 +9,8 @@ NotificationService WebFlux ile yazılabilir.
 Servislere gelen istekler şuan sadece apigateway'de log'lanıyor. Fakat request body gibi detaylı log'lamayı Spring Aspect kullanarak
 servis controller'larında yakalayıp log'layabiliriz.
 
-/api/v1/category/products-filter-option/{categoryId} sonuçları dönerken, toplam ürün sayısı da dönmeli
-
 ProductVariant ve ProductAttribute veya value'lar silindiğinde mevcut ürünlerde nasıl değişiklikler olmalı (örneğin index tablosundaki JSON'lar)
 
 Kafka'ya deserialize edilemeyen bir mesaj geldiğinde servis sonsuz döngüye giriyor. Kontrol et ve exception handler mekanizması kur.
+
+shop sayfasında Sıralama kısmı şuan çalışmıyor. Ürün görüntülenmeleri ve puan'ları tamamlandığında bu kısmı da tamamla
