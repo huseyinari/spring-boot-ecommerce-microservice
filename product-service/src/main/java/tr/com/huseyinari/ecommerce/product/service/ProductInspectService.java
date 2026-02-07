@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductInspectService {
-    private final Logger logger = LoggerFactory.getLogger(ProductInspectService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductInspectService.class);
 
     private final ProductInspectRepository repository;
     private final ProductInspectMapper mapper;

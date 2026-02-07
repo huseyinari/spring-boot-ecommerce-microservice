@@ -13,7 +13,7 @@ import tr.com.huseyinari.ecommerce.inventory.service.InventoryService;
 @Component
 @RequiredArgsConstructor
 public class InventoryKafkaConsumer {
-    Logger logger = LoggerFactory.getLogger(InventoryKafkaConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(InventoryKafkaConsumer.class);
 
     private final InventoryService service;
     private final InventoryKafkaProducer kafkaProducer;

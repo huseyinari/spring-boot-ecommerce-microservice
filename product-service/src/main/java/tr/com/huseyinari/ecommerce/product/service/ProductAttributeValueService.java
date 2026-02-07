@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class ProductAttributeValueService {
-    private final Logger logger = LoggerFactory.getLogger(ProductAttributeValueService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductAttributeValueService.class);
 
     private final ProductAttributeValueRepository repository;
     private final ProductAttributeValueMapper mapper;

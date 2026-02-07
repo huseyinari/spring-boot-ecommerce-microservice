@@ -23,7 +23,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class LocalStorageService implements StorageService {
-    private static Logger logger = LoggerFactory.getLogger(LocalStorageService.class);
+    private static final Logger logger = LoggerFactory.getLogger(LocalStorageService.class);
     private final ECommerceConfigurationProperties configurationProperties;
 
     @Override

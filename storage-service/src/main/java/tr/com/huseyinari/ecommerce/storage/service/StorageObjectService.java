@@ -22,7 +22,7 @@ import tr.com.huseyinari.utils.StringUtils;
 @Service
 @RequiredArgsConstructor
 public class StorageObjectService {
-    private final Logger logger = LoggerFactory.getLogger(StorageObjectService.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageObjectService.class);
 
     private final StorageObjectRepository repository;
     private final StorageObjectMapper mapper;

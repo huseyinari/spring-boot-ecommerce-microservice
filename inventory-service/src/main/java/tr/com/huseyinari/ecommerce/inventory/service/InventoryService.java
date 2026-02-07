@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Validated
 public class InventoryService {
-    private final Logger logger = LoggerFactory.getLogger(InventoryService.class);
+    private static final Logger logger = LoggerFactory.getLogger(InventoryService.class);
 
     private final InventoryRepository repository;
     private final InventoryMapper mapper;

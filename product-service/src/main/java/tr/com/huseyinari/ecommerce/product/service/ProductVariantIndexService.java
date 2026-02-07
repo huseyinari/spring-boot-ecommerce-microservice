@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Validated
 public class ProductVariantIndexService {
-    private final Logger logger = LoggerFactory.getLogger(ProductVariantIndexService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductVariantIndexService.class);
 
     private final ProductVariantIndexRepository repository;
     private final ProductVariantIndexMapper mapper;

@@ -40,7 +40,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @Validated
 public class ProductService {
-    private final Logger logger = LoggerFactory.getLogger(ProductService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository repository;
     private final ProductMapper mapper;

@@ -31,7 +31,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Validated
 public class AuthService {
-    private final Logger logger = LoggerFactory.getLogger(AuthService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final KeycloakAdminClientService keycloakAdminClientService;
     private final ECommerceConfigurationProperties configurationProperties;

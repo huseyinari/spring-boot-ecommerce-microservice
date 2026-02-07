@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 //@RequiredArgsConstructor
 public class ProductImageService {
-    private final Logger logger = LoggerFactory.getLogger(ProductImageService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductImageService.class);
 
     private final ProductImageRepository repository;
     private final ProductImageMapper mapper;

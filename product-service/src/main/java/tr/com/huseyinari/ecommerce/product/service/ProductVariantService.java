@@ -29,7 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Validated
 public class ProductVariantService {
-    private final Logger logger = LoggerFactory.getLogger(ProductVariantService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductVariantService.class);
 
     private final ProductVariantRepository repository;
     private final ProductVariantMapper mapper;

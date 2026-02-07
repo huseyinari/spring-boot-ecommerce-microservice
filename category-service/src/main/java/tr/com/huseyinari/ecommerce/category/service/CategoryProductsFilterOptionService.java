@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryProductsFilterOptionService {
-    private final Logger logger = LoggerFactory.getLogger(CategoryProductsFilterOptionService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryProductsFilterOptionService.class);
 
     private final CategoryProductsFilterOptionRepository repository;
     private final CategoryProductsFilterOptionMapper mapper;

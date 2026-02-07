@@ -16,7 +16,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class ProductKafkaConsumer {
-    Logger logger = LoggerFactory.getLogger(ProductKafkaConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductKafkaConsumer.class);
 
     private final ProductRepository repository;
 

@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarouselItemService {
-    private final Logger logger = LoggerFactory.getLogger(CarouselItemService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CarouselItemService.class);
 
     private final CarouselItemRepository repository;
     private final CarouselItemMapper mapper;

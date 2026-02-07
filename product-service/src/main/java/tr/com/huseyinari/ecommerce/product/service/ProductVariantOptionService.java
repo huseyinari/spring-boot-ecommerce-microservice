@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class ProductVariantOptionService {
-    private final Logger logger = LoggerFactory.getLogger(ProductVariantOptionService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductVariantOptionService.class);
 
     private final ProductVariantOptionRepository repository;
     private final ProductVariantOptionMapper mapper;

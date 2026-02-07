@@ -15,7 +15,7 @@ import tr.com.huseyinari.ecommerce.auth.config.ECommerceConfigurationProperties;
 @Component
 @RequiredArgsConstructor
 public class KeycloakAdminClientService {
-    private final Logger logger = LoggerFactory.getLogger(KeycloakAdminClientService.class);
+    private static final Logger logger = LoggerFactory.getLogger(KeycloakAdminClientService.class);
 
     private final ECommerceConfigurationProperties configurationProperties;
 

@@ -21,7 +21,7 @@ import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    private final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository repository;
     private final OrderMapper mapper;

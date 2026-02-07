@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductVariantValueService {
-    private final Logger logger = LoggerFactory.getLogger(ProductVariantValueService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductVariantValueService.class);
 
     private final ProductVariantValueRepository repository;
     private final ProductVariantValueMapper mapper;
