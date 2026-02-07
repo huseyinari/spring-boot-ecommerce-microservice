@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.product.request.ProductCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductDetailSearchResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductMostInspectedTodayResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductSearchResponse;
 import tr.com.huseyinari.ecommerce.product.service.ProductService;
@@ -71,6 +72,27 @@ public class ProductController {
     }
 
     @Operation(
+        summary = "Id'ye göre ürün ara",
+        description = "Belirtilen id ile eşleşen ürünü getir.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ürün bulundu",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ProductDetailSearchResponse.class)
+            )
+        )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDetailSearchResponse> findById(@PathVariable String id) {
+        ProductDetailSearchResponse response = this.service.findDetailById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
         summary = "Stok koduna göre ürün ara",
         description = "Belirtilen stok koduyla eşleşen ürünü getir.",
         security = @SecurityRequirement(name = "bearerAuth")
@@ -85,8 +107,8 @@ public class ProductController {
             )
         )
     })
-    @GetMapping("/{skuCode}")
-    public ResponseEntity<ProductSearchResponse> findOne(@PathVariable String skuCode) {
+    @GetMapping("/sku/{skuCode}")
+    public ResponseEntity<ProductSearchResponse> findBySkuCode(@PathVariable String skuCode) {
         ProductSearchResponse response = this.service.findBySkuCode(skuCode);
         return ResponseEntity.ok(response);
     }

@@ -83,6 +83,42 @@ public class ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public ProductDetailSearchResponse findDetailById(String id) {
+        ProductSearchResponse productSearchResponse = this.findById(id);
+
+        ProductDetailSearchResponse response = new ProductDetailSearchResponse();
+        response.setId(productSearchResponse.id());
+        response.setName(productSearchResponse.name());
+        response.setDescription(productSearchResponse.description());
+        response.setPrice(productSearchResponse.price());
+        response.setDiscount(productSearchResponse.discount());
+        response.setDiscountedPrice(productSearchResponse.discountedPrice());
+
+        // product images
+        List<ProductImageSearchResponse> productImageList = this.productImageService.findByProductId(id);
+        response.setImageUrls(
+            productImageList
+                .stream()
+                .map(ProductImageSearchResponse::imageUrl)
+                .toList()
+        );
+
+        // product attribute values
+        List<ProductAttributeValueSearchResponse> productAttributeValues = this.productAttributeValueService.findAllByProductIdOrderByProductAttributeId(id);
+        response.setAttributeValues(productAttributeValues);
+
+        // product variant values
+        List<ProductVariantValueSearchResponse> productVariantValues = this.productVariantValueService.findAllByProductIdOrderByProductVariantId(id);
+        response.setVariantValues(productVariantValues);
+
+        // product variant index
+        List<ProductVariantIndexSearchResponse> productVariantIndexes = this.productVariantIndexService.findByProductId(id);
+        response.setVariantIndexes(productVariantIndexes);
+
+        return response;
+    }
+
     @Transactional
     public ProductCreateResponse create(@Valid ProductCreateRequest request) {
         final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow(() -> new RuntimeException("Kullanıcı bilgisi bulunamadı !"));

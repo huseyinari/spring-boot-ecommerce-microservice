@@ -8,6 +8,6 @@ import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
 @FeignClient(value = "product-service", path = "/api/v1/product" /* url = "localhost:8080" */)
 public interface ProductClient {
-    @GetMapping("/{skuCode}")
+    @GetMapping("/sku/{skuCode}")
     SinhaRestApiResponse<ProductSearchResponse> get(@PathVariable String skuCode);
 }

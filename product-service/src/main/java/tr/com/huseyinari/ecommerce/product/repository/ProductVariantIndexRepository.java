@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ProductVariantIndexRepository extends BaseJpaQueryDslRepository<ProductVariantIndex, Long> {
-    void deleteByProductId(String productId);
+    List<ProductVariantIndex> findByProduct_Id(String productId);
 
     @Query(value = """
                 /*
@@ -67,4 +67,6 @@ public interface ProductVariantIndexRepository extends BaseJpaQueryDslRepository
             @Param("queryNameList") List<String> queryNameList,
             @Param("categoryId") Long categoryId
     );
+
+    void deleteByProductId(String productId);
 }

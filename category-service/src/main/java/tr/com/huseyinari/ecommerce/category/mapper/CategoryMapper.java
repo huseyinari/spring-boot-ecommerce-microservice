@@ -81,6 +81,7 @@ public class CategoryMapper {
         }
 
         return new PopularCategorySearchResponse(
+            category.getId(),
             category.getName(),
             category.getTotalProductCount(),
             storageObjectContentUrl + "/" + category.getImageStorageObjectId()

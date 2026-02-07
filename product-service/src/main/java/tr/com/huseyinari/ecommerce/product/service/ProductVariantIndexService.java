@@ -176,6 +176,12 @@ public class ProductVariantIndexService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProductVariantIndexSearchResponse> findByProductId(String productId) {
+        List<ProductVariantIndex> productVariantIndexList = this.repository.findByProduct_Id(productId);
+        return productVariantIndexList.stream().map(this.mapper::toSearchResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<ProductVariantIndexGroupSearchResponse> findProductVariantIndexGroupsByQueryNameList(
             @NotEmpty(message = "Sorgu adı listesi boş olamaz.") List<String> queryNameList,
             Long categoryId
