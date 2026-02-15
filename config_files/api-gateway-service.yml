@@ -19,7 +19,16 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/product/**,/api/v1/product/**,/api/v1/product-image/**,/api/v1/product-attribute/**,/api/v1/product-variant/**,/api/v1/product-variant-index/**
+            - name: Path
+              args:
+                patterns:
+                  - /product/**
+                  - /api/v1/product/**
+                  - /api/v1/product-image/**
+                  - /api/v1/product-attribute/**
+                  - /api/v1/product-variant/**
+                  - /api/v1/product-variant-index/**
+                  - /api/v1/product-review/**
           # NOT => Filter'lar burada tanımlandığı sırayla çalışırlar !!! AbstractGatewayFilterFactory ile oluşturulan filter'lara Ordered işlemez. Buradaki sıra önemli
           filters:
             - AddAuthenticatedUserInHeaderFilter

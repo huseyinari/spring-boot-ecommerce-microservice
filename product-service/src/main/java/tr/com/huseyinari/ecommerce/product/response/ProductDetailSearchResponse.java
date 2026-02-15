@@ -19,5 +19,5 @@ public class ProductDetailSearchResponse {
     private List<ProductAttributeValueSearchResponse> attributeValues;
     private List<ProductVariantValueSearchResponse> variantValues;
     private List<ProductVariantIndexSearchResponse> variantIndexes;
-    //    private XXX reviews;
+    private List<ProductReviewSearchResponse> reviews;
 }

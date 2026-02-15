@@ -474,7 +474,7 @@ VALUES(517, 101, 'XS', 'huseyinari', '2025-12-06 01:24:31.836', 'huseyinari', '2
 
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
-VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', '{"price": 483.99, "armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Kapüşonlu", "fabricContent": "%100 Pamuk"}'::jsonb, 'altınyıldız_classics_erkek_sweatshirt', 0, 483.99, 0.00, 483.99, 1, 'huseyinari', '2026-01-01 13:38:45.597', 'huseyinari', '2026-01-01 13:38:45.597');
+VALUES(100, '0c9f4199-235d-4c20-8280-c29105737cff', '{"price": 483.99, "armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Kapüşonlu", "fabricContent": "%100 Pamuk"}'::jsonb, 'altınyıldız_classics_erkek_sweatshirt', 0, 500, 16.01, 483.99, 1, 'huseyinari', '2026-01-01 13:38:45.597', 'huseyinari', '2026-01-01 13:38:45.597');
 INSERT INTO public.product_variant_index
 (id, product_id, variant_value_index, sku_code, stock, price, discount, discounted_price, query_order, created_by, created_date, updated_by, updated_date)
 VALUES(101, 'e8aa49c1-bfb0-4cdb-bf9d-3b0376f653b4', '{"price": 477.35, "armType": "Uzun Kol", "cutType": "Regular", "pattern": "Düz", "collarType": "Bisiklet Yaka", "fabricContent": "%75 Pamuk, %25 Polyester"}'::jsonb, 'grimelange_travıs_erkek_sweatshirt', 0, 477.35, 0.00, 477.35, 1, 'huseyinari', '2026-01-01 13:50:07.446', 'huseyinari', '2026-01-01 13:50:07.446');
@@ -531,3 +531,14 @@ VALUES(106, '0c9f4199-235d-4c20-8280-c29105737cff', NULL, 100016, 'huseyinari', 
 INSERT INTO public.product_image
 (id, product_id, product_variant_index_id, storage_object_id, created_by, created_date, updated_by, updated_date)
 VALUES(107, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', NULL, 100017, 'huseyinari', '2026-01-24 15:21:56.484', 'huseyinari', '2026-01-24 15:21:56.484');
+
+/* product reviews */
+INSERT INTO public.product_review
+(id, product_id, description, rating, reviewer_name, reviewer_email, created_by, created_date, updated_by, updated_date)
+VALUES(100, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 'Çok beğendim', 10, 'Hüseyin ARI', 'hsynari1060@gmail.com', 'huseyinari', '2026-02-15 14:06:09.505', 'huseyinari', '2026-02-15 14:06:09.505');
+INSERT INTO public.product_review
+(id, product_id, description, rating, reviewer_name, reviewer_email, created_by, created_date, updated_by, updated_date)
+VALUES(101, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 'Güzel değil', 4, 'Ahmet Test', 'ahmettest@gmail.com', 'huseyinari', '2026-02-15 14:06:26.969', 'huseyinari', '2026-02-15 14:06:26.969');
+INSERT INTO public.product_review
+(id, product_id, description, rating, reviewer_name, reviewer_email, created_by, created_date, updated_by, updated_date)
+VALUES(102, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 'İdare eder', 7, 'Mehmet Test', 'mehmettest@gmail.com', 'huseyinari', '2026-02-15 14:31:37.587', 'huseyinari', '2026-02-15 14:31:37.587');

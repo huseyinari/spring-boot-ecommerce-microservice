@@ -12,7 +12,7 @@ import tr.com.huseyinari.ecommerce.product.response.ProductAttributeUpdateRespon
 @Component
 @RequiredArgsConstructor
 public class ProductAttributeMapper {
-    public ProductAttributeSearchResponse toSearchResponse(ProductAttribute  productAttribute) {
+    public ProductAttributeSearchResponse toSearchResponse(ProductAttribute productAttribute) {
         if (productAttribute == null) {
             return null;
         }

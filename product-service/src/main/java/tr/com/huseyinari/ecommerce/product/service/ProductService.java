@@ -51,6 +51,7 @@ public class ProductService {
     private final ProductAttributeValueService productAttributeValueService;
     private final ProductVariantValueService productVariantValueService;
     private final ProductVariantIndexService productVariantIndexService;
+    private final ProductReviewService productReviewService;
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -115,6 +116,10 @@ public class ProductService {
         // product variant index
         List<ProductVariantIndexSearchResponse> productVariantIndexes = this.productVariantIndexService.findByProductId(id);
         response.setVariantIndexes(productVariantIndexes);
+
+        // product reviews
+        List<ProductReviewSearchResponse> productReviews = this.productReviewService.findAllByProductId(id);
+        response.setReviews(productReviews);
 
         return response;
     }

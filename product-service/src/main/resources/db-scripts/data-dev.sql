@@ -531,3 +531,14 @@ VALUES(106, '0c9f4199-235d-4c20-8280-c29105737cff', NULL, 100016, 'huseyinari', 
 INSERT INTO public.product_image
 (id, product_id, product_variant_index_id, storage_object_id, created_by, created_date, updated_by, updated_date)
 VALUES(107, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', NULL, 100017, 'huseyinari', '2026-01-24 15:21:56.484', 'huseyinari', '2026-01-24 15:21:56.484');
+
+/* product reviews */
+INSERT INTO public.product_review
+(id, product_id, description, rating, reviewer_name, reviewer_email, created_by, created_date, updated_by, updated_date)
+VALUES(100, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 'Çok beğendim', 10, 'Hüseyin ARI', 'hsynari1060@gmail.com', 'huseyinari', '2026-02-15 14:06:09.505', 'huseyinari', '2026-02-15 14:06:09.505');
+INSERT INTO public.product_review
+(id, product_id, description, rating, reviewer_name, reviewer_email, created_by, created_date, updated_by, updated_date)
+VALUES(101, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 'Güzel değil', 4, 'Ahmet Test', 'ahmettest@gmail.com', 'huseyinari', '2026-02-15 14:06:26.969', 'huseyinari', '2026-02-15 14:06:26.969');
+INSERT INTO public.product_review
+(id, product_id, description, rating, reviewer_name, reviewer_email, created_by, created_date, updated_by, updated_date)
+VALUES(102, 'c6b6f7f1-3581-493f-be4f-e6734b83744e', 'İdare eder', 7, 'Mehmet Test', 'mehmettest@gmail.com', 'huseyinari', '2026-02-15 14:31:37.587', 'huseyinari', '2026-02-15 14:31:37.587');

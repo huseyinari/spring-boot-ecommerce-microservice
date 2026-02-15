@@ -41,7 +41,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 @Validated
 public class ProductVariantIndexService {
     private static final Logger logger = LoggerFactory.getLogger(ProductVariantIndexService.class);
@@ -50,9 +50,21 @@ public class ProductVariantIndexService {
     private final ProductVariantIndexMapper mapper;
     private final ProductVariantValueService productVariantValueService;
     private final ProductAttributeValueService productAttributeValueService;
+    private final ProductService productService;
 
-    @Autowired
-    @Lazy private ProductService productService;
+    public ProductVariantIndexService(
+        ProductVariantIndexRepository repository,
+        ProductVariantIndexMapper mapper,
+        ProductVariantValueService productVariantValueService,
+        ProductAttributeValueService productAttributeValueService,
+        @Lazy ProductService productService
+    ) {
+        this.repository = repository;
+        this.mapper = mapper;
+        this.productVariantValueService = productVariantValueService;
+        this.productAttributeValueService = productAttributeValueService;
+        this.productService = productService;
+    }
 
     @PersistenceContext
     private EntityManager entityManager;
