@@ -57,6 +57,7 @@ public class ProductMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getSkuCode(),
+                product.getCategoryId(),
                 product.getPrice(),
                 product.getDiscount(),
                 product.getDiscountedPrice(),

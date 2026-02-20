@@ -10,7 +10,7 @@ INSERT INTO public.products
 VALUES('u7b7596b-306c-4ab9-a623-c835e421d533', 'Seiko SRPD63K1 Erkek Kol Saati', 'Kol Saati', 'seiko_srpd63k1', 16079.70, 0.00, 16079.70, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'system', '2025-07-26 04:00:00.000', NULL, NULL);
 INSERT INTO public.products
 (id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
-VALUES('p9b7596b-306c-4ab9-a623-c835e421d533', 'Sinangil Çok Amaçlı Un 1kg', 'sinangil un', 'sinangil_un_1kg', 132.00, 0.00, 132.00, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'system', '2025-07-26 05:00:00.000', NULL, NULL);
+VALUES('p9b7596b-306c-4ab9-a623-c835e421d533', 'Sinangil Çok Amaçlı Un 1kg', 'sinangil un', 'sinangil_un_1kg', 132.00, 0.00, 132.00, 100007, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'system', '2025-07-26 05:00:00.000', NULL, NULL);
 INSERT INTO public.products
 (id, "name", description, sku_code, price, discount, discounted_price, category_id, status, failure_description, user_id, created_by, created_date, updated_by, updated_date)
 VALUES('0c9f4199-235d-4c20-8280-c29105737cff', 'Altınyıldız Classics Erkek Sweatshirt', 'Altınyıldız Classics Erkek Antrasit Anti-pilling Tüylenme Yapmayan Standart Fit Dik Yaka Soğuk Geçirmez Polar Sweatshirt', 'altınyıldız_classics_erkek_sweatshirt', 483.99, 0.00, 483.99, 100001, 'SUCCESS', NULL, 'c043d233-6a49-4fd8-96fe-5f8bc96c0bdd', 'huseyinari', '2026-01-01 13:38:45.415', 'huseyinari', '2026-01-01 13:38:45.415');

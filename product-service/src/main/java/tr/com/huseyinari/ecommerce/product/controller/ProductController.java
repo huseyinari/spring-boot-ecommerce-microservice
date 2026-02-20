@@ -156,4 +156,24 @@ public class ProductController {
         List<ProductMostInspectedTodayResponse> responseList = this.service.getMostInspectedTodayProducts();
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
+
+    @Operation(
+        summary = "İlginizi çekebilecek ürünleri getir",
+        description = "Bir ürüne benzeyen ve kullanıcının ilgisini çekebilecek diğer ürünlerden öneri getir"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "İlgili ürünler başarıyla getirildi.",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                array = @ArraySchema(schema = @Schema(implementation = ProductSearchResponse.class))
+            )
+        )
+    })
+    @GetMapping("/may-be-interested/{productId}")
+    public ResponseEntity<List<ProductSearchResponse>> getMayBeInterestedProducts(@PathVariable String productId) {
+        List<ProductSearchResponse> responseList = this.service.getMayBeInterestedProducts(productId);
+        return ResponseEntity.ok(responseList);
+    }
 }

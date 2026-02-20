@@ -8,6 +8,7 @@ public record ProductSearchResponse (
     String name,
     String description,
     String skuCode,
+    Long categoryId,
     BigDecimal price,
     BigDecimal discount,
     BigDecimal  discountedPrice,

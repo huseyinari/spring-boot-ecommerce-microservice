@@ -224,6 +224,19 @@ public class ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductSearchResponse> getMayBeInterestedProducts(String productId) {
+        ProductSearchResponse currentProduct = this.findById(productId);
+
+        // Bir ürünü incelerken ona benzeyen ve kullanıcının ilgisini çekebilecek 10 ürün daha getir.
+        // Şuan sadece aynı kategorideki ürünlerden en çok incelenenleri getiriyor. Farklı kriterlere göre geliştirilmeli
+        return this.repository
+            .findByCategoryIdOrderByInspectCount(currentProduct.categoryId(), productId, Pageable.ofSize(10))
+            .stream()
+            .map(this.mapper::toSearchResponse)
+            .toList();
+    }
+
     private String generateSkuCode(String productName) {
         if (productName == null || productName.equals("")) {
             throw new RuntimeException("Ürün ismi boş olamaz !");
