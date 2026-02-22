@@ -54,7 +54,7 @@ public class ProductService {
     private final ProductReviewService productReviewService;
 
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
 //    @Transactional(readOnly = true)
 //    public ProductSearchPageableResponse search(ProductSearchParameters params, Pageable pageable) {

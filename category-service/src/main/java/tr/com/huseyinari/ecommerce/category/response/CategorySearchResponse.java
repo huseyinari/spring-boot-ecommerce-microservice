@@ -4,5 +4,6 @@ public record CategorySearchResponse (
     Long id,
     String name,
     Long parentId,
-    Integer totalProductCount
+    Integer totalProductCount,
+    String imageUrl
 ) {}

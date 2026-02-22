@@ -9,15 +9,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
-import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
-import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
-import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
-import tr.com.huseyinari.ecommerce.category.response.PopularCategorySearchResponse;
+import tr.com.huseyinari.ecommerce.category.response.*;
 import tr.com.huseyinari.ecommerce.category.service.CategoryService;
 
 import java.util.List;
@@ -30,21 +27,21 @@ public class CategoryController {
     private final CategoryService service;
 
     @Operation(
-        summary = "Tüm kategorileri getir.",
-        description = "Herhangi bir koşul olmaksızın tüm kategorileri getirir.",
+        summary = "Kategori ara",
+        description = "Belirli koşullara göre kategorileri sayfalandırılmış şekilde getirir.",
         security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(
         responseCode = "200",
-        description = "Tüm kategoriler getirildi.",
+        description = "Koşullara göre kategoriler getirildi",
         content = @Content(
             mediaType = MediaType.APPLICATION_JSON_VALUE,
-            array = @ArraySchema(schema = @Schema(implementation = CategorySearchResponse.class))
+            array = @ArraySchema(schema = @Schema(implementation = CategorySearchPageableResponse.class))
         )
     )
-    @GetMapping
-    public ResponseEntity<List<CategorySearchResponse>> findAll() {
-        List<CategorySearchResponse> response = this.service.findAll();
+    @GetMapping("/search")
+    public ResponseEntity<CategorySearchPageableResponse> search(@RequestParam String search, @ParameterObject Pageable pageable) {
+        CategorySearchPageableResponse response = this.service.search(search, pageable);
         return ResponseEntity.ok(response);
     }
 

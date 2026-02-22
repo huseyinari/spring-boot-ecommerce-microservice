@@ -1,17 +1,16 @@
 package tr.com.huseyinari.ecommerce.category.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
-import tr.com.huseyinari.ecommerce.category.response.CategoryCreateResponse;
-import tr.com.huseyinari.ecommerce.category.response.CategorySearchResponse;
-import tr.com.huseyinari.ecommerce.category.response.MenuCategoryResponse;
-import tr.com.huseyinari.ecommerce.category.response.PopularCategorySearchResponse;
+import tr.com.huseyinari.ecommerce.category.response.*;
 import tr.com.huseyinari.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +35,42 @@ public class CategoryMapper {
             return null;
         }
 
-        return new CategorySearchResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
+        final String storageObjectContentUrl = this.configurationProperties.getStorageObjectContentUrl();
+
+        if (StringUtils.isBlank(storageObjectContentUrl)) {
+            throw new RuntimeException("Kategori resmi için eksik bilgiler mevcut. Lütfen sistem yöneticiniz ile iletişime geçiniz.");
+        }
+
+        return new CategorySearchResponse(
+            category.getId(),
+            category.getName(),
+            category.getParentId(),
+            category.getTotalProductCount(),
+            storageObjectContentUrl + "/" + category.getImageStorageObjectId()
+        );
+    }
+
+    public CategorySearchPageableResponse toSearchPageableResponse(Page<Category> pageResult) {
+        if (pageResult == null) {
+            return null;
+        }
+
+        List<CategorySearchResponse> searchResponseList = pageResult
+                .getContent()
+                .stream()
+                .map(this::toSearchResponse)
+                .toList();
+
+        CategorySearchPageableResponse response = new CategorySearchPageableResponse();
+        response.setItems(searchResponseList);
+        response.setPage(pageResult.getNumber());
+        response.setSize(pageResult.getSize());
+        response.setTotalElements(pageResult.getTotalElements());
+        response.setTotalPages(pageResult.getTotalPages());
+        response.setFirst(pageResult.isFirst());
+        response.setLast(pageResult.isLast());
+
+        return response;
     }
 
     public CategoryCreateResponse toCreateResponse(Category category) {

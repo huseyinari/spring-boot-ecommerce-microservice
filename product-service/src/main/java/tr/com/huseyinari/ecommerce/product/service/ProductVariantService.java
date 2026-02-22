@@ -36,7 +36,7 @@ public class ProductVariantService {
     private final ProductVariantOptionService productVariantOptionService;
 
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Transactional(readOnly = true)
     public List<ProductVariantSearchResponse> findAll() {
