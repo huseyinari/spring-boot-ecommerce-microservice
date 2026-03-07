@@ -6,6 +6,7 @@ import tr.com.huseyinari.ecommerce.storage.domain.StorageObject;
 import tr.com.huseyinari.ecommerce.storage.request.StorageObjectCreateRequest;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectCreateResponse;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectSearchResponse;
+import tr.com.huseyinari.ecommerce.storage.response.UploadCategoryImageResponse;
 import tr.com.huseyinari.ecommerce.storage.response.UploadProductImageResponse;
 
 @Component
@@ -66,6 +67,21 @@ public class StorageObjectMapper {
         }
 
         return new UploadProductImageResponse(
+            response.id(),
+            response.fileName(),
+            response.extension(),
+            response.fileSize(),
+            response.storageName(),
+            response.ownerId()
+        );
+    }
+
+    public UploadCategoryImageResponse toUploadCategoryImageResponse(StorageObjectCreateResponse response) {
+        if (response == null) {
+            return null;
+        }
+
+        return new UploadCategoryImageResponse(
             response.id(),
             response.fileName(),
             response.extension(),

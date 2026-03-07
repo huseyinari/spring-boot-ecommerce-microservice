@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tr.com.huseyinari.ecommerce.storage.config.ECommerceConfigurationProperties;
+import tr.com.huseyinari.ecommerce.storage.request.DeleteFileRequest;
 import tr.com.huseyinari.ecommerce.storage.request.ReadFileRequest;
 import tr.com.huseyinari.ecommerce.storage.request.UploadFileRequest;
 import tr.com.huseyinari.ecommerce.storage.response.LocalStorageReadFileResponse;
@@ -97,6 +98,43 @@ public class LocalStorageService implements StorageService {
             }
         } else {
             throw new RuntimeException("Dosya Bulunamadı !");
+        }
+    }
+
+    @Override
+    public void deleteFile(DeleteFileRequest request) {
+        final String fileName = request.getFileName();
+        final String directoryName = request.getStorageName();
+
+        if (StringUtils.isBlank(fileName)) {
+            throw new RuntimeException("Dosya adı geçersiz olduğu için dosya silme işlemi başarısız.");
+        }
+        if (StringUtils.isBlank(directoryName)) {
+            throw new RuntimeException("Saklama alanı adı geçersiz olduğu için dosya silme işlemi başarısız.");
+        }
+
+        final String localStorageFilePath = this.configurationProperties.getLocalStorageFilePath();
+        final String filePath = localStorageFilePath + File.separator + directoryName + File.separator + fileName;
+        final File targetFile = new File(filePath);
+
+        if (!targetFile.exists()) {
+            throw new RuntimeException("Dosya bulunamadı !");
+        }
+
+        if (!targetFile.isFile()) {
+            throw new RuntimeException("Belirtilen yol bir dosya değil !");
+        }
+
+        try {
+            boolean isDeleted = targetFile.delete();
+            if (!isDeleted) {
+                logger.error("[STRG-1051] - Dosya silme işlemi başarısız. Dosya: {}", filePath);
+                throw new RuntimeException("[STRG-1051] - Dosya silme işlemi başarısız.");
+            }
+            logger.info("Dosya silme işlemi tamamlandı. Dizin: {}, Dosya Adı: {}", directoryName, fileName);
+        } catch (SecurityException exception) {
+            logger.error("[STRG-1052] - Dosya silme izniniz bulunmamaktadır. Sistem yöneticisi ile iletişime geçiniz.");
+            throw new RuntimeException("[STRG-1052] - Dosya silme izniniz bulunmamaktadır. Sistem yöneticisi ile iletişime geçiniz.");
         }
     }
 }

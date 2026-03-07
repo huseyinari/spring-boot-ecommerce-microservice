@@ -19,6 +19,8 @@ import tr.com.huseyinari.ecommerce.storage.response.*;
 import tr.com.huseyinari.springweb.rest.RequestUtils;
 import tr.com.huseyinari.utils.StringUtils;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class StorageObjectService {
@@ -76,6 +78,29 @@ public class StorageObjectService {
     }
 
     @Transactional
+    public void delete(Long id) {
+        final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+
+        Optional<StorageObject> optional = this.repository.findById(id);
+        if (optional.isEmpty()) {
+            throw new StorageObjectNotFoundException();
+        }
+
+        final StorageObject storageObject = optional.get();
+
+        if (!currentUserId.equals(storageObject.getOwnerId())) {    // Yalnızca dosyayı oluşturan kişi silebilir.
+            throw new StorageObjectAccessDeniedException();
+        }
+
+        StorageService storageService = this.storageServiceFactory.getStorageService(storageObject.getType());
+
+        DeleteFileRequest deleteFileRequest = this.toDeleteFileRequest(this.mapper.toSearchResponse(storageObject));
+        storageService.deleteFile(deleteFileRequest);
+
+        this.repository.deleteById(id);
+    }
+
+    @Transactional
     public UploadProductImageResponse uploadProductImage(UploadProductImageRequest request) {
         final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
         final String productImagesBucketName = this.configurationProperties.getAws().getS3().getProductImagesBucketName();
@@ -87,18 +112,44 @@ public class StorageObjectService {
         final boolean privateAccess = false;
 
         StorageObjectCreateRequest storageObjectCreateRequest = new StorageObjectCreateRequest(
-                uploadFileResponse.getFileName(),
-                uploadFileResponse.getStorageName(),
-                uploadFileResponse.getFileSize(),
-                uploadFileResponse.getExtension(),
-                currentUserId,
-                StorageObjectType.S3,
-                privateAccess
+            uploadFileResponse.getFileName(),
+            uploadFileResponse.getStorageName(),
+            uploadFileResponse.getFileSize(),
+            uploadFileResponse.getExtension(),
+            currentUserId,
+            StorageObjectType.S3,
+            privateAccess
         );
 
         StorageObjectCreateResponse storageObjectCreateResponse = this.create(storageObjectCreateRequest);
 
         return this.mapper.toUploadProductImageResponse(storageObjectCreateResponse);
+    }
+
+    @Transactional
+    public UploadCategoryImageResponse uploadCategoryImage(UploadCategoryImageRequest request) {
+        final String currentUserId = RequestUtils.getHeader(RequestHeaderConstants.AUTHENTICATED_USER_ID).orElseThrow();
+        final String categoryBucketName = this.configurationProperties.getAws().getS3().getCategoryImagesBucketName();
+        final StorageService storageService = this.storageServiceFactory.getStorageService(StorageObjectType.S3);
+
+        UploadFileRequest uploadFileRequest = new S3UploadFileRequest(request.multipartFile(), categoryBucketName);
+        UploadFileResponse uploadFileResponse = storageService.uploadFile(uploadFileRequest);
+
+        final boolean privateAccess = false;
+
+        StorageObjectCreateRequest storageObjectCreateRequest = new StorageObjectCreateRequest(
+            uploadFileResponse.getFileName(),
+            uploadFileResponse.getStorageName(),
+            uploadFileResponse.getFileSize(),
+            uploadFileResponse.getExtension(),
+            currentUserId,
+            StorageObjectType.S3,
+            privateAccess
+        );
+
+        StorageObjectCreateResponse storageObjectCreateResponse = this.create(storageObjectCreateRequest);
+
+        return this.mapper.toUploadCategoryImageResponse(storageObjectCreateResponse);
     }
 
     public MediaType getMediaType(String fileExtension) {
@@ -124,6 +175,19 @@ public class StorageObjectService {
         return switch (storageObject.type()) {
             case LOCAL -> new LocalStorageReadFileRequest(fileName, storageName);
             case S3 -> new S3ReadFileRequest(fileName, storageName);
+        };
+    }
+
+    private DeleteFileRequest toDeleteFileRequest(StorageObjectSearchResponse storageObject) {
+        if (storageObject == null) {
+            throw new RuntimeException("Lütfen silmek istediğiniz dosyayı seçiniz.");
+        }
+        final String fileName = storageObject.fileName();
+        final String storageName = storageObject.storageName();
+
+        return switch (storageObject.type()) {
+            case LOCAL -> new LocalStorageDeleteFileRequest(fileName, storageName);
+            case S3 -> new S3DeleteFileRequest(fileName, storageName);
         };
     }
 }

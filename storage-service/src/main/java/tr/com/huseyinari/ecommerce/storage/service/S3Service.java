@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tr.com.huseyinari.ecommerce.storage.config.ECommerceConfigurationProperties;
+import tr.com.huseyinari.ecommerce.storage.request.DeleteFileRequest;
 import tr.com.huseyinari.ecommerce.storage.request.ReadFileRequest;
 import tr.com.huseyinari.ecommerce.storage.request.UploadFileRequest;
 import tr.com.huseyinari.ecommerce.storage.response.ReadFileResponse;
@@ -116,6 +117,34 @@ public class S3Service implements StorageService {
             logger.error("Exception Message: {}", exception.getMessage());
 
             throw new RuntimeException("Dosya okumada hata oluştu !");
+        }
+    }
+
+    @Override
+    public void deleteFile(DeleteFileRequest request) {
+        final String fileName = request.getFileName();
+        final String bucketName = request.getStorageName();
+
+        if (StringUtils.isBlank(fileName)) {
+            throw new RuntimeException("Dosya adı geçersiz olduğu için dosya silme işlemi başarısız.");
+        }
+        if (StringUtils.isBlank(bucketName)) {
+            throw new RuntimeException("Saklama alanı adı geçersiz olduğu için dosya silme işlemi başarısız.");
+        }
+
+        try {
+            this.amazonS3.deleteObject(bucketName, fileName);
+            logger.info("Dosya silme işlemi tamamlandı. Bucket Adı: {}, Dosya Adı: {}", bucketName, fileName);
+        } catch (AmazonS3Exception exception) {
+            if (exception.getStatusCode() == 404 && "NoSuchBucket".equals(exception.getErrorCode())) {
+                throw new RuntimeException("Saklama alanı bulunamadı !");
+            }
+
+            logger.error("[STRG-1049] - Dosya silme işlemi başarısız.");
+            throw new RuntimeException("[STRG-1049] - Dosya silme işlemi başarısız.");
+        } catch (Exception exception) {
+            logger.error("[STRG-1050] - Dosya silme servisine erişim başarısız.");
+            throw new RuntimeException("[STRG-1050] - Dosya silme servisine erişim başarısız.");
         }
     }
 }

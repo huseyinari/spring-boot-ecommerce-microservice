@@ -14,10 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tr.com.huseyinari.ecommerce.storage.request.UploadCategoryImageRequest;
 import tr.com.huseyinari.ecommerce.storage.request.UploadProductImageRequest;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentBase64Response;
 import tr.com.huseyinari.ecommerce.storage.response.FileContentResponse;
 import tr.com.huseyinari.ecommerce.storage.response.StorageObjectSearchResponse;
+import tr.com.huseyinari.ecommerce.storage.response.UploadCategoryImageResponse;
 import tr.com.huseyinari.ecommerce.storage.response.UploadProductImageResponse;
 import tr.com.huseyinari.ecommerce.storage.service.StorageObjectService;
 import tr.com.huseyinari.springweb.rest.IgnoreResponseBodyAdvice;
@@ -133,6 +135,18 @@ public class StorageObjectController {
     }
 
     @Operation(
+        summary = "Bir depolama nesnesini tamamen sistemden siler.",
+        description = "Servise gönderilen id'ye ait depolama nesnesini sistemden tamamen yok eder.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        this.service.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
         summary = "Bir ürün fotoğrafını depolama servisine kaydet",
         description = "Servise gönderilen resmi alır ve ürün fotoğraflarının bulunduğu depolama servisine kaydeder.",
         security = @SecurityRequirement(name = "bearerAuth")
@@ -150,10 +164,34 @@ public class StorageObjectController {
     @PostMapping(value = "/upload/product-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UploadProductImageResponse> uploadProductImage(
         @RequestParam("file") MultipartFile multipartFile
-//        @RequestParam("private_access") boolean privateAccess
     ) {
         UploadProductImageRequest request = new UploadProductImageRequest(multipartFile);
         UploadProductImageResponse response = this.service.uploadProductImage(request);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(
+        summary = "Bir kategori fotoğrafını depolama servisine kaydet",
+        description = "Servise gönderilen resmi alır ve kategori fotoğraflarının bulunduğu depolama servisine kaydeder.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "201",
+            description = "Kategori fotoğrafını depolama servisine yükleme işlemi başarılı.",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = UploadCategoryImageResponse.class)
+            )
+        )
+    })
+    @PostMapping(value = "/upload/category-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UploadCategoryImageResponse> uploadCategoryImage(
+        @RequestParam("file") MultipartFile multipartFile
+    ) {
+        UploadCategoryImageRequest request = new UploadCategoryImageRequest(multipartFile);
+        UploadCategoryImageResponse response = this.service.uploadCategoryImage(request);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
