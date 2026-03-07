@@ -8,6 +8,8 @@ import lombok.Setter;
 public class CategorySearchResponse {
     private Long id;
     private String name;
-    private String imageUrl;
+    private Long parentId;
     private Integer totalProductCount;
+    private Long storageObjectId;
+    private String imageUrl;
 }

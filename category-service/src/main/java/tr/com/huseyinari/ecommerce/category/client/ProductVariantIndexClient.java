@@ -3,7 +3,7 @@ package tr.com.huseyinari.ecommerce.category.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import tr.com.huseyinari.ecommerce.category.shared.ProductVariantIndexGroupSearchResponse;
+import tr.com.huseyinari.ecommerce.category.shared.response.ProductVariantIndexGroupSearchResponse;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
 import java.util.List;

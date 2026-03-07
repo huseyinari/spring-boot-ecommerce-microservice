@@ -126,6 +126,23 @@ public class CategoryController {
     }
 
     @Operation(
+        summary = "Kategori sil",
+        description = "Mevcut bir kategoriyi siler.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "204",
+            description = "Kategori başarıyla silindi."
+        )
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        this.service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
         summary = "Menü için kategori listesini getir.",
         description = "Anasayfada gösterilen menüdeki kategori bilgilerini getirir."
     )

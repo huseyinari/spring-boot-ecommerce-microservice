@@ -12,7 +12,7 @@ import tr.com.huseyinari.ecommerce.category.mapper.CategoryProductsFilterOptionM
 import tr.com.huseyinari.ecommerce.category.repository.CategoryProductsFilterOptionRepository;
 import tr.com.huseyinari.ecommerce.category.response.CategoryProductsFilterOptionSearchResponse;
 import tr.com.huseyinari.ecommerce.category.response.CategoryProductsFilterOptionSearchResponseValue;
-import tr.com.huseyinari.ecommerce.category.shared.ProductVariantIndexGroupSearchResponse;
+import tr.com.huseyinari.ecommerce.category.shared.response.ProductVariantIndexGroupSearchResponse;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 import tr.com.huseyinari.utils.CollectionUtils;
 

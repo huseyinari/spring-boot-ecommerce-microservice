@@ -143,6 +143,29 @@ public class CategoryService {
         return this.mapper.toUpdateResponse(category);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        CategorySearchResponse category = this.findOne(id);
+
+        if (category.totalProductCount() > 0) {
+            throw new RuntimeException("Bu kategoriye ait ürün olduğu için silinemez!");
+        }
+
+        try {
+            this.storageClient.deleteFile(category.storageObjectId());
+        } catch (FeignException.NotFound e) {
+            logger.info("Silinmek istenen kategori resmi bulunamadı. ID: {}", category.storageObjectId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Kategori resmi silinirken bir hata oluştu. ID: {}", category.storageObjectId());
+            throw new RuntimeException("Kategori resmi silinirken bir hata oluştu.");
+        }
+
+        this.repository.deleteById(id);
+
+        logger.info("Kategori başarıyla silindi. ID: {}", id);
+    }
+
     public List<MenuCategoryResponse> getMenuCategories() {
         List<MenuCategoryResponse> allCategories =
                 this.repository.findAll()

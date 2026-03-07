@@ -1,4 +1,4 @@
-package tr.com.huseyinari.ecommerce.category.shared;
+package tr.com.huseyinari.ecommerce.category.shared.response;
 
 import lombok.Getter;
 import lombok.Setter;
