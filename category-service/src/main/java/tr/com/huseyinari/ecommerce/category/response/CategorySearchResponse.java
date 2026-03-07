@@ -5,5 +5,6 @@ public record CategorySearchResponse (
     String name,
     Long parentId,
     Integer totalProductCount,
+    Long storageObjectId,
     String imageUrl
 ) {}

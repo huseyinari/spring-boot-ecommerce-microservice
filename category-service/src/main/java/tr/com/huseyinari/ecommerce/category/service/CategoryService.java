@@ -2,8 +2,10 @@ package tr.com.huseyinari.ecommerce.category.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import feign.FeignException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,24 +14,32 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import tr.com.huseyinari.ecommerce.category.client.StorageClient;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.domain.QCategory;
 import tr.com.huseyinari.ecommerce.category.exception.CategoryNotFoundException;
 import tr.com.huseyinari.ecommerce.category.mapper.CategoryMapper;
 import tr.com.huseyinari.ecommerce.category.repository.CategoryRepository;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
+import tr.com.huseyinari.ecommerce.category.request.CategoryUpdateRequest;
 import tr.com.huseyinari.ecommerce.category.response.*;
+import tr.com.huseyinari.ecommerce.category.shared.response.UploadCategoryImageResponse;
+import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 import tr.com.huseyinari.utils.StringUtils;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class CategoryService {
     private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
     private final CategoryRepository repository;
     private final CategoryMapper mapper;
+    private final StorageClient storageClient;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -76,11 +86,61 @@ public class CategoryService {
         return this.mapper.toSearchResponse(category);
     }
 
-    public CategoryCreateResponse create(CategoryCreateRequest request) {
+    @Transactional
+    public CategoryCreateResponse create(@Valid CategoryCreateRequest request) {
+        if (request.image() == null || request.image().isEmpty()) {
+            throw new RuntimeException("Kategori resmi zorunludur!");
+        }
+
+        final Long imageStorageObjectId;
+        try {
+            SinhaRestApiResponse<UploadCategoryImageResponse> uploadResponse = storageClient.uploadCategoryImage(request.image());
+            imageStorageObjectId = uploadResponse.getData().storageObjectId();
+        } catch (FeignException.BadRequest e) {
+            throw new RuntimeException("Geçersiz dosya formatı!");
+        } catch (Exception e) {
+            throw new RuntimeException("Dosya yüklenirken hata oluştu: " + e.getMessage());
+        }
+
         Category category = this.mapper.toEntity(request);
+        category.setImageStorageObjectId(imageStorageObjectId);
+        category.setTotalProductCount(0);
+        category = this.repository.save(category); // TODO: Veritabanı işlemi hata verirse resim boşu boşuna upload edilmiş olur.
+
+        logger.info("Kategori başarıyla oluşturuldu. ID: {}", category.getId());
+        return this.mapper.toCreateResponse(category);
+    }
+
+    @Transactional
+    public CategoryUpdateResponse update(@Valid CategoryUpdateRequest request) {
+        CategorySearchResponse existCategory = this.findOne(request.id());
+
+        Category category = this.mapper.toEntity(request);
+        category.setImageStorageObjectId(existCategory.storageObjectId());
+        category.setTotalProductCount(existCategory.totalProductCount());  // Toplam ürün sayısını değiştirme
+
+        if (request.image() != null && !request.image().isEmpty()) {    // Resim güncellenecek demektir.
+            try {
+                SinhaRestApiResponse<UploadCategoryImageResponse> uploadResponse = storageClient.uploadCategoryImage(request.image());
+                Long newImageStorageObjectId = uploadResponse.getData().storageObjectId();
+
+                category.setImageStorageObjectId(newImageStorageObjectId);
+            } catch (FeignException.BadRequest e) {
+                throw new RuntimeException("Geçersiz dosya formatı!");
+            } catch (Exception e) {
+                throw new RuntimeException("Dosya yüklenirken hata oluştu: " + e.getMessage());
+            }
+        }
+
         category = this.repository.save(category);
 
-        return this.mapper.toCreateResponse(category);
+        // TODO: Veritabanı işlemi hata verirse resim boşu boşuna siliniyor ve veri kaybı oluşuyor.
+        if (!existCategory.storageObjectId().equals(category.getImageStorageObjectId())) {
+            this.storageClient.deleteFile(existCategory.storageObjectId());  // resim değiştiyse eskisini sil
+        }
+
+        logger.info("Kategori başarıyla güncellendi. ID: {}", category.getId());
+        return this.mapper.toUpdateResponse(category);
     }
 
     public List<MenuCategoryResponse> getMenuCategories() {

@@ -55,6 +55,7 @@ public class SecurityConfig {
 
         http
             .authorizeExchange(auth -> auth
+                .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()    // CORS için tüm OPTIONS isteklerine izin ver
                 .pathMatchers(permittedUrls).permitAll()
                 .pathMatchers(HttpMethod.POST, "/api/v1/product").hasRole("CREATE_PRODUCT")
                 .anyExchange().authenticated()

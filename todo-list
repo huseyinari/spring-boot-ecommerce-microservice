@@ -14,3 +14,5 @@ ProductVariant ve ProductAttribute veya value'lar silindiğinde mevcut ürünler
 Kafka'ya deserialize edilemeyen bir mesaj geldiğinde servis sonsuz döngüye giriyor. Kontrol et ve exception handler mekanizması kur.
 
 shop sayfasında Sıralama kısmı şuan çalışmıyor. Ürün görüntülenmeleri ve puan'ları tamamlandığında bu kısmı da tamamla
+
+Kategori ekleme-güncelleme db hatası gelirse s3'den dosyayı silme işlemi boşuna yapılıyor ve resmi kaybediyoruz. transaction'ı sağla.

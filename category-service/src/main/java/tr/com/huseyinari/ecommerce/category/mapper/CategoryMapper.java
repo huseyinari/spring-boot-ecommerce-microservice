@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
+import tr.com.huseyinari.ecommerce.category.request.CategoryUpdateRequest;
 import tr.com.huseyinari.ecommerce.category.response.*;
 import tr.com.huseyinari.utils.StringUtils;
 
@@ -25,8 +26,19 @@ public class CategoryMapper {
         return Category.builder()
                 .name(request.name())
                 .parentId(request.parentId())
-                .imageStorageObjectId(Long.valueOf(-1))     // TODO: Kategori eklenirken resim seçilemeyecek diye düşündüm. Eğer bu imkan sağlanırsa düzenlenmeli
                 .totalProductCount(0)
+                .build();
+    }
+
+    public Category toEntity(CategoryUpdateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        return Category.builder()
+                .id(request.id())
+                .name(request.name())
+                .parentId(request.parentId())
                 .build();
     }
 
@@ -46,6 +58,7 @@ public class CategoryMapper {
             category.getName(),
             category.getParentId(),
             category.getTotalProductCount(),
+            category.getImageStorageObjectId(),
             storageObjectContentUrl + "/" + category.getImageStorageObjectId()
         );
     }
@@ -79,6 +92,14 @@ public class CategoryMapper {
         }
 
         return new CategoryCreateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
+    }
+
+    public CategoryUpdateResponse toUpdateResponse(Category category) {
+        if (category == null) {
+            return null;
+        }
+
+        return new CategoryUpdateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
     }
 
     public MenuCategoryResponse toMenuCategoriesResponse(Category category) {

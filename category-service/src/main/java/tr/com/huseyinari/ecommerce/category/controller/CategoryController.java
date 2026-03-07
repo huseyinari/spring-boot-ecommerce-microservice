@@ -11,9 +11,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
+import tr.com.huseyinari.ecommerce.category.request.CategoryUpdateRequest;
 import tr.com.huseyinari.ecommerce.category.response.*;
 import tr.com.huseyinari.ecommerce.category.service.CategoryService;
 
@@ -66,26 +70,60 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
 
-//    @Operation(
-//        summary = "Kategori oluştur",
-//        description = "Yeni bir kategori kaydı oluşturur.",
-//        security = @SecurityRequirement(name = "bearerAuth")
-//    )
-//    @ApiResponses({
-//        @ApiResponse(
-//            responseCode = "201",
-//            description = "Kategori başarıyla oluşturuldu",
-//            content = @Content(
-//                mediaType = MediaType.APPLICATION_JSON_VALUE,
-//                schema = @Schema(implementation = CategoryCreateResponse.class)
-//            )
-//        )
-//    })
-//    @PostMapping
-//    public ResponseEntity<CategoryCreateResponse> create(@RequestBody CategoryCreateRequest request) {
-//        CategoryCreateResponse response = this.service.create(request);
-//        return new ResponseEntity<>(response , HttpStatus.CREATED);
-//    }
+    @Operation(
+        summary = "Kategori oluştur",
+        description = "Yeni bir kategori kaydı oluşturur.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "201",
+            description = "Kategori başarıyla oluşturuldu",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = CategoryCreateResponse.class)
+            )
+        )
+    })
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<CategoryCreateResponse> create(
+        @RequestParam("name") String name,
+        @RequestParam(value = "parentId", required = false) Long parentId,
+        @RequestParam("image") MultipartFile image
+    ) {
+        CategoryCreateRequest request = new CategoryCreateRequest(name, parentId, image);
+        CategoryCreateResponse response = this.service.create(request);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(
+        summary = "Kategori güncelle",
+        description = "Mevcut bir kategoriyi güncelle.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Kategori başarıyla güncellendi",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = CategoryUpdateResponse.class)
+            )
+        )
+    })
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<CategoryUpdateResponse> update(
+        @PathVariable("id") Long id,
+        @RequestParam("name") String name,
+        @RequestParam(value = "parentId", required = false) Long parentId,
+        @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        CategoryUpdateRequest request = new CategoryUpdateRequest(id, name, parentId, image);
+        CategoryUpdateResponse response = this.service.update(request);
+
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(
         summary = "Menü için kategori listesini getir.",
