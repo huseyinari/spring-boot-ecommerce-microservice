@@ -44,7 +44,7 @@ public class SecurityConfig {
             "/api/v1/category/search",
             "/api/v1/category/menu",
             "/api/v1/category/popular",
-            "/api/v1/category/products-filter-option/{categoryId}",
+            "/api/v1/category/products-filter-option/category/{categoryId}",
             "/api/v1/carousel-item/{carouselName}",
             "/api/v1/product/{id}",
             "/api/v1/product/most-inspected/today",
