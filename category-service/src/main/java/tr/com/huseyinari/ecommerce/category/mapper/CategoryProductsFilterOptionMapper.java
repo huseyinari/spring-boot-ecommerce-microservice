@@ -1,28 +1,134 @@
 package tr.com.huseyinari.ecommerce.category.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.domain.CategoryProductsFilterOption;
-import tr.com.huseyinari.ecommerce.category.response.CategoryProductsFilterOptionSearchResponse;
+import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionCreateRequest;
+import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionUpdateRequest;
+import tr.com.huseyinari.ecommerce.category.response.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class CategoryProductsFilterOptionMapper {
+    private final CategoryMapper categoryMapper;
+
     public CategoryProductsFilterOptionSearchResponse toSearchResponse(CategoryProductsFilterOption categoryProductsFilterOption) {
         if (categoryProductsFilterOption == null) {
             return null;
         }
 
         CategoryProductsFilterOptionSearchResponse categoryProductsFilterOptionSearchResponse = new CategoryProductsFilterOptionSearchResponse();
+        categoryProductsFilterOptionSearchResponse.setId(categoryProductsFilterOption.getId());
         categoryProductsFilterOptionSearchResponse.setName(categoryProductsFilterOption.getName());
         categoryProductsFilterOptionSearchResponse.setQueryName(categoryProductsFilterOption.getQueryName());
         categoryProductsFilterOptionSearchResponse.setFilterType(categoryProductsFilterOption.getFilterType());
         categoryProductsFilterOptionSearchResponse.setUiComponent(categoryProductsFilterOption.getUiComponent());
         categoryProductsFilterOptionSearchResponse.setMaxFilterOption(categoryProductsFilterOption.getMaxFilterOption());
-        categoryProductsFilterOptionSearchResponse.setValues(new ArrayList<>());
+        categoryProductsFilterOptionSearchResponse.setValues(Collections.emptyList());
+
+        if (categoryProductsFilterOption.getCategory() != null) {
+            CategorySearchResponse category = this.categoryMapper.toSearchResponse(categoryProductsFilterOption.getCategory());
+            categoryProductsFilterOptionSearchResponse.setCategory(category);
+        }
 
         return categoryProductsFilterOptionSearchResponse;
+    }
+
+    public CategoryProductsFilterOptionPageableResponse toSearchPageableResponse(Page<CategoryProductsFilterOption> pageResult) {
+        if (pageResult == null) {
+            return null;
+        }
+
+        List<CategoryProductsFilterOptionSearchResponse> searchResponseList = pageResult
+            .getContent()
+            .stream()
+            .map(this::toSearchResponse)
+            .toList();
+
+        CategoryProductsFilterOptionPageableResponse response = new CategoryProductsFilterOptionPageableResponse();
+        response.setItems(searchResponseList);
+        response.setPage(pageResult.getNumber());
+        response.setSize(pageResult.getSize());
+        response.setTotalElements(pageResult.getTotalElements());
+        response.setTotalPages(pageResult.getTotalPages());
+        response.setFirst(pageResult.isFirst());
+        response.setLast(pageResult.isLast());
+
+        return response;
+    }
+
+    public CategoryProductsFilterOption toEntity(CategoryProductsFilterOptionCreateRequest categoryProductsFilterOptionCreateRequest) {
+        if (categoryProductsFilterOptionCreateRequest == null) {
+            return null;
+        }
+
+        Category category = new Category();
+        category.setId(categoryProductsFilterOptionCreateRequest.categoryId());
+
+        return CategoryProductsFilterOption.builder()
+            .name(categoryProductsFilterOptionCreateRequest.name())
+            .queryName(categoryProductsFilterOptionCreateRequest.queryName())
+            .filterType(categoryProductsFilterOptionCreateRequest.filterType())
+            .uiComponent(categoryProductsFilterOptionCreateRequest.uiComponent())
+            .maxFilterOption(categoryProductsFilterOptionCreateRequest.maxFilterOption())
+            .category(category)
+            .build();
+    }
+
+    public CategoryProductsFilterOption toEntity(CategoryProductsFilterOptionUpdateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        Category category = new Category();
+        category.setId(request.categoryId());
+
+        return CategoryProductsFilterOption.builder()
+            .id(request.id())
+            .name(request.name())
+            .queryName(request.queryName())
+            .filterType(request.filterType())
+            .uiComponent(request.uiComponent())
+            .maxFilterOption(request.maxFilterOption())
+            .category(category)
+            .build();
+    }
+
+    public CategoryProductsFilterOptionCreateResponse toCreateResponse(CategoryProductsFilterOption categoryProductsFilterOption, CategorySearchResponse category) {
+        if (categoryProductsFilterOption == null) {
+            return null;
+        }
+
+        return new CategoryProductsFilterOptionCreateResponse(
+            categoryProductsFilterOption.getId(),
+            categoryProductsFilterOption.getName(),
+            categoryProductsFilterOption.getQueryName(),
+            categoryProductsFilterOption.getFilterType(),
+            categoryProductsFilterOption.getUiComponent(),
+            categoryProductsFilterOption.getMaxFilterOption(),
+            category
+        );
+    }
+
+    public CategoryProductsFilterOptionUpdateResponse toUpdateResponse(CategoryProductsFilterOption categoryProductsFilterOption, CategorySearchResponse category) {
+        if (categoryProductsFilterOption == null) {
+            return null;
+        }
+
+        return new CategoryProductsFilterOptionUpdateResponse(
+            categoryProductsFilterOption.getId(),
+            categoryProductsFilterOption.getName(),
+            categoryProductsFilterOption.getQueryName(),
+            categoryProductsFilterOption.getFilterType(),
+            categoryProductsFilterOption.getUiComponent(),
+            categoryProductsFilterOption.getMaxFilterOption(),
+            category
+        );
     }
 }

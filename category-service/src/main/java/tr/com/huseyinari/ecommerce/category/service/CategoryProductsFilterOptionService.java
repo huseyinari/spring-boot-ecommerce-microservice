@@ -1,20 +1,40 @@
 package tr.com.huseyinari.ecommerce.category.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import feign.FeignException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import tr.com.huseyinari.ecommerce.category.client.ProductVariantIndexClient;
+import tr.com.huseyinari.ecommerce.category.domain.Category;
+import tr.com.huseyinari.ecommerce.category.domain.CategoryProductsFilterOption;
+import tr.com.huseyinari.ecommerce.category.domain.QCategoryProductsFilterOption;
 import tr.com.huseyinari.ecommerce.category.enums.CategoryProductsFilterType;
+import tr.com.huseyinari.ecommerce.category.exception.CategoryProductsFilterOptionNotFoundException;
 import tr.com.huseyinari.ecommerce.category.mapper.CategoryProductsFilterOptionMapper;
 import tr.com.huseyinari.ecommerce.category.repository.CategoryProductsFilterOptionRepository;
-import tr.com.huseyinari.ecommerce.category.response.CategoryProductsFilterOptionSearchResponse;
-import tr.com.huseyinari.ecommerce.category.response.CategoryProductsFilterOptionSearchResponseValue;
+import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionCreateRequest;
+import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionSearchRequest;
+import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionUpdateRequest;
+import tr.com.huseyinari.ecommerce.category.response.*;
 import tr.com.huseyinari.ecommerce.category.shared.response.ProductVariantIndexGroupSearchResponse;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 import tr.com.huseyinari.utils.CollectionUtils;
+import tr.com.huseyinari.utils.NumberUtils;
+import tr.com.huseyinari.utils.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,12 +43,60 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class CategoryProductsFilterOptionService {
     private static final Logger logger = LoggerFactory.getLogger(CategoryProductsFilterOptionService.class);
 
     private final CategoryProductsFilterOptionRepository repository;
     private final CategoryProductsFilterOptionMapper mapper;
     private final ProductVariantIndexClient productVariantIndexClient;
+    private final CategoryService categoryService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional(readOnly = true)
+    public CategoryProductsFilterOptionSearchResponse findOne(Long id) {
+        CategoryProductsFilterOption categoryProductsFilterOption = this.repository.findById(id).orElseThrow(CategoryProductsFilterOptionNotFoundException::new);
+        return this.mapper.toSearchResponse(categoryProductsFilterOption);
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryProductsFilterOptionPageableResponse search(CategoryProductsFilterOptionSearchRequest request, Pageable pageable) {
+        QCategoryProductsFilterOption qCategoryProductsFilterOption = QCategoryProductsFilterOption.categoryProductsFilterOption;
+
+        BooleanBuilder where = new BooleanBuilder();
+
+        if (StringUtils.isNotBlank(request.name())) {
+            where.and(qCategoryProductsFilterOption.name.likeIgnoreCase("%" + request.name() + "%"));
+        }
+        if (StringUtils.isNotBlank(request.queryName())) {
+            where.and(qCategoryProductsFilterOption.queryName.likeIgnoreCase("%" + request.queryName() + "%"));
+        }
+        if (NumberUtils.greaterThen(request.categoryId(), 0L)) {
+            where.and(qCategoryProductsFilterOption.category.id.eq(request.categoryId()));
+        }
+
+        JPAQueryFactory totalQuery = new JPAQueryFactory(this.entityManager);
+        Long total = totalQuery
+                .select(qCategoryProductsFilterOption.count())
+                .from(qCategoryProductsFilterOption)
+                .where(where)
+                .fetchOne();
+
+        JPAQueryFactory query = new JPAQueryFactory(this.entityManager);
+        List<CategoryProductsFilterOption> categoryProductsFilterOptionList = query
+                .select(qCategoryProductsFilterOption)
+                .from(qCategoryProductsFilterOption)
+                .where(where)
+                .orderBy(getOrderSpecifier(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Page<CategoryProductsFilterOption> pageResult = new PageImpl<>(categoryProductsFilterOptionList, pageable, total != null ? total : 0L);
+        return this.mapper.toSearchPageableResponse(pageResult);
+    }
 
     @Transactional(readOnly = true)
     public List<CategoryProductsFilterOptionSearchResponse> getFilterOptionsByCategoryId(Long categoryId) {
@@ -74,7 +142,7 @@ public class CategoryProductsFilterOptionService {
 
             Integer maxOptions = categoryProductsFilterOptionSearchResponse.getMaxFilterOption();
 
-            if (categoryProductsFilterOptionSearchResponse.getMaxFilterOption() > 0) {
+            if (maxOptions != null && maxOptions > 0) {
                 values = values.stream()    // maxFilterOption değerinden fazla sonuç varsa en fazla ürün içerenden başlayarak x tane al
                         .sorted((a, b) -> Long.compare(b.getTotal(), a.getTotal()))
                         .limit(maxOptions)
@@ -91,6 +159,33 @@ public class CategoryProductsFilterOptionService {
         }
 
         return categoryProductsFilterOptionSearchResponseList;
+    }
+
+    @Transactional
+    public CategoryProductsFilterOptionCreateResponse create(@Valid CategoryProductsFilterOptionCreateRequest request) {
+        CategorySearchResponse category = this.categoryService.findOne(request.categoryId());
+
+        CategoryProductsFilterOption categoryProductsFilterOption = this.mapper.toEntity(request);
+        categoryProductsFilterOption = this.repository.save(categoryProductsFilterOption);
+
+        return this.mapper.toCreateResponse(categoryProductsFilterOption, category);
+    }
+
+    @Transactional
+    public CategoryProductsFilterOptionUpdateResponse update(@Valid CategoryProductsFilterOptionUpdateRequest request) {
+        CategoryProductsFilterOptionSearchResponse exist = this.findOne(request.id());
+        CategorySearchResponse category = this.categoryService.findOne(request.categoryId());
+
+        CategoryProductsFilterOption categoryProductsFilterOption = this.mapper.toEntity(request);
+        categoryProductsFilterOption = this.repository.save(categoryProductsFilterOption);
+
+        return this.mapper.toUpdateResponse(categoryProductsFilterOption, category);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        CategoryProductsFilterOptionSearchResponse categoryProductsFilterOption = this.findOne(id);
+        this.repository.deleteById(id);
     }
 
     private List<CategoryProductsFilterOptionSearchResponseValue> buildRangeValues(
@@ -157,7 +252,6 @@ public class CategoryProductsFilterOptionService {
         return ranges;
     }
 
-
     private long normalizeStep(long rawStep) {
         long magnitude = (long) Math.pow(10, String.valueOf(rawStep).length() - 1);
 
@@ -168,4 +262,38 @@ public class CategoryProductsFilterOptionService {
         return magnitude * 10;
     }
 
+    private OrderSpecifier<?>[] getOrderSpecifier(Pageable pageable) {
+        QCategoryProductsFilterOption qCategoryProductsFilterOption = QCategoryProductsFilterOption.categoryProductsFilterOption;
+
+        if (pageable.getSort().isEmpty()) {
+            return new OrderSpecifier[]{ new OrderSpecifier(Order.ASC, qCategoryProductsFilterOption.name) };
+        }
+
+        return pageable.getSort().stream().map(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+
+            switch (property) {
+                case "name":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.name);
+                case "queryName":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.queryName);
+                case "filterType":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.filterType);
+                case "uiComponent":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.uiComponent);
+                case "maxFilterOption":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.maxFilterOption);
+                case "category":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.category.name);
+                case "createdDate":
+                    return new OrderSpecifier(direction, qCategoryProductsFilterOption.createdDate);
+                default:
+//                    // Gönderilen property'ye göre uygun path'i belirleme
+//                    PathBuilder<CategoryProductsFilterOption> pathBuilder = new PathBuilder<>(CategoryProductsFilterOption.class, "categoryProductsFilterOption");
+//                    return new OrderSpecifier(direction, pathBuilder.get(property));
+                    throw new RuntimeException("Geçersiz sıralama parametresi: " + property);
+            }
+        }).toArray(OrderSpecifier[]::new);
+    }
 }

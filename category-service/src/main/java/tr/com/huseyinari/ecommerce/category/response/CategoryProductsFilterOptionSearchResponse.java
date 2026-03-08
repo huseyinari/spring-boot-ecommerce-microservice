@@ -10,11 +10,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CategoryProductsFilterOptionSearchResponse{
+public class CategoryProductsFilterOptionSearchResponse {
+    private Long id;
     private String name;
     private String queryName;
     private CategoryProductsFilterType filterType;
     private CategoryProductsFilterUiComponent uiComponent;
     private Integer maxFilterOption;
+    private CategorySearchResponse category;
     private List<CategoryProductsFilterOptionSearchResponseValue> values;
 }

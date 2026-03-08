@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tr.com.huseyinari.ecommerce.category.exception.CategoryNotFoundException;
+import tr.com.huseyinari.ecommerce.category.exception.CategoryProductsFilterOptionNotFoundException;
 import tr.com.huseyinari.springweb.rest.SinhaGlobalExceptionHandler;
 import tr.com.huseyinari.springweb.rest.SinhaRestApiResponse;
 
@@ -14,8 +15,13 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends SinhaGlobalExceptionHandler {
-    @ExceptionHandler({CategoryNotFoundException.class})
+    @ExceptionHandler({ CategoryNotFoundException.class })
     public ResponseEntity<SinhaRestApiResponse<Object>> handleCategoryNotFoundException(CategoryNotFoundException exception) {
+        return super.fromSingleErrorMessage(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({ CategoryProductsFilterOptionNotFoundException.class })
+    public ResponseEntity<SinhaRestApiResponse<Object>> handleCategoryProductsFilterOptionNotFoundException(CategoryProductsFilterOptionNotFoundException exception) {
         return super.fromSingleErrorMessage(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

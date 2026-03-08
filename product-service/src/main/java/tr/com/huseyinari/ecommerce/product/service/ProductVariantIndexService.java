@@ -382,7 +382,7 @@ public class ProductVariantIndexService {
         QProductVariantIndex qProductVariantIndex = QProductVariantIndex.productVariantIndex;
 
         if (pageable.getSort().isEmpty()) {
-            return new OrderSpecifier[]{new OrderSpecifier(Order.ASC, qProductVariantIndex.product.name)};
+            return new OrderSpecifier[]{ new OrderSpecifier(Order.ASC, qProductVariantIndex.product.name) };
         }
 
         return pageable.getSort().stream().map(order -> {
