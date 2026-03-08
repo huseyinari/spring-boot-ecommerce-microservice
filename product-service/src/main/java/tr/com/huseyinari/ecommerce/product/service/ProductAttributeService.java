@@ -1,19 +1,28 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import tr.com.huseyinari.ecommerce.product.domain.ProductAttribute;
+import tr.com.huseyinari.ecommerce.product.domain.QProductAttribute;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductAttributeMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductAttributeRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeUpdateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductAttributeSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeSearchResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeUpdateResponse;
 
@@ -29,12 +38,52 @@ public class ProductAttributeService {
     private final ProductAttributeRepository repository;
     private final ProductAttributeMapper mapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional(readOnly = true)
+    public ProductAttributeSearchPageableResponse search(String search, Pageable pageable) {
+        final QProductAttribute qProductAttribute = QProductAttribute.productAttribute;
+
+        BooleanBuilder where = new BooleanBuilder();
+
+        if (search != null && !search.isBlank()) {
+            where.and(qProductAttribute.name.containsIgnoreCase(search));
+        }
+
+        JPAQueryFactory totalQuery = new JPAQueryFactory(this.entityManager);
+        Long total = totalQuery
+                .select(qProductAttribute.count())
+                .from(qProductAttribute)
+                .where(where)
+                .fetchOne();
+
+        JPAQueryFactory query = new JPAQueryFactory(this.entityManager);
+        List<ProductAttribute> productAttributeList = query
+                .select(qProductAttribute)
+                .from(qProductAttribute)
+                .where(where)
+                .orderBy(qProductAttribute.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Page<ProductAttribute> pageResult = new PageImpl<>(productAttributeList, pageable, total != null ? total : 0L);
+        return this.mapper.toSearchPageableResponse(pageResult);
+    }
+
     @Transactional(readOnly = true)
     public List<ProductAttributeSearchResponse> findAll() {
         return this.repository.findAllOrderByNameAsc()
                 .stream()
                 .map(this.mapper::toSearchResponse)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ProductAttributeSearchResponse findOne(@NotNull Long id) {
+        ProductAttribute productAttribute = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Ürün özelliği bulunamadı !"));
+        return this.mapper.toSearchResponse(productAttribute);
     }
 
     @Transactional
