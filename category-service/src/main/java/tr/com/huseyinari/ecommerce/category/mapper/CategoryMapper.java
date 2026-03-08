@@ -8,6 +8,7 @@ import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
 import tr.com.huseyinari.ecommerce.category.request.CategoryUpdateRequest;
 import tr.com.huseyinari.ecommerce.category.response.*;
+import tr.com.huseyinari.utils.NumberUtils;
 import tr.com.huseyinari.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -23,9 +24,16 @@ public class CategoryMapper {
             return null;
         }
 
+        Category parent = null;
+
+        if (NumberUtils.greaterThen(request.parentId(), 0L)) {
+            parent = new Category();
+            parent.setId(request.parentId());
+        }
+
         return Category.builder()
                 .name(request.name())
-                .parentId(request.parentId())
+                .parent(parent)
                 .totalProductCount(0)
                 .build();
     }
@@ -35,10 +43,17 @@ public class CategoryMapper {
             return null;
         }
 
+        Category parent = null;
+
+        if (NumberUtils.greaterThen(request.parentId(), 0L)) {
+            parent = new Category();
+            parent.setId(request.parentId());
+        }
+
         return Category.builder()
                 .id(request.id())
                 .name(request.name())
-                .parentId(request.parentId())
+                .parent(parent)
                 .build();
     }
 
@@ -53,10 +68,15 @@ public class CategoryMapper {
             throw new RuntimeException("Kategori resmi için eksik bilgiler mevcut. Lütfen sistem yöneticiniz ile iletişime geçiniz.");
         }
 
+        CategorySearchResponse parent = null;
+        if (category.getParent() != null) {
+            parent = this.toSearchResponse(category.getParent());
+        }
+
         return new CategorySearchResponse(
             category.getId(),
             category.getName(),
-            category.getParentId(),
+            parent,
             category.getTotalProductCount(),
             category.getImageStorageObjectId(),
             storageObjectContentUrl + "/" + category.getImageStorageObjectId()
@@ -91,7 +111,9 @@ public class CategoryMapper {
             return null;
         }
 
-        return new CategoryCreateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+
+        return new CategoryCreateResponse(category.getId(), category.getName(), parentId, category.getTotalProductCount());
     }
 
     public CategoryUpdateResponse toUpdateResponse(Category category) {
@@ -99,7 +121,9 @@ public class CategoryMapper {
             return null;
         }
 
-        return new CategoryUpdateResponse(category.getId(), category.getName(), category.getParentId(), category.getTotalProductCount());
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+
+        return new CategoryUpdateResponse(category.getId(), category.getName(), parentId, category.getTotalProductCount());
     }
 
     public MenuCategoryResponse toMenuCategoriesResponse(Category category) {
@@ -113,12 +137,14 @@ public class CategoryMapper {
             throw new RuntimeException("Menü resmi için eksik bilgiler mevcut. Lütfen sistem yöneticiniz ile iletişime geçiniz.");
         }
 
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+
         MenuCategoryResponse response = new MenuCategoryResponse();
         response.setId(category.getId());
         response.setName(category.getName());
         response.setImageUrl(storageObjectContentUrl + "/" + category.getImageStorageObjectId());
         response.setTotalProductCount(category.getTotalProductCount());
-        response.setParentId(category.getParentId());
+        response.setParentId(parentId);
         response.setSubCategories(new ArrayList<>());
 
         return response;

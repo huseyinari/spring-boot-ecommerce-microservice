@@ -65,7 +65,7 @@ public class CategoryService {
             .select(qCategory)
             .from(qCategory)
             .where(where)
-            .orderBy(qCategory.id.asc())
+            .orderBy(qCategory.createdDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
