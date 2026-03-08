@@ -30,7 +30,7 @@ public class CategoryProductsFilterOptionMapper {
         categoryProductsFilterOptionSearchResponse.setFilterType(categoryProductsFilterOption.getFilterType());
         categoryProductsFilterOptionSearchResponse.setUiComponent(categoryProductsFilterOption.getUiComponent());
         categoryProductsFilterOptionSearchResponse.setMaxFilterOption(categoryProductsFilterOption.getMaxFilterOption());
-        categoryProductsFilterOptionSearchResponse.setValues(Collections.emptyList());
+        categoryProductsFilterOptionSearchResponse.setValues(new ArrayList<>());
 
         if (categoryProductsFilterOption.getCategory() != null) {
             CategorySearchResponse category = this.categoryMapper.toSearchResponse(categoryProductsFilterOption.getCategory());

@@ -50,6 +50,27 @@ public class CategoryProductsFilterOptionController {
     }
 
     @Operation(
+        summary = "Id'ye göre kategori ürün filtreleme seçeneği ara",
+        description = "Belirtilen Id ile eşleşen kategori ürün filtreleme seçeneğini getirir.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Kategori ürün filtreleme seçeneği bulundu",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = CategoryProductsFilterOptionSearchResponse.class)
+            )
+        )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryProductsFilterOptionSearchResponse> findOne(@PathVariable Long id) {
+        CategoryProductsFilterOptionSearchResponse response = this.service.findOne(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
         summary = "Kategoriye ait ürün filtreleme alanlarını getir.",
         description = "Kategoriye ait ürünlerin listelendiği sayfada, ürünlerin hangi kriterlere göre aranabileceğini belirten verileri döner."
     )
@@ -61,7 +82,7 @@ public class CategoryProductsFilterOptionController {
             array = @ArraySchema(schema = @Schema(implementation = CategoryProductsFilterOptionSearchResponse.class))
         )
     )
-    @GetMapping("/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<CategoryProductsFilterOptionSearchResponse>> getFilterOptionsByCategoryId(@PathVariable Long categoryId) {
         List<CategoryProductsFilterOptionSearchResponse> response = this.service.getFilterOptionsByCategoryId(categoryId);
         return ResponseEntity.ok(response);
