@@ -134,21 +134,19 @@ public class ProductVariantIndexService {
             }
         }
 
-        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(this.entityManager);
-
-        Long total = jpaQueryFactory
+        JPAQueryFactory totalQuery = new JPAQueryFactory(this.entityManager);
+        Long total = totalQuery
                 .select(qProductVariantIndex.count())
                 .from(qProductVariantIndex)
                 .where(where)
                 .fetchOne();
 
-        OrderSpecifier[] orderList = this.getOrderSpecifier(pageable);
-
-        List<ProductVariantIndex> productVariantIndexList = jpaQueryFactory
+        JPAQueryFactory query = new JPAQueryFactory(this.entityManager);
+        List<ProductVariantIndex> productVariantIndexList = query
                 .selectFrom(qProductVariantIndex)
                 .innerJoin(qProduct).on(qProductVariantIndex.product.id.eq(qProduct.id))
                 .where(where)
-                .orderBy(orderList)
+                .orderBy(this.getOrderSpecifier(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -382,7 +380,7 @@ public class ProductVariantIndexService {
         QProductVariantIndex qProductVariantIndex = QProductVariantIndex.productVariantIndex;
 
         if (pageable.getSort().isEmpty()) {
-            return new OrderSpecifier[]{ new OrderSpecifier(Order.ASC, qProductVariantIndex.product.name) };
+            return new OrderSpecifier[]{ new OrderSpecifier(Order.DESC, qProductVariantIndex.createdDate) };
         }
 
         return pageable.getSort().stream().map(order -> {

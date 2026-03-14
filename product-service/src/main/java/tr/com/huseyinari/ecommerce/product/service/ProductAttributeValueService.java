@@ -2,6 +2,7 @@ package tr.com.huseyinari.ecommerce.product.service;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class ProductAttributeValueService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductAttributeValueSearchResponse> findAllByProductAttributeId(Long productAttributeId) {
+    public List<ProductAttributeValueSearchResponse> findAllByProductAttributeId(@NotNull Long productAttributeId) {
         List<ProductAttributeValue> productAttributeValueList = this.repository.findAllByProductAttributeId(productAttributeId);
         return productAttributeValueList
                 .stream()

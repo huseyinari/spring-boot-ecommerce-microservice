@@ -1,6 +1,8 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -61,7 +63,7 @@ public class ProductAttributeService {
                 .select(qProductAttribute)
                 .from(qProductAttribute)
                 .where(where)
-                .orderBy(qProductAttribute.createdDate.desc())
+                .orderBy(this.getOrderSpecifier(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -113,17 +115,46 @@ public class ProductAttributeService {
     public void delete(@NotNull Long id) {
         Optional<ProductAttribute> optional = this.repository.findById(id);
 
-        if (optional.isPresent()) {
-            ProductAttribute productAttribute = optional.get();
-
-            List< ProductAttributeValueSearchResponse> valueList = this.productAttributeValueService.findAllByProductAttributeId(productAttribute.getId());
-            if (!valueList.isEmpty()) {
-                throw new RuntimeException("Bu özellik ile eşleştirilmiş ürünler bulunduğu için silinemez.");
-            }
-
-            this.repository.delete(optional.get());
-        } else {
+        if (optional.isEmpty()) {
             throw new RuntimeException("Ürün özelliği bulunamadı !");
         }
+
+        ProductAttribute productAttribute = optional.get();
+
+        List< ProductAttributeValueSearchResponse> valueList = this.productAttributeValueService.findAllByProductAttributeId(productAttribute.getId());
+        if (!valueList.isEmpty()) {
+            throw new RuntimeException("Bu özellik ile eşleştirilmiş ürünler bulunduğu için silinemez.");
+        }
+
+        this.repository.delete(optional.get());
+    }
+
+    private OrderSpecifier<?>[] getOrderSpecifier(Pageable pageable) {
+        QProductAttribute qProductAttribute = QProductAttribute.productAttribute;
+
+        if (pageable.getSort().isEmpty()) {
+            return new OrderSpecifier[]{new OrderSpecifier(Order.DESC, qProductAttribute.createdDate)};
+        }
+
+        return pageable.getSort().stream().map(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+
+            switch (property) {
+                case "name":
+                    return new OrderSpecifier(direction, qProductAttribute.name);
+                case "queryName":
+                    return new OrderSpecifier(direction, qProductAttribute.queryName);
+                case "description":
+                    return new OrderSpecifier(direction,qProductAttribute.description);
+                case "createdDate":
+                    return new OrderSpecifier(direction, qProductAttribute.createdDate);
+                default:
+//                    // Gönderilen property'ye göre uygun path'i belirleme
+//                    PathBuilder<CategoryProductsFilterOption> pathBuilder = new PathBuilder<>(CategoryProductsFilterOption.class, "categoryProductsFilterOption");
+//                    return new OrderSpecifier(direction, pathBuilder.get(property));
+                    throw new RuntimeException("Geçersiz sıralama parametresi: " + property);
+            }
+        }).toArray(OrderSpecifier[]::new);
     }
 }

@@ -81,25 +81,6 @@ public class CategoryProductsFilterOptionMapper {
             .build();
     }
 
-    public CategoryProductsFilterOption toEntity(CategoryProductsFilterOptionUpdateRequest request) {
-        if (request == null) {
-            return null;
-        }
-
-        Category category = new Category();
-        category.setId(request.categoryId());
-
-        return CategoryProductsFilterOption.builder()
-            .id(request.id())
-            .name(request.name())
-            .queryName(request.queryName())
-            .filterType(request.filterType())
-            .uiComponent(request.uiComponent())
-            .maxFilterOption(request.maxFilterOption())
-            .category(category)
-            .build();
-    }
-
     public CategoryProductsFilterOptionCreateResponse toCreateResponse(CategoryProductsFilterOption categoryProductsFilterOption, CategorySearchResponse category) {
         if (categoryProductsFilterOption == null) {
             return null;
@@ -114,6 +95,25 @@ public class CategoryProductsFilterOptionMapper {
             categoryProductsFilterOption.getMaxFilterOption(),
             category
         );
+    }
+
+    public void fromUpdateRequestToEntity(CategoryProductsFilterOptionUpdateRequest request, CategoryProductsFilterOption categoryProductsFilterOption) {
+        if (request == null) {
+            return;
+        }
+        if (categoryProductsFilterOption == null) {
+            return;
+        }
+
+        Category category = new Category();
+        category.setId(request.categoryId());
+
+        categoryProductsFilterOption.setName(request.name());
+        categoryProductsFilterOption.setQueryName(request.queryName());
+        categoryProductsFilterOption.setFilterType(request.filterType());
+        categoryProductsFilterOption.setUiComponent(request.uiComponent());
+        categoryProductsFilterOption.setMaxFilterOption(request.maxFilterOption());
+        categoryProductsFilterOption.setCategory(category);
     }
 
     public CategoryProductsFilterOptionUpdateResponse toUpdateResponse(CategoryProductsFilterOption categoryProductsFilterOption, CategorySearchResponse category) {

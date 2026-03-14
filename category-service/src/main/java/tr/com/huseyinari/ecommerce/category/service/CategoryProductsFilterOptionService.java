@@ -89,7 +89,7 @@ public class CategoryProductsFilterOptionService {
                 .select(qCategoryProductsFilterOption)
                 .from(qCategoryProductsFilterOption)
                 .where(where)
-                .orderBy(getOrderSpecifier(pageable))
+                .orderBy(this.getOrderSpecifier(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -173,10 +173,12 @@ public class CategoryProductsFilterOptionService {
 
     @Transactional
     public CategoryProductsFilterOptionUpdateResponse update(@Valid CategoryProductsFilterOptionUpdateRequest request) {
-        CategoryProductsFilterOptionSearchResponse exist = this.findOne(request.id());
+        CategoryProductsFilterOption categoryProductsFilterOption = this.repository.findById(request.id())
+                .orElseThrow(CategoryProductsFilterOptionNotFoundException::new);
+
         CategorySearchResponse category = this.categoryService.findOne(request.categoryId());
 
-        CategoryProductsFilterOption categoryProductsFilterOption = this.mapper.toEntity(request);
+        this.mapper.fromUpdateRequestToEntity(request, categoryProductsFilterOption);
         categoryProductsFilterOption = this.repository.save(categoryProductsFilterOption);
 
         return this.mapper.toUpdateResponse(categoryProductsFilterOption, category);
@@ -266,7 +268,7 @@ public class CategoryProductsFilterOptionService {
         QCategoryProductsFilterOption qCategoryProductsFilterOption = QCategoryProductsFilterOption.categoryProductsFilterOption;
 
         if (pageable.getSort().isEmpty()) {
-            return new OrderSpecifier[]{ new OrderSpecifier(Order.ASC, qCategoryProductsFilterOption.name) };
+            return new OrderSpecifier[]{ new OrderSpecifier(Order.DESC, qCategoryProductsFilterOption.createdDate) };
         }
 
         return pageable.getSort().stream().map(order -> {

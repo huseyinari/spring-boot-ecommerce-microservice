@@ -113,16 +113,17 @@ public class CategoryService {
 
     @Transactional
     public CategoryUpdateResponse update(@Valid CategoryUpdateRequest request) {
-        CategorySearchResponse existCategory = this.findOne(request.id());
+        Category category = this.repository.findById(request.id()).orElseThrow(CategoryNotFoundException::new);
+        
+        Long oldImageStorageObjectId = category.getImageStorageObjectId();
+        Long newImageStorageObjectId = null;
 
-        Category category = this.mapper.toEntity(request);
-        category.setImageStorageObjectId(existCategory.storageObjectId());
-        category.setTotalProductCount(existCategory.totalProductCount());  // Toplam ürün sayısını değiştirme
+        this.mapper.fromUpdateRequestToEntity(request, category);
 
         if (request.image() != null && !request.image().isEmpty()) {    // Resim güncellenecek demektir.
             try {
                 SinhaRestApiResponse<UploadCategoryImageResponse> uploadResponse = storageClient.uploadCategoryImage(request.image());
-                Long newImageStorageObjectId = uploadResponse.getData().storageObjectId();
+                newImageStorageObjectId = uploadResponse.getData().storageObjectId();
 
                 category.setImageStorageObjectId(newImageStorageObjectId);
             } catch (FeignException.BadRequest e) {
@@ -135,8 +136,8 @@ public class CategoryService {
         category = this.repository.save(category);
 
         // TODO: Veritabanı işlemi hata verirse resim boşu boşuna siliniyor ve veri kaybı oluşuyor.
-        if (!existCategory.storageObjectId().equals(category.getImageStorageObjectId())) {
-            this.storageClient.deleteFile(existCategory.storageObjectId());  // resim değiştiyse eskisini sil
+        if (newImageStorageObjectId != null) {
+            this.storageClient.deleteFile(oldImageStorageObjectId);
         }
 
         logger.info("Kategori başarıyla güncellendi. ID: {}", category.getId());

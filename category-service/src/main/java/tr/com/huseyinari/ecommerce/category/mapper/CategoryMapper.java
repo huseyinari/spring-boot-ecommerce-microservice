@@ -38,25 +38,6 @@ public class CategoryMapper {
                 .build();
     }
 
-    public Category toEntity(CategoryUpdateRequest request) {
-        if (request == null) {
-            return null;
-        }
-
-        Category parent = null;
-
-        if (NumberUtils.greaterThen(request.parentId(), 0L)) {
-            parent = new Category();
-            parent.setId(request.parentId());
-        }
-
-        return Category.builder()
-                .id(request.id())
-                .name(request.name())
-                .parent(parent)
-                .build();
-    }
-
     public CategorySearchResponse toSearchResponse(Category category) {
         if (category == null) {
             return null;
@@ -114,6 +95,25 @@ public class CategoryMapper {
         Long parentId = category.getParent() != null ? category.getParent().getId() : null;
 
         return new CategoryCreateResponse(category.getId(), category.getName(), parentId, category.getTotalProductCount());
+    }
+
+    public void fromUpdateRequestToEntity(CategoryUpdateRequest request, Category category) {
+        if (request == null) {
+            return;
+        }
+        if (category == null) {
+            return;
+        }
+
+        Category parent = null;
+
+        if (NumberUtils.greaterThen(request.parentId(), 0L)) {
+            parent = new Category();
+            parent.setId(request.parentId());
+        }
+
+        category.setName(request.name());
+        category.setParent(parent);
     }
 
     public CategoryUpdateResponse toUpdateResponse(Category category) {
