@@ -21,10 +21,7 @@ import tr.com.huseyinari.ecommerce.product.mapper.ProductAttributeMapper;
 import tr.com.huseyinari.ecommerce.product.repository.ProductAttributeRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeUpdateRequest;
-import tr.com.huseyinari.ecommerce.product.response.ProductAttributeCreateResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductAttributeSearchPageableResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductAttributeSearchResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductAttributeUpdateResponse;
+import tr.com.huseyinari.ecommerce.product.response.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +34,7 @@ public class ProductAttributeService {
 
     private final ProductAttributeRepository repository;
     private final ProductAttributeMapper mapper;
+    private final ProductAttributeValueService productAttributeValueService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -116,6 +114,13 @@ public class ProductAttributeService {
         Optional<ProductAttribute> optional = this.repository.findById(id);
 
         if (optional.isPresent()) {
+            ProductAttribute productAttribute = optional.get();
+
+            List< ProductAttributeValueSearchResponse> valueList = this.productAttributeValueService.findAllByProductAttributeId(productAttribute.getId());
+            if (!valueList.isEmpty()) {
+                throw new RuntimeException("Bu özellik ile eşleştirilmiş ürünler bulunduğu için silinemez.");
+            }
+
             this.repository.delete(optional.get());
         } else {
             throw new RuntimeException("Ürün özelliği bulunamadı !");

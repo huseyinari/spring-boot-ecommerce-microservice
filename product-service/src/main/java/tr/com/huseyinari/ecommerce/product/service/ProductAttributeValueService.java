@@ -46,6 +46,15 @@ public class ProductAttributeValueService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductAttributeValueSearchResponse> findAllByProductAttributeId(Long productAttributeId) {
+        List<ProductAttributeValue> productAttributeValueList = this.repository.findAllByProductAttributeId(productAttributeId);
+        return productAttributeValueList
+                .stream()
+                .map(this.mapper::toSearchResponse)
+                .toList();
+    }
+
     @Transactional
     public List<ProductAttributeValueCreateResponse> createOrUpdateAll(@Valid List<ProductAttributeValueCreateRequest> requestList) {
         if (CollectionUtils.isEmpty(requestList)) {

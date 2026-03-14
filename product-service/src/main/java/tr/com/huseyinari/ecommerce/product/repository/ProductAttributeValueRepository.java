@@ -22,4 +22,11 @@ public interface ProductAttributeValueRepository extends BaseJpaQueryDslReposito
 
 //    @Query("SELECT pav FROM ProductAttributeValue pav WHERE pav.id IN :idList ORDER BY ID ASC")
     List<ProductAttributeValue> findByIdInOrderById(Collection<Long> idList);
+
+    @Query(
+        "SELECT pav FROM ProductAttributeValue pav " +
+        "INNER JOIN pav.productAttribute pa " +
+        "WHERE pa.id = :productAttributeId"
+    )
+    List<ProductAttributeValue> findAllByProductAttributeId(Long productAttributeId);
 }
