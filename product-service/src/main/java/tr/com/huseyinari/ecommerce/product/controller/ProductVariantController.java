@@ -9,15 +9,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantUpdateRequest;
-import tr.com.huseyinari.ecommerce.product.response.ProductVariantCreateResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductVariantSearchResponse;
-import tr.com.huseyinari.ecommerce.product.response.ProductVariantUpdateResponse;
+import tr.com.huseyinari.ecommerce.product.response.*;
 import tr.com.huseyinari.ecommerce.product.service.ProductVariantService;
 
 import java.util.List;
@@ -28,6 +28,25 @@ import java.util.List;
 @Tag(name = "Product Variant Controller", description = "Ürün Varyantı Yönetimi")
 public class ProductVariantController {
     private final ProductVariantService service;
+
+    @Operation(
+        summary = "Ürün varyantı ara",
+        description = "Belirli koşullara göre ürün varyantlarını sayfalandırılmış şekilde getirir.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Koşullara göre ürün varyantları getirildi",
+        content = @Content(
+            mediaType = MediaType.APPLICATION_JSON_VALUE,
+            schema = @Schema(implementation = ProductVariantSearchPageableResponse.class)
+        )
+    )
+    @GetMapping("/search")
+    public ResponseEntity<ProductVariantSearchPageableResponse> search(@RequestParam(required = false) String search, @ParameterObject Pageable pageable) {
+        ProductVariantSearchPageableResponse response = this.service.search(search, pageable);
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(
         summary = "Tüm ürün varyantlarını getir",

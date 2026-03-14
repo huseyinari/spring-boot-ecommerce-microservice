@@ -40,7 +40,7 @@ public class CategoryProductsFilterOptionController {
         description = "Koşullara göre kategori ürün filtreleme seçeneği getirildi",
         content = @Content(
             mediaType = MediaType.APPLICATION_JSON_VALUE,
-            array = @ArraySchema(schema = @Schema(implementation = CategoryProductsFilterOptionPageableResponse.class))
+            schema = @Schema(implementation = CategoryProductsFilterOptionPageableResponse.class)
         )
     )
     @PostMapping("/search")

@@ -41,7 +41,7 @@ public class AuthController {
             description = "Giriş işlemi başarılı",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                array = @ArraySchema(schema = @Schema(implementation = LoginResponse.class))
+                schema = @Schema(implementation = LoginResponse.class)
             )
         ),
         @ApiResponse(responseCode = "401", description = "Kullanıcı adı veya şifre hatalı !", content = @Content)
@@ -63,7 +63,7 @@ public class AuthController {
             description = "Token yenilendi.",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                array = @ArraySchema(schema = @Schema(implementation = LoginResponse.class))
+                schema = @Schema(implementation = LoginResponse.class)
             )
         ),
         @ApiResponse(responseCode = "401", description = "Refresh token hatalı !", content = @Content)
@@ -85,7 +85,7 @@ public class AuthController {
             description = "Kullanıcı kaydı başarıyla yapıldı.",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                array = @ArraySchema(schema = @Schema(implementation = RegisterResponse.class))
+                schema = @Schema(implementation = RegisterResponse.class)
             )
         ),
         @ApiResponse(responseCode = "500", description = "Kayıt işlemi başarısız !", content = @Content)

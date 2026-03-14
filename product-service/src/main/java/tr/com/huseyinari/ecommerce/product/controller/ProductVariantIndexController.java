@@ -42,7 +42,7 @@ public class ProductVariantIndexController {
             description = "Ürünler listelendi.",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                array = @ArraySchema(schema = @Schema(implementation = ProductVariantIndexSearchPageableResponse.class))
+                schema = @Schema(implementation = ProductVariantIndexSearchPageableResponse.class)
             )
         )
     })

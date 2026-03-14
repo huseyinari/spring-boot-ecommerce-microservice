@@ -42,7 +42,7 @@ public class ProductAttributeController {
         description = "Koşullara göre ürün özellikleri getirildi",
         content = @Content(
             mediaType = MediaType.APPLICATION_JSON_VALUE,
-            array = @ArraySchema(schema = @Schema(implementation = ProductAttributeSearchPageableResponse.class))
+            schema = @Schema(implementation = ProductAttributeSearchPageableResponse.class)
         )
     )
     @GetMapping("/search")
