@@ -1,5 +1,7 @@
 package tr.com.huseyinari.ecommerce.product.service;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,16 @@ public class ProductVariantValueService {
     private final ProductVariantValueMapper mapper;
 
     @Transactional(readOnly = true)
-    public List<ProductVariantValueSearchResponse> findAllByProductIdOrderByProductVariantId(String productId) {
+    public List<ProductVariantValueSearchResponse> findAllByProductIdOrderByProductVariantId(@NotBlank String productId) {
         return this.repository.findAllByProductIdOrderByProductVariantId(productId)
+                .stream()
+                .map(this.mapper::toSearchResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductVariantValueSearchResponse> findAllByProductVariantId(@NotNull Long productVariantId) {
+        return this.repository.findAllByProductVariantId(productVariantId)
                 .stream()
                 .map(this.mapper::toSearchResponse)
                 .toList();

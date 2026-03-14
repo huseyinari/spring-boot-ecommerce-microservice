@@ -1,12 +1,14 @@
 package tr.com.huseyinari.ecommerce.product.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.product.domain.ProductVariant;
 import tr.com.huseyinari.ecommerce.product.domain.ProductVariantOption;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantCreateRequest;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantUpdateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantCreateResponse;
+import tr.com.huseyinari.ecommerce.product.response.ProductVariantSearchPageableResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantSearchResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantUpdateResponse;
 
@@ -122,5 +124,27 @@ public class ProductVariantMapper {
             productVariant.getProductVariantIndexJsonOrderNumber(),
             options
         );
+    }
+
+    public ProductVariantSearchPageableResponse toSearchPageableResponse(Page<ProductVariant> pageResult) {
+        if (pageResult == null) {
+            return null;
+        }
+
+        List<ProductVariantSearchResponse> searchResponseList = pageResult.getContent()
+                .stream()
+                .map(this::toSearchResponse)
+                .toList();
+
+        ProductVariantSearchPageableResponse response = new ProductVariantSearchPageableResponse();
+        response.setItems(searchResponseList);
+        response.setPage(pageResult.getNumber());
+        response.setSize(pageResult.getSize());
+        response.setTotalElements(pageResult.getTotalElements());
+        response.setTotalPages(pageResult.getTotalPages());
+        response.setFirst(pageResult.isFirst());
+        response.setLast(pageResult.isLast());
+
+        return response;
     }
 }

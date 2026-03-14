@@ -18,4 +18,11 @@ public interface ProductVariantValueRepository extends BaseJpaQueryDslRepository
         "ORDER BY pv.id ASC"
     )
     List<ProductVariantValue> findAllByProductIdOrderByProductVariantId(@Param("productId") String productId);
+
+    @Query(
+        "SELECT pvv FROM ProductVariantValue pvv " +
+        "INNER JOIN pvv.productVariant pv " +
+        "WHERE pv.id = :productVariantId"
+    )
+    List<ProductVariantValue> findAllByProductVariantId(@Param("productVariantId") Long productVariantId);
 }
