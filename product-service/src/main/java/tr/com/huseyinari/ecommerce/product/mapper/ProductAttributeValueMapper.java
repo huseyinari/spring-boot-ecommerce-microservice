@@ -5,25 +5,33 @@ import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductAttribute;
 import tr.com.huseyinari.ecommerce.product.domain.ProductAttributeValue;
+import tr.com.huseyinari.ecommerce.product.repository.JpaEntityResolver;
 import tr.com.huseyinari.ecommerce.product.request.ProductAttributeValueCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductAttributeValueSearchResponse;
+import tr.com.huseyinari.utils.NumberUtils;
+import tr.com.huseyinari.utils.StringUtils;
 
 @Component
 @RequiredArgsConstructor
 public class ProductAttributeValueMapper {
     private final ProductAttributeMapper productAttributeMapper;
+    private final JpaEntityResolver jpaEntityResolver;
 
     public ProductAttributeValue toEntity(ProductAttributeValueCreateRequest request) {
         if (request == null) {
             return null;
         }
 
-        Product product = new Product();
-        product.setId(request.productId());
+        Product product = null;
+        if (StringUtils.isNotBlank(request.productId())) {
+            product = this.jpaEntityResolver.getReference(Product.class, request.productId());
+        }
 
-        ProductAttribute productAttribute = new ProductAttribute();
-        productAttribute.setId(request.productAttributeId());
+        ProductAttribute productAttribute = null;
+        if (NumberUtils.greaterZero(request.productAttributeId())) {
+            productAttribute = this.jpaEntityResolver.getReference(ProductAttribute.class, request.productAttributeId());
+        }
 
         return ProductAttributeValue.builder()
                 .product(product)

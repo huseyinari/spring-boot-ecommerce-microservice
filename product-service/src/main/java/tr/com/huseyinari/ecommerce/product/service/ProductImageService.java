@@ -10,6 +10,7 @@ import tr.com.huseyinari.ecommerce.product.client.StorageClient;
 import tr.com.huseyinari.ecommerce.product.domain.Product;
 import tr.com.huseyinari.ecommerce.product.domain.ProductImage;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductImageMapper;
+import tr.com.huseyinari.ecommerce.product.repository.JpaEntityResolver;
 import tr.com.huseyinari.ecommerce.product.repository.ProductImageRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductImageCreateRequest;
 import tr.com.huseyinari.ecommerce.product.response.ProductImageCreateResponse;
@@ -30,17 +31,20 @@ public class ProductImageService {
     private final ProductImageMapper mapper;
     private final ProductService productService;
     private final StorageClient storageClient;
+    private final JpaEntityResolver jpaEntityResolver;
 
     public ProductImageService(
         ProductImageRepository repository,
         ProductImageMapper mapper,
         @Lazy ProductService productService,
-        StorageClient storageClient
+        StorageClient storageClient,
+        JpaEntityResolver jpaEntityResolver
     ) {
         this.repository = repository;
         this.mapper = mapper;
         this.productService = productService;
         this.storageClient = storageClient;
+        this.jpaEntityResolver = jpaEntityResolver;
     }
 
     List<ProductImageSearchResponse> findByProductId(String productId) {
@@ -71,9 +75,7 @@ public class ProductImageService {
             throw new RuntimeException("Depolama servisine erişilemedi. Lütfen daha sonra tekrar deneyiniz.");
         }
 
-        // TODO: Product servisten searchobject döndüğü için Product entity'si oluşturup setliyorum. JPA'de bu durumun avantaj ve dezavantajları araştırılmalı.
-        Product product = new Product();
-        product.setId(productResponse.id());
+        Product product = this.jpaEntityResolver.getReference(Product.class, productResponse.id());
 
         ProductImage productImage = new ProductImage();
         productImage.setProduct(product);

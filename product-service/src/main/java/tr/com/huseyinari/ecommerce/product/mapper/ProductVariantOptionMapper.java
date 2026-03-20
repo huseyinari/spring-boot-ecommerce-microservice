@@ -4,20 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.product.domain.ProductVariant;
 import tr.com.huseyinari.ecommerce.product.domain.ProductVariantOption;
+import tr.com.huseyinari.ecommerce.product.repository.JpaEntityResolver;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantOptionCreateRequest;
-import tr.com.huseyinari.ecommerce.product.response.ProductVariantCreateResponse;
 import tr.com.huseyinari.ecommerce.product.response.ProductVariantOptionCreateResponse;
+import tr.com.huseyinari.utils.NumberUtils;
 
 @Component
 @RequiredArgsConstructor
 public class ProductVariantOptionMapper {
+    private final JpaEntityResolver jpaEntityResolver;
+
     public ProductVariantOption toEntity(ProductVariantOptionCreateRequest request) {
         if (request == null) {
             return null;
         }
 
-        ProductVariant productVariant = new ProductVariant();
-        productVariant.setId(request.productVariantId());
+        ProductVariant productVariant = null;
+        if (NumberUtils.greaterZero(request.productVariantId())) {
+            productVariant = this.jpaEntityResolver.getReference(ProductVariant.class, request.productVariantId());
+        }
 
         ProductVariantOption productVariantOption = new ProductVariantOption();
         productVariantOption.setProductVariant(productVariant);

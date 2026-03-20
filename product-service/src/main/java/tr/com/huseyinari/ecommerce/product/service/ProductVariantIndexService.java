@@ -27,6 +27,7 @@ import tr.com.huseyinari.ecommerce.product.domain.*;
 import tr.com.huseyinari.ecommerce.product.enums.ProductVariantDataType;
 import tr.com.huseyinari.ecommerce.product.mapper.ProductVariantIndexMapper;
 import tr.com.huseyinari.ecommerce.product.projection.ProductVariantIndexGroupsByQueryName;
+import tr.com.huseyinari.ecommerce.product.repository.JpaEntityResolver;
 import tr.com.huseyinari.ecommerce.product.repository.ProductVariantIndexRepository;
 import tr.com.huseyinari.ecommerce.product.request.ProductSearchParameters;
 import tr.com.huseyinari.ecommerce.product.request.ProductVariantIndexCreateRequest;
@@ -51,19 +52,22 @@ public class ProductVariantIndexService {
     private final ProductVariantValueService productVariantValueService;
     private final ProductAttributeValueService productAttributeValueService;
     private final ProductService productService;
+    private final JpaEntityResolver jpaEntityResolver;
 
     public ProductVariantIndexService(
         ProductVariantIndexRepository repository,
         ProductVariantIndexMapper mapper,
         ProductVariantValueService productVariantValueService,
         ProductAttributeValueService productAttributeValueService,
-        @Lazy ProductService productService
+        @Lazy ProductService productService,
+        JpaEntityResolver jpaEntityResolver
     ) {
         this.repository = repository;
         this.mapper = mapper;
         this.productVariantValueService = productVariantValueService;
         this.productAttributeValueService = productAttributeValueService;
         this.productService = productService;
+        this.jpaEntityResolver = jpaEntityResolver;
     }
 
     @PersistenceContext
@@ -81,7 +85,7 @@ public class ProductVariantIndexService {
         if (StringUtils.isNotBlank(productSearchParameters.getName())) {
             where.and(qProductVariantIndex.product.name.likeIgnoreCase("%" + productSearchParameters.getName() + "%"));
         }
-        if (NumberUtils.greaterThen(productSearchParameters.getCategoryId(), 0L)) {
+        if (NumberUtils.greaterZero(productSearchParameters.getCategoryId())) {
             where.and(qProductVariantIndex.product.categoryId.eq(productSearchParameters.getCategoryId()));
         }
         if (productSearchParameters.getParams() != null) {
@@ -95,7 +99,7 @@ public class ProductVariantIndexService {
                     if (StringUtils.isNotBlank(key) && compareValue != null) {
                         BooleanBuilder valueCondition = new BooleanBuilder();
 
-                        if (NumberUtils.greaterThen(compareValue.getMin(), BigDecimal.ZERO) && NumberUtils.greaterThen(compareValue.getMax(), BigDecimal.ZERO)) {
+                        if (NumberUtils.greaterZero(compareValue.getMin()) && NumberUtils.greaterZero(compareValue.getMax())) {
                             NumberTemplate<BigDecimal> numberTemplate =
                                     Expressions.numberTemplate(
                                             BigDecimal.class,
@@ -237,8 +241,7 @@ public class ProductVariantIndexService {
 
         variantIndex.setVariantValueIndex(indexJson);
 
-        Product productEntity = new Product();
-        productEntity.setId(product.getId());
+        Product productEntity = this.jpaEntityResolver.getReference(Product.class, product.getId());
         variantIndex.setProduct(productEntity);
 
         variantIndex = this.repository.save(variantIndex);
@@ -317,8 +320,7 @@ public class ProductVariantIndexService {
             ProductVariantIndex productVariantIndex = new ProductVariantIndex();
             productVariantIndex.setVariantValueIndex(indexJson);
 
-            Product product = new Product();
-            product.setId(productId);
+            Product product = this.jpaEntityResolver.getReference(Product.class, productId);
 
             productVariantIndex.setProduct(product);
             productVariantIndex.setStock(request.stock());

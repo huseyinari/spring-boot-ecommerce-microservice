@@ -3,6 +3,7 @@ package tr.com.huseyinari.ecommerce.category.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import tr.com.huseyinari.ecommerce.category.repository.JpaEntityResolver;
 import tr.com.huseyinari.ecommerce.category.config.ECommerceConfigurationProperties;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.request.CategoryCreateRequest;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryMapper {
     private final ECommerceConfigurationProperties configurationProperties;
+    private final JpaEntityResolver jpaEntityResolver;
 
     public Category toEntity(CategoryCreateRequest request) {
         if (request == null) {
@@ -25,10 +27,8 @@ public class CategoryMapper {
         }
 
         Category parent = null;
-
-        if (NumberUtils.greaterThen(request.parentId(), 0L)) {
-            parent = new Category();
-            parent.setId(request.parentId());
+        if (NumberUtils.greaterZero(request.parentId())) {
+            parent = this.jpaEntityResolver.getReference(Category.class, request.parentId());
         }
 
         return Category.builder()
@@ -106,10 +106,8 @@ public class CategoryMapper {
         }
 
         Category parent = null;
-
-        if (NumberUtils.greaterThen(request.parentId(), 0L)) {
-            parent = new Category();
-            parent.setId(request.parentId());
+        if (NumberUtils.greaterZero(request.parentId())) {
+            parent = this.jpaEntityResolver.getReference(Category.class, request.parentId());
         }
 
         category.setName(request.name());

@@ -73,7 +73,7 @@ public class CategoryProductsFilterOptionService {
         if (StringUtils.isNotBlank(request.queryName())) {
             where.and(qCategoryProductsFilterOption.queryName.likeIgnoreCase("%" + request.queryName() + "%"));
         }
-        if (NumberUtils.greaterThen(request.categoryId(), 0L)) {
+        if (NumberUtils.greaterZero(request.categoryId())) {
             where.and(qCategoryProductsFilterOption.category.id.eq(request.categoryId()));
         }
 

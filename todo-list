@@ -16,4 +16,4 @@ Kafka'ya deserialize edilemeyen bir mesaj geldiğinde servis sonsuz döngüye gi
 shop sayfasında Sıralama kısmı şuan çalışmıyor. Ürün görüntülenmeleri ve puan'ları tamamlandığında bu kısmı da tamamla
 
 Kategori ekleme-güncelleme db hatası gelirse s3'den dosyayı silme işlemi boşuna yapılıyor ve resmi kaybediyoruz. transaction'ı sağla.
-Son eklenen kategori servisleri update kısımlarında, mapper'lardaki toEntity metotlarını fromUpdateRequestToEntity yöntemiyle güncelle.
+distributed logging & tracing işlemlerini ayarla. ELK sistemi kur.

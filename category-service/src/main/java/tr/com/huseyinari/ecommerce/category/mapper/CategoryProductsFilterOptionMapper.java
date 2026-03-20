@@ -5,18 +5,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import tr.com.huseyinari.ecommerce.category.domain.Category;
 import tr.com.huseyinari.ecommerce.category.domain.CategoryProductsFilterOption;
+import tr.com.huseyinari.ecommerce.category.repository.JpaEntityResolver;
 import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionCreateRequest;
 import tr.com.huseyinari.ecommerce.category.request.CategoryProductsFilterOptionUpdateRequest;
 import tr.com.huseyinari.ecommerce.category.response.*;
+import tr.com.huseyinari.utils.NumberUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class CategoryProductsFilterOptionMapper {
     private final CategoryMapper categoryMapper;
+    private final JpaEntityResolver jpaEntityResolver;
 
     public CategoryProductsFilterOptionSearchResponse toSearchResponse(CategoryProductsFilterOption categoryProductsFilterOption) {
         if (categoryProductsFilterOption == null) {
@@ -68,8 +70,10 @@ public class CategoryProductsFilterOptionMapper {
             return null;
         }
 
-        Category category = new Category();
-        category.setId(categoryProductsFilterOptionCreateRequest.categoryId());
+        Category category = null;
+        if (NumberUtils.greaterZero(categoryProductsFilterOptionCreateRequest.categoryId())) {
+            category = this.jpaEntityResolver.getReference(Category.class, categoryProductsFilterOptionCreateRequest.categoryId());
+        }
 
         return CategoryProductsFilterOption.builder()
             .name(categoryProductsFilterOptionCreateRequest.name())
@@ -105,8 +109,10 @@ public class CategoryProductsFilterOptionMapper {
             return;
         }
 
-        Category category = new Category();
-        category.setId(request.categoryId());
+        Category category = null;
+        if (NumberUtils.greaterZero(request.categoryId())) {
+            category = this.jpaEntityResolver.getReference(Category.class, request.categoryId());
+        }
 
         categoryProductsFilterOption.setName(request.name());
         categoryProductsFilterOption.setQueryName(request.queryName());
